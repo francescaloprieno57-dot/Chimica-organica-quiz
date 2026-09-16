@@ -171,7 +171,7 @@
             </div>
             <div class="chapter-card" onclick="startQuiz(20)">
                 <h3>Lezione 020</h3>
-                <p>32 Domande (Carbonili, Scissione Eteri, Tiolati)</p>
+                <p>40 Domande (Carbonili, Scissione Eteri, Tiolati)</p>
             </div>
             <div class="chapter-card" onclick="startQuiz(21)">
                 <h3>Lezione 021</h3>
@@ -185,13 +185,9 @@
                 <h3>Lezione 023</h3>
                 <p>47 Domande (Acidi Carbossilici e Nitrili)</p>
             </div>
-            <div class="chapter-card" onclick="startQuiz(24)">
+            <div class="chapter-card" onclick="startQuiz(24)" style="grid-column: 1 / -1;">
                 <h3>Lezione 024</h3>
                 <p>40 Domande (Derivati degli Acidi Carbossilici)</p>
-            </div>
-            <div class="chapter-card" onclick="startQuiz(25)" style="grid-column: 1 / -1;">
-                <h3>Lezione 025</h3>
-                <p>40 Domande (Derivati, Tioesteri e Polimeri)</p>
             </div>
         </div>
     </div>
@@ -209,9 +205,6 @@
 </div>
 
 <script>
-let currentChapter = null;
-let userAnswers = {};
-
 const allQuestions = {
     17: [
         { question: "1. Quale molecola biologica agisce come donatore di metile nelle SN2 biologiche?", options: ["NADH", "ATP", "S-adenosilmetionina", "CoA"], answer: 2 },
@@ -361,301 +354,243 @@ const allQuestions = {
         { question: "29. Quale composto ha formula generale R–S–R?", options: ["Fenolo", "Tiolo", "Solfuro", "Etere"], answer: 2 },
         { question: "30. Quale reazione produce disolfuri a partire da tioli?", options: ["Riduzione", "Idrogenazione", "Ossidazione", "Eliminazione"], answer: 2 },
         { question: "31. Quale legame caratterizza i disolfuri?", options: ["S–S", "C=C", "C–N", "C–O"], answer: 0 },
-        { question: "32. Quale ruolo biologico hanno i ponti disolfuro nelle proteine?", options: ["Catalisi redox", "Trasporto di elettroni", "Stabilizzazione della struttura", "Sintesi di ATP"], answer: 2 }
+        { question: "32. Quale ruolo biologico hanno i ponti disolfuro nelle proteine?", options: ["Catalisi redox", "Trasporto di elettroni", "Stabilizzazione della struttura", "Sintesi di ATP"], answer: 2 },
+        { question: "33. Quale reagente può ossidare due tioli a disolfuro?", options: ["LiAlH4", "H2", "NaBH4", "I2"], answer: 3 },
+        { question: "34. Quale gruppo funzionale caratterizza gli eteri?", options: ["R–SH", "R–CO–R", "R–O–R", "R–OH"], answer: 2 },
+        { question: "35. Quale proprietà chimica rende gli eteri relativamente poco reattivi?", options: ["Elevata basicità", "Assenza di legami polari forti", "Elevata acidità", "Instabilità termica"], answer: 1 },
+        { question: "36. Quale metodo classico di sintesi degli eteri coinvolge un alcossido e un alogenuro alchilico?", options: ["Ozonolisi", "Riduzione catalitica", "Reazione di Friedel–Crafts", "Sintesi di Williamson"], answer: 3 },
+        { question: "37. Quale substrato è più adatto per la sintesi di Williamson?", options: ["Alogenuro aromatico", "Alogenuro vinilico", "Alogenuro terziario", "Alogenuro primario"], answer: 3 },
+        { question: "38. Perché gli alogenuri terziari non sono adatti alla sintesi di Williamson?", options: ["Sono troppo polari", "Sono troppo stabili", "Favoriscono eliminazione", "Non reagiscono con nucleofili"], answer: 2 },
+        { question: "39. Quale prodotto si ottiene dalla reazione tra un alcossido e CH3Br?", options: ["Aldeide", "Etere", "Alcol", "Chetone"], answer: 1 },
+        { question: "40. Quale effetto elettronico contribuisce alla reattività dei carbonili?", options: ["Effetto isotopico", "Effetto induttivo", "Effetto magnetico", "Effetto sterico"], answer: 1 }
     ],
     21: [
-        { question: "1. Quale reagente converte un'aldeide in un alcol primario?", options: ["NaBH4", "H2SO4", "KMnO4", "CH3I"], answer: 0 },
-        { question: "2. Quale gruppo funzionale è presente nelle aldeidi?", options: ["–OH", "–CHO", "–COOH", "–COOR"], answer: 1 },
-        { question: "3. Quale reagente ossida le aldeidi ad acidi carbossilici?", options: ["NaBH4", "H2", "KMnO4", "Li"], answer: 2 },
-        { question: "4. Come si chiama il test che usa Ag(NH3)2+ per riconoscere le aldeidi?", options: ["Test di Tollens", "Test di Lucas", "Test di Baeyer", "Test di Fehling"], answer: 0 },
-        { question: "5. Quale prodotto si ottiene dall'idratazione di un'aldeide in ambiente acquoso?", options: ["Diolo geminale", "Etere", "Chetone", "Alchene"], answer: 0 },
-        { question: "6. Quale intermedio si forma nell'addizione nucleofila al carbonile in ambiente acido?", options: ["Carbocatione", "Carbonile protonato", "Carbanione", "Radicale"], answer: 1 },
-        { question: "7. Quale composto si ottiene facendo reagire un'aldeide con un alcol in presenza di acido?", options: ["Etere", "Emiacetale", "Ammide", "Ester"], answer: 1 },
-        { question: "8. Quale composto si forma dalla reazione completa di un'aldeide con due equivalenti di alcol?", options: ["Acetale", "Chetone", "Emichetone", "Alchene"], answer: 0 },
-        { question: "9. Quale reazione converte un chetone in un acetale ciclico?", options: ["Reazione con un diolo in ambiente acido", "Riduzione", "Ossidazione", "Idrolisi"], answer: 0 },
-        { question: "10. Quale utilità principale hanno gli acetali nella sintesi organica?", options: ["Gruppi protettivi per il carbonile", "Agenti ossidanti", "Solventi polari", "Basi forti"], answer: 0 },
-        { question: "11. Come si rimuove un gruppo protettivo acetalico?", options: ["Idrolisi acida", "Riduzione con LiAlH4", "Trattamento con base forte", "Ossidazione"], answer: 0 },
-        { question: "12. Quale reagente converte un chetone in un'ammina primaria tramite amminazione riduttiva?", options: ["NH3 e un riducente come NaBH3CN", "KMnO4", "H2SO4", "HCl"], answer: 0 },
-        { question: "13. Quale classe di composti si forma dalla reazione tra un chetone e un'ammina primaria?", options: ["Immine (basi di Schiff)", "Eteri", "Ammidi", "Nitrili"], answer: 0 },
-        { question: "14. Quale classe di composti si forma dalla reazione tra un chetone e un'ammina secondaria?", options: ["Enamine", "Immine", "Esteri", "Alcoli"], answer: 0 },
-        { question: "15. Quale reagente trasforma un gruppo carbonilico in un gruppo metilenico (–CH2–) tramite riduzione totale?", options: ["Amalgama di zinco e HCl (Riduzione di Clemmensen)", "KMnO4", "NaBH4", "H2O"], answer: 0 },
-        { question: "16. Quale altra reazione permette la riduzione totale del carbonile a metilene in ambiente basico?", options: ["Riduzione di Wolff-Kishner", "Esterificazione di Fischer", "Sintesi di Williamson", "Test di Tollens"], answer: 0 },
-        { question: "17. Quale reagente viene usato nella riduzione di Wolff-Kishner?", options: ["Idrazina (NH2NH2) e KOH", "NaBH4", "H2SO4", "Ag(NH3)2+"], answer: 0 },
-        { question: "18. Quale ilide viene usata nella reazione di Wittig?", options: ["Ilide di fosforo", "Ilide di zolfo", "Ilide di azoto", "Ilide di cloro"], answer: 0 },
-        { question: "19. Cosa si forma principalmente nella reazione di Wittig di un chetone con un ilide di fosforo?", options: ["Un alchene", "Un alcol", "Un etere", "Un alcano"], answer: 0 },
-        { question: "20. Quale composto intermedio ciclico a quattro termini si ipotizza nella reazione di Wittig?", options: ["Ossafetano", "Epossido", "Aziridina", "Ciclopropano"], answer: 0 },
-        { question: "21. Quale proprietà rende i protoni in posizione alfa a un carbonile relativamente acidi?", options: ["Stabilizzazione per risonanza dell'anione enolato", "Presenza di cloro", "Solvatazione ionica", "Formazione di radicali"], answer: 0 },
-        { question: "22. Come viene definita la forma tautomerica di un chetone che possiede un doppio legame e un gruppo –OH?", options: ["Forma enolica", "Forma acetalica", "Forma iminica", "Forma di anidride"], answer: 0 },
-        { question: "23. Quale forma tautomerica è generalmente molto più stabile per la maggior parte dei chetoni semplici?", options: ["Forma chetonica", "Forma enolica", "Forma radicalica", "Forma zwitterionica"], answer: 0 },
-        { question: "24. Quale alogeno reagisce con i chetoni in ambiente acido per dare alfa-alogenazione?", options: ["Cloro, bromo o iodio", "Solo elio", "Solo fluoro", "Nessun alogeno"], answer: 0 },
-        { question: "25. Come si chiama la reazione di dimerizzazione di due aldeidi o chetoni catalizzata da basi?", options: ["Condensazione aldolica", "Reazione di Diels-Alder", "Sintesi di Williamson", "Ozonolisi"], answer: 0 },
-        { question: "26. Quale prodotto si forma inizialmente da una condensazione aldolica?", options: ["Un beta-idrossialdeide o beta-idrossichetone", "Un alfa-clorochetone", "Un etere", "Un alcol terziario"], answer: 0 },
-        { question: "27. Cosa succede tipicamente se si scalda un beta-idrossichetone ottenuto da condensazione aldolica?", options: ["Eliminazione di acqua e formazione di un enone anello-coniugato", "Riduzione ad alcano", "Ossidazione ad acido", "Polimerizzazione radicalica"], answer: 0 },
-        { question: "28. Quale tipo di condensazione aldolica avviene tra due composti carbonilici differenti?", options: ["Condensazione aldolica incrociata (cross-aldol)", "Condensazione di Claisen", "Sintesi di Fischer", "Reazione di Grignard"], answer: 0 },
-        { question: "29. Quale reazione ciclica intramolecolare permette di formare anioni ciclici a 5 o 6 termini da dichetoni?", options: ["Condensazione aldolica intramolecolare", "Aminolisi", "Idrolisi acida", "Saponificazione"], answer: 0 },
-        { question: "30. Quale reattivo permette di ossidare selettivamente un'aldeide a spese di ioni rame(II) che virano a rosso mattone?", options: ["Reattivo di Fehling", "Reattivo di Tollens", "LiAlH4", "POCl3"], answer: 0 },
-        { question: "31. Quale caratteristica strutturale impedisce a un chetone di dare il test di Tollens?", options: ["Non può essere facilmente ossidato senza rompere i legami C–C", "Non ha legami polarizzati", "È troppo acido", "Ha troppi idrogeni alfa"], answer: 0 },
-        { question: "32. Quale reagente riduce un chetone ad alcol secondario?", options: ["NaBH4", "KMnO4", "AgNO3", "H2SO4"], answer: 0 },
-        { question: "33. Quale tipo di legame viene spezzato nell'ozonolisi degli alcheni per formare aldeidi o chetoni?", options: ["Doppio legame C=C", "Legame semplice C–C", "Legame C–H", "Legame O–H"], answer: 0 },
-        { question: "34. Quale classe di molecole biologiche sfrutta le immine (basi di Schiff) nei cicli enzimatici?", options: ["Enzimi PLP-dipendenti (piridossal fosfato)", "Lipidi semplici", "Carboidrati lineari", "Acidi nucleici"], answer: 0 },
-        { question: "35. Quale proprietà rende il carbonio carbonilico suscettibile all'attacco di nucleofili deboli in ambiente acido?", options: ["La protonazione dell'ossigeno carbonilico ne aumenta l'elettrofilia", "La neutralità della molecola", "La presenza di radicali liberi", "La forte basicità del carbonio"], answer: 0 }
+        { question: "1. Quale gruppo funzionale caratterizza aldeidi e chetoni?", options: ["Tiolo (–SH)", "Amino (–NH2)", "Carbonile (C=O)", "Idrossile (–OH)"], answer: 2 },
+        { question: "2. Quale differenza strutturale distingue un’aldeide da un chetone?", options: ["L’aldeide ha almeno un idrogeno legato al carbonile", "L’aldeide contiene due carbonili", "Il chetone ha due ossigeni", "Il chetone contiene un gruppo –OH"], answer: 0 },
+        { question: "3. Qual è la formula generale di un’aldeide?", options: ["R–OH", "R–CHO", "R–CO–R", "R–SH"], answer: 1 },
+        { question: "4. Qual è la formula generale di un chetone?", options: ["R–COOH", "R–O–R", "R–CHO", "R–CO–R"], answer: 3 },
+        { question: "5. Perché il carbonio carbonilico è elettrofilo?", options: ["Il carbonile è aromatico", "Il legame C=O è fortemente polarizzato", "L’ossigeno è poco elettronegativo", "Il carbonio ha carica negativa"], answer: 1 },
+        { question: "6. Quale specie attacca tipicamente il carbonio carbonilico?", options: ["Protone", "Elettrofilo", "Radicale", "Nucleofilo"], answer: 3 },
+        { question: "7. Quale tipo di reazione caratterizza aldeidi e chetoni?", options: ["Eliminazione", "Addizione nucleofila", "Sostituzione nucleofila", "Addizione radicalica"], answer: 1 },
+        { question: "8. Perché le aldeidi sono generalmente più reattive dei chetoni?", options: ["Maggiore stabilità", "Minore ingombro sterico", "Maggiore massa molecolare", "Minore polarità"], answer: 1 },
+        { question: "9. Quale aldeide ha nome comune formaldeide?", options: ["Methanal", "Propanal", "Ethanal", "Butanal"], answer: 0 },
+        { question: "10. Quale nome IUPAC corrisponde all’acetone?", options: ["Pentanon", "Butanone", "Ethanone", "Propanone"], answer: 3 },
+        { question: "11. Quale gruppo acilico deriva da CH3CO–?", options: ["Benzoile", "Formile", "Propile", "Acetile"], answer: 3 },
+        { question: "12. Quale gruppo acilico deriva da –CHO?", options: ["Benzile", "Propile", "Formile", "Acetile"], answer: 2 },
+        { question: "13. Quale prodotto si ottiene dalla reazione tra benzene e acetil cloruro con AlCl3?", options: ["Fenolo", "Benzaldeide", "Toluene", "Acetofenone"], answer: 3 },
+        { question: "14. Quale reazione introduce un gruppo acilico su un anello aromatico?", options: ["Idrogenazione", "Friedel–Crafts acilazione", "Friedel–Crafts alchilazione", "Ozonolisi"], answer: 1 },
+        { question: "15. Quale ormone citato nel capitolo contiene un gruppo chetonico?", options: ["Hydrocortisone", "Adrenalina", "Insulina", "Glucagone"], answer: 0 },
+        { question: "16. Quale proprietà rende le aldeidi importanti nelle vie metaboliche?", options: ["Elevata basicità", "Elevata reattività del carbonile", "Elevata stabilità aromatica", "Assenza di polarità"], answer: 1 },
+        { question: "17. Quale prodotto si ottiene dall’ossidazione di un’aldeide?", options: ["Etere", "Acido carbossilico", "Alchene", "Alcol"], answer: 1 },
+        { question: "18. Quale nome sistematico corrisponde all’acetaldeide?", options: ["Propanal", "Methanal", "Ethanal", "Butanal"], answer: 2 },
+        { question: "19. Quale aldeide aromatica è comunemente chiamata benzaldeide?", options: ["C6H5CHO", "C6H5COOH", "C6H5OH", "C6H5COCH3"], answer: 0 },
+        { question: "20. Quale composto contiene un carbonile tra due gruppi alchilici?", options: ["Chetone", "Alcol", "Aldeide", "Fenolo"], answer: 0 },
+        { question: "21. Quale composto contiene un carbonile terminale?", options: ["Solfuro", "Chetone", "Aldeide", "Etere"], answer: 2 },
+        { question: "22. Quale proprietà dell’ossigeno contribuisce alla polarità del carbonile?", options: ["Elevata stabilità", "Elevata elettronegatività", "Elevata basicità", "Elevata massa"], answer: 1 },
+        { question: "23. Quale orbitale accetta elettroni durante l’attacco nucleofilo al carbonile?", options: ["d", "s", "σ", "π*"], answer: 3 },
+        { question: "24. Quale effetto elettronico contribuisce alla polarizzazione del carbonile?", options: ["Effetto sterico", "Effetto isotopico", "Effetto induttivo", "Effetto magnetico"], answer: 2 },
+        { question: "25. Quale prodotto si ottiene dalla reazione tra cloruro acilico e reagente di Gilman?", options: ["Alcol", "Chetone", "Acido carbossilico", "Aldeide"], answer: 1 },
+        { question: "26. Quale reagente organometallico può convertire cloruri acilici in chetoni?", options: ["RMgBr", "R2CuLi", "LiAlH4", "NaBH4"], answer: 1 },
+        { question: "27. Quale catalizzatore è tipico per l’acilazione di Friedel–Crafts?", options: ["NaOH", "AlCl3", "KMnO4", "H2"], answer: 1 },
+        { question: "28. Quale reazione può produrre chetoni da alcheni?", options: ["Ozonolisi", "Eliminazione", "Riduzione", "Idrogenazione"], answer: 0 },
+        { question: "29. Come si nomina un’aldeide ciclica con –CHO legato a un anello?", options: ["Aldone", "Formate", "Carbaldehyde", "Ketone"], answer: 2 },
+        { question: "30. Quale prefisso viene usato quando il carbonile è un sostituente?", options: ["Aldo-", "Keto-", "Oxo-", "Hydro-"], answer: 2 },
+        { question: "31. Quale reagente può ossidare un alcol secondario a chetone?", options: ["NaBH4", "CrO3", "HCl", "LiAlH4"], answer: 1 },
+        { question: "32. Quale tipo di alcol ossidato produce un chetone?", options: ["Fenolo", "Alcol primario", "Alcol secondario", "Alcol terziario"], answer: 2 },
+        { question: "33. Quale reagente può ridurre un estere ad aldeide a bassa temperatura?", options: ["H2SO4", "DIBAL-H", "NaBH4", "KMnO4"], answer: 1 },
+        { question: "34. Quale reagente è comunemente usato per ossidare alcoli primari ad aldeidi?", options: ["LiAlH4", "NaBH4", "H2", "Dess–Martin periodinane"], answer: 3 },
+        { question: "35. Quale reazione produce un’aldeide dall’ossidazione di un alcol primario?", options: ["Riduzione", "Addizione radicalica", "Idrogenazione", "Ossidazione selettiva"], answer: 3 }
     ],
     22: [
-        { question: "1. Quale intermedio si forma nell'addizione nucleofila al carbonile catalizzata da acidi?", options: ["Intermedio carbocationico stabilizzato da risonanza / protone", "Carbanione puro", "Radicale libero", "Composto aromatico"], answer: 0 },
-        { question: "2. Nella formazione di emiacetali, il nucleofilo che attacca il carbonile è:", options: ["Un atomo di ossigeno di un alcol", "Un idruro", "Uno ione cloruro", "Un radicale metilico"], answer: 0 },
-        { question: "3. Gli acetali sono stabili in ambiente:", options: ["Basico", "Acido forte", "Acido anidro", "Acquoso caldo"], answer: 0 },
-        { question: "4. Quale composto si ottiene dalla reazione di un'aldeide con idrossilammina (NH2OH)?", options: ["Ossima", "Immina", "Idrazone", "Enammina"], answer: 0 },
-        { question: "5. La reazione di Wittig richiede l'uso di quale reagente organometallico o ilide?", options: ["Fosfonio ilide (fosforano)", "Reagente di Grignard", "Composto di organolitio", "Dialchilrame litio"], answer: 0 },
-        { question: "6. Nella sintesi di un'enammina, l'ammina reagente deve essere:", options: ["Secondaria", "Primaria", "Terziaria", "Quaternaria"], answer: 0 },
-        { question: "7. Le enammine possono essere alchilate preferenzialmente sul carbonio:", options: ["Alfa", "Beta", "Gamma", "Carbonilico"], answer: 0 },
-        { question: "8. Quale reagente riduce selettivamente il doppio legame carbonilico di un enone senza toccare il doppio legame C=C?", options: ["Non esiste un riducente diretto, si usa NaBH4 con particolari condizioni o selettività", "H2 e Pt", "KMnO4", "Acido cloridrico"], answer: 0 },
-        { question: "9. L'addizione coniugata (o addizione 1,4) avviene tipicamente su:", options: ["Composti carbonilici alfa,beta-insaturi", "Aldeidi semplici sature", "Alcoli terziari", "Eteri semplici"], answer: 0 },
-        { question: "10. Quale nucleofilo partecipa tipicamente alle reazioni di addizione 1,4 di Michael?", options: ["Enolati e nucleofili stabilizzati (donatori di Michael)", "Solo acqua", "Idruro puro", "Alogenuri alchilici"], answer: 0 },
-        { question: "11. Il prodotto di un'addizione 1,4 seguita da una condensazione aldolica intramolecolare è noto come:", options: ["Anellazione di Robinson", "Sintesi di Williamson", "Riduzione di Clemmensen", "Reazione di Grignard"], answer: 0 },
-        { question: "12. Quale fattore sposta l'equilibrio della formazione di immine verso i prodotti?", options: ["Rimozione dell'acqua formata durante la reazione", "Aggiunta di altra acqua", "Uso di temperature molto basse", "Assenza di catalizzatore acido"], answer: 0 },
-        { question: "13. Quale gruppo protettivo viene comunemente utilizzato per proteggere i dioli o i carbonili vicinali?", options: ["Formazione di acetali ciclici (es. con acetone)", "Eteri metilici", "Ammidi", "Cloruri acilici"], answer: 0 },
-        { question: "14. Nel meccanismo di formazione delle ossime, lo stadio lento a pH neutro diventa veloce se:", options: ["Si catalizza con acidi deboli", "Si aggiunge una base forte", "Si opera a pressione elevata", "Si usano solventi apolari"], answer: 0 },
-        { question: "15. Un ilide di fosforo è caratterizzato da:", options: ["Una carica negativa sul carbonio adiacente a un fosforo positivo", "Un legame radicalico", "Un atomo di zolfo carico", "Un gruppo –OH libero"], answer: 0 },
-        { question: "16. Quale sottoprodotto inorganico si forma nella reazione di Wittig e guida la reazione verso la fine?", options: ["Ossido di trifenilfosfina", "Cloruro di sodio", "Acqua ossigenata", "Anidride carbonica"], answer: 1 },
-        { question: "17. L'acidità dei protoni alfa nei composti carbonilici è dovuta a:", options: ["Delocalizzazione della carica negativa dell'enolato per risonanza", "Presenza di legami idrogeno intermolecolari", "Dimensioni dell'ossigeno carbonilico", "Polarità del solvente"], answer: 0 },
-        { question: "18. La tautomeria cheto-enolica è un esempio di:", options: ["Tautomeria prototropica", "Isomeria geometrica cis-trans", "Isomeria ottica", "Stereoisomeria conformazionale"], answer: 0 },
-        { question: "19. Quale catalizzatore viene comunemente impiegato per favorire la tautomeria cheto-enolica?", options: ["Acidi o basi", "Metalli pesanti come il piombo", "Radicali liberi", "Solventi apolari"], answer: 0 },
-        { question: "20. Nelle condensazioni aldoliche incrociate, per evitare una miscela complessa di prodotti si utilizzano solitamente:", options: ["Composti in cui un partner è privo di idrogeni alfa", "Miscele racemiche di alcoli", "Grignard in eccesso", "Sali di ammonio quaternario"], answer: 0 },
-        { question: "21. Quale composto si ottiene dalla reazione di un'aldeide con fenilidrazina?", options: ["Fenilidrazone", "Immina", "Ossima", "Enammina"], answer: 0 },
-        { question: "22. Quale specie chimica agisce da elettrofilo nell'addizione coniugata (1,4)?", options: ["Il carbonio beta del sistema alfa,beta-insaturo", "Il carbonio carbonilico", "L'ossigeno del carbonile", "Il gruppo alchilico terminale"], answer: 0 },
-        { question: "23. L'alogenazione in posizione alfa di un chetone in ambiente acido passa attraverso la formazione di:", options: ["Un enolo", "Un enolato anionico", "Un carbanione", "Un radicale libero"], answer: 0 },
-        { question: "24. L'alogenazione in posizione alfa di un chetone in ambiente basico passa attraverso la formazione di:", options: ["Un enolato", "Un enolo neutro", "Un carbocatione", "Un complesso di coordinazione"], answer: 0 },
-        { question: "25. La reazione dell'aloformio (es. saggio dello iodoformio) è positiva per:", options: ["Metil chetoni e alcoli che si ossidano a metil chetoni", "Acidi carbossilici", "Eteri semplici", "Ammidi terziarie"], answer: 0 },
-        { question: "26. Quale colore ha il precipitato che si forma nel saggio dello iodoformio?", options: ["Giallo", "Blu intenso", "Rosso mattone", "Verde smeraldo"], answer: 0 },
-        { question: "27. Nella sintesi malonica, l'estere dietil malonato viene convertito in:", options: ["Acidi carbossilici sostituiti", "Aldeidi sature", "Alcoli terziari", "Eteri macrociclici"], answer: 0 },
-        { question: "28. Nella sintesi con acetoacetico estere, il prodotto finale dopo decarbossilazione è:", options: ["Un chetone sostituito", "Un alcol primario", "Un acido dicarbossilico", "Un'ammina secondaria"], answer: 0 },
-        { question: "29. Quale passaggio chiave avviene durante la decarbossilazione termica di un beta-chetoacido?", options: ["Uno stato di transizione ciclico a 6 membri con perdita di CO2", "Un'eliminazione E2", "Una sostituzione SN1", "Un'addizione radicalica"], answer: 0 },
-        { question: "30. Quale coenzima biologico agisce tipicamente come trasportatore di gruppi acilici nelle reazioni metaboliche?", options: ["Coenzima A (CoA)", "NADH", "ATP", "FAD"], answer: 0 },
-        { question: "31. Quale proprietà chimica rende i composti alfa,beta-insaturi differenti dai normali alcheni?", options: ["Il doppio legame è polarizzato e risente del risucchio elettronico del carbonile", "Sono inerti a qualsiasi nucleofilo", "Hanno punti di ebollizione inferiori agli alcani", "Non danno mai reazioni di addizione"], answer: 0 },
-        { question: "32. Quale reattivo si usa per preparare un ilide di fosforo a partire da un alogenuro alchilico?", options: ["Trifenilfosfina seguita da una base forte (es. butillitio)", "Acido solforico concentrato", "Idrossido di sodio acquoso", "Idrogeno gassoso su platino"], answer: 0 },
-        { question: "33. Qual è l'effetto di un gruppo attrattore di elettroni in posizione alfa su un acido o un carbonile?", options: ["Aumenta l'acidità dei protoni alfa facilitando la formazione dell'enolato", "Diminuisce la reattività del carbonile", "Stabilizza la forma chetonica riducendo l'enolo", "Rende la molecola un forte riducente"], answer: 0 },
-        { question: "34. Nella reazione di Mannich si ottiene un beta-amminochetone partendo da:", options: ["Un'aldeide, un'ammina e un composto con idrogeni alfa (es. chetone)", "Due molecole di estere", "Un alcol e un acido", "Un alchene e acqua"], answer: 0 },
-        { question: "35. Quale tipologia di reazione prevale quando si usano nucleofili forti e non basici (es. ioni cianuro) su aldeidi?", options: ["Addizione nucleofila al carbonile (es. formazione di cianidrine)", "Sostituzione elettrofila aromatica", "Eliminazione E1", "Polimerizzazione a stadi"], answer: 0 }
+        { question: "1. Da quale direzione approssimativa attacca il nucleofilo il carbonio carbonilico?", options: ["A 0° lungo il piano aromatico", "Da circa 75° rispetto al piano del gruppo carbonilico", "Da 120° rispetto al legame C–H", "Perpendicolarmente a 180°"], answer: 1 },
+        { question: "2. Perché le aldeidi aromatiche sono meno reattive delle aldeidi alifatiche verso addizione nucleofila?", options: ["Perché l’ossigeno diventa meno elettronegativo", "Perché il carbonile aromatico non è planare", "Perché l’anello aromatico dona densità elettronica per risonanza al gruppo carbonilico", "Perché l’anello aromatico rende il carbonile più positivo"], answer: 2 },
+        { question: "3. Quale fattore spiega principalmente la maggiore reattività delle aldeidi rispetto ai chetoni nelle addizioni nucleofile?", options: ["Maggiore basicità del carbonile", "Presenza obbligatoria di un gruppo ossidrilico", "Minore ingombro sterico e minore stabilizzazione elettronica del carbonio carbonilico", "Maggiore aromaticità delle aldeidi"], answer: 2 },
+        { question: "4. Quali reagenti favoriscono tipicamente l’addizione coniugata di gruppi alchilici agli enoni?", options: ["NaBH4 in metanolo", "I reagenti di Grignard, RMgX, in modo esclusivo", "I reagenti di Gilman, R2CuLi", "HBr in assenza di perossidi"], answer: 2 },
+        { question: "5. Nel meccanismo generale di addizione nucleofila a un carbonile, quale specie si forma subito dopo l’attacco del nucleofilo?", options: ["Un intermedio aromatico", "Un carbocatione planare", "Un intermedio alcossido tetraedrico", "Un radicale libero"], answer: 2 },
+        { question: "6. Quale intermedio è coinvolto nell’ossidazione delle aldeidi ad acidi carbossilici?", options: ["L’ilide di fosforo", "L’enolato", "L’ossonio acetalico", "Il gem-diolo (1,1-diolo)"], answer: 3 },
+        { question: "7. Perché le aldeidi si ossidano facilmente ad acidi carbossilici mentre i chetoni generalmente no?", options: ["Perché i chetoni reagiscono solo in ambiente basico", "Perché le aldeidi sono sempre aromatiche", "Perché i chetoni non contengono ossigeno", "Perché le aldeidi possiedono un idrogeno sul carbonio carbonilico che può essere rimosso durante l’ossidazione"], answer: 3 },
+        { question: "8. In acqua, l’equilibrio di idratazione è particolarmente spostato verso il gem-diolo per:", options: ["La formaldeide", "L’acetone", "L’acetofenone", "Il benzofenone"], answer: 0 },
+        { question: "9. Il prodotto dell’addizione di CN⁻ a un’aldeide o un chetone, seguita da protonazione, è:", options: ["Un acetale", "Un tioacetale", "Un’emiammina", "Una cianoidrina"], answer: 3 },
+        { question: "10. Quale prodotto si ottiene riducendo un’aldeide con NaBH4?", options: ["Un alcol primario", "Un alcol secondario", "Un acido carbossilico", "Un alcano"], answer: 0 },
+        { question: "11. Perché l’idratazione dell’acetone è molto meno favorita rispetto a quella della formaldeide?", options: ["Perché l’acetone è già un diolo", "Per motivi sterici ed elettronici che sfavoriscono il gem-diolo", "Perché la formaldeide è un chetone", "Perché l’acetone non contiene un carbonile"], answer: 1 },
+        { question: "12. Un acetale deriva formalmente dalla reazione di un carbonile con:", options: ["Un equivalente di acqua e uno di HBr", "Un organocuprato e un’idrazina", "Due equivalenti di ammina primaria", "Due equivalenti di alcol oppure un diolo"], answer: 3 },
+        { question: "13. L’addizione coniugata 1,4 a un composto α,β-insaturo avviene sul:", options: ["Carbonio β del sistema coniugato", "Carbonio carbonilico esclusivamente", "Carbonio dell’ossigeno", "Carbonio terminale di un gruppo metile casuale"], answer: 0 },
+        { question: "14. Nel trasferimento biologico di idruro da NADH a un carbonile, il prodotto della riduzione del carbonile è in generale:", options: ["Un alcol", "Un nitrile", "Un alchene", "Un acetale"], answer: 0 },
+        { question: "15. Nella reazione di Cannizzaro, una molecola di aldeide viene ossidata e un’altra viene ridotta. Questo è possibile soprattutto per aldeidi:", options: ["Solo chetoniche", "Con due gruppi carbonilici adiacenti", "Solo aromatiche con nitro in para", "Senza idrogeni α"], answer: 3 },
+        { question: "16. Le ilidi necessarie per la reazione di Wittig si preparano tipicamente tramite:", options: ["Addizione elettrofila di PPh3 a un alchene", "Ossidazione di un fosfato con CrO3", "Riduzione di un’ammide con LiAlH4", "SN2 tra un alogenuro alchilico primario e trifenilfosfina, seguita da deprotonazione con base forte"], answer: 3 },
+        { question: "17. Il sottoprodotto caratteristico della reazione di Wittig è:", options: ["Metanolo", "Acido fosforico", "Acqua ossigenata", "Ossido di trifenilfosfina"], answer: 3 },
+        { question: "18. Quale intermedio ciclico a quattro membri è proposto nella reazione di Wittig?", options: ["L’ossafosfetano", "L’imminio", "L’acetale", "L’epossido"], answer: 0 },
+        { question: "19. La reazione di Wittig trasforma aldeidi e chetoni in:", options: ["Alcheni", "Acidi carbossilici", "Ammidi", "Alcoli"], answer: 0 },
+        { question: "20. Per spostare l’equilibrio verso la formazione di un acetale, si deve in genere:", options: ["Aggiungere molto NaOH", "Usare un eccesso di ammina secondaria", "Rimuovere l’acqua dal mezzo di reazione", "Aumentare la concentrazione di CN⁻"], answer: 2 },
+        { question: "21. Nel meccanismo di idratazione in ambiente basico, il primo nucleofilo che attacca il carbonile è:", options: ["CN⁻", "H2O", "H3O⁺", "OH⁻"], answer: 3 },
+        { question: "22. Quale specie si forma per prima durante l’addizione di un alcol a un carbonile in ambiente acido?", options: ["Un sale di fosfonio", "Un’acido carbossilico", "Un emiacetale", "Un’enammina"], answer: 2 },
+        { question: "23. Perché gli acetali sono utili come gruppi protettori di aldeidi e chetoni?", options: ["Perché reagiscono con NaBH4 più velocemente dei chetoni", "Perché sono stabili verso basi, idruri riducenti e reagenti di Grignard ma si idrolizzano in ambiente acido", "Perché sono più reattivi dei carbonili in tutte le condizioni", "Perché si ossidano selettivamente ad acidi"], answer: 1 },
+        { question: "24. Nella formazione di un’enammina da un’imminio intermedio, quale protone viene rimosso?", options: ["Un protone aromatico", "Un protone sul carbonio α adiacente al carbonio dell’ex carbonile", "Un protone sull’ossigeno carbonilico", "Un protone sul gruppo uscente alchilico"], answer: 1 },
+        { question: "25. La reazione di un’aldeide con un reagente di Grignard seguita da idrolisi porta a:", options: ["Un alcol primario", "Un etere", "Un alcol terziario", "Un alcol secondario"], answer: 3 },
+        { question: "26. Nel meccanismo di idratazione in ambiente acido, qual è il primo passaggio?", options: ["La formazione diretta del gem-diolo senza catalisi", "L’attacco di OH⁻ al carbonile", "La deprotonazione del carbonio α", "La protonazione dell’ossigeno carbonilico"], answer: 3 },
+        { question: "27. Rispetto ai Grignard, i reagenti di Gilman su un enone tendono a dare preferenzialmente:", options: ["Addizione 1,4 coniugata", "Nessuna reazione", "Solo riduzione del doppio legame", "Addizione 1,2 esclusiva al carbonile"], answer: 0 },
+        { question: "28. Perché la formazione di immine ed enammine è lenta sia a pH molto basso sia a pH molto alto?", options: ["Perché l’ammina diventa un radicale", "Perché serve abbastanza acido per facilitare la disidratazione ma non così tanto da protonare completamente l’ammina nucleofila", "Perché il carbonile scompare a pH estremo", "Perché l’acqua non può agire da solvente"], answer: 1 },
+        { question: "29. Perché la riduzione di un carbonile con NaBH4 è praticamente irreversibile?", options: ["Perché il processo inverso richiederebbe l’espulsione di H⁻, pessimo gruppo uscente", "Perché il sodio blocca il carbonile in modo permanente", "Perché l’ossigeno perde elettronegatività", "Perché si forma un carbocatione stabile"], answer: 0 },
+        { question: "30. Quale prodotto si ottiene riducendo un chetone con NaBH4?", options: ["Un alcol secondario", "Un alchene", "Un acido carbossilico", "Un alcol primario"], answer: 0 },
+        { question: "31. La reazione di un chetone con un reagente di Grignard seguita da idrolisi porta a:", options: ["Un acido carbossilico", "Un alcol primario", "Un alcol secondario", "Un alcol terziario"], answer: 3 },
+        { question: "32. Nel meccanismo di addizione dei Grignard, il ruolo iniziale di Mg²⁺ è:", options: ["Coordinarsi all’ossigeno carbonilico aumentando l’elettrofilia del carbonile", "Redurre il carbonile a radicale", "Protonare il carbonile", "Agire da nucleofilo diretto sul carbonio carbonilico"], answer: 0 },
+        { question: "33. La reazione tra un’aldeide o un chetone e un’ammina primaria in ambiente acido controllato produce:", options: ["Un alcol terziario", "Un acetale", "Un’enammina", "Un’immina"], answer: 3 },
+        { question: "34. La reazione tra un’aldeide o un chetone e un’ammina secondaria porta tipicamente a:", options: ["Un’immina", "Un’enammina", "Un nitrile", "Un acido carbossilico"], answer: 1 },
+        { question: "35. Qual è l’intermedio neutro chiave nella formazione sia di immine sia di enammine?", options: ["L’acetale ciclico", "La carbinolammina", "L’enolato", "L’ossonio aromatico"], answer: 1 }
     ],
     23: [
-        { question: "1. Quale gruppo funzionale caratterizza gli acidi carbossilici?", options: ["–COOH", "–CHO", "–OH", "–COOR"], answer: 0 },
-        { question: "2. Quale proprietà acida tipicamente presentano gli acidi carbossilici alifatici semplici?", options: ["Sono acidi deboli con pKa intorno a 4-5", "Sono acidi forti come l'HCl", "Sono neutri", "Sono basi forti"], answer: 0 },
-        { question: "3. Come si chiama il sale di un acido carbossilico?", options: ["Carbossilato", "Alcolato", "Alcossido", "Fosfato"], answer: 0 },
-        { question: "4. Quale fattore stabilizza lo ione carbossilato rendendo gli acidi carbossilici più acidi degli alcoli?", options: ["La delocalizzazione della carica negativa per risonanza tra i due atomi di ossigeno", "La presenza di un solo ossigeno", "L'effetto induttivo donatore dei metili", "L'assenza di legami a idrogeno"], answer: 0 },
-        { question: "5. Come influisce un gruppo attrattore di elettroni (es. alogeno) vicino al gruppo carbossilico?", options: ["Aumenta l'acidità per effetto induttivo", "Diminuisce l'acidità", "Non ha alcun effetto", "Neutralizza la molecola"], answer: 0 },
-        { question: "6. Quale reazione converte un acido carbossilico in un estere tramite riscaldamento con un alcol in ambiente acido?", options: ["Esterificazione di Fischer", "Sintesi di Williamson", "Reazione di Wittig", "Riduzione di Clemmensen"], answer: 0 },
-        { question: "7. Quale reagente viene comunemente usato per convertire un acido carbossilico in un cloruro acilico?", options: ["Cloruro di tionile (SOCl2) o PCl3/PCl5", "NaCl acquoso", "Cl2 gassoso alla luce", "HCl diluito"], answer: 0 },
-        { question: "8. Quale reagente riduce un acido carbossilico direttamente ad alcol primario?", options: ["LiAlH4", "NaBH4", "H2 in condizioni miti", "KMnO4"], answer: 0 },
-        { question: "9. Quale reagente NON è in grado di ridurre gli acidi carbossilici?", options: ["NaBH4", "LiAlH4", "H2 ad alta pressione con catalizzatori specifici", "Nessuna delle precedenti"], answer: 0 },
-        { question: "10. Quale gruppo funzionale è caratterizzato dal triplo legame carbonio-azoto (–C≡N)?", options: ["Nitrile", "Ammide", "Nitrocomposto", "Immina"], answer: 0 },
-        { question: "11. Come si possono preparare i nitrili per sostituzione nucleofila bimolecolare (SN2)?", options: ["Facendo reagire un alogenuro alchilico primario con cianuro di sodio (NaCN)", "Riducendo un chetone", "Trattando un alcol con acido solforico", "Idrolizzando un estere"], answer: 0 },
-        { question: "12. Quale reazione subiscono i nitrili per idrolisi totale in ambiente acido o basico?", options: ["Vengono convertiti in acidi carbossilici", "Vengono convertiti in alcani", "Vengono ridotti ad ammine primarie", "Vengono ossidati a diossido di carbonio"], answer: 0 },
-        { question: "13. Quale composto si ottiene dalla riduzione catalitica o con LiAlH4 di un nitrile?", options: ["Un'ammina primaria", "Un'aldeide", "Un chetone", "Un acido carbossilico"], answer: 0 },
-        { question: "14. Come si comportano i nitrili quando reagiscono con i reattivi di Grignard?", options: ["Formano chetoni dopo idrolisi dell'intermedio imminico", "Formano acidi carbossilici", "Formano alcani", "Non reagiscono"], answer: 0 },
-        { question: "15. Quale reazione di alogenazione in posizione alfa caratterizza gli acidi carbossilici in presenza di fosforo e alogeno?", options: ["Reazione di Hell-Volhard-Zelinsky (HVZ)", "Reazione di Diels-Alder", "Condensazione di Claisen", "Ozonolisi"], answer: 0 },
-        { question: "16. Quale prodotto si ottiene dalla decarbossilazione termica dei beta-diasidi (acidi dicarbossilici con i gruppi in posizione 1,3)?", options: ["Un acido carbossilico monofunzionale con perdita di CO2", "Un alcano gassoso", "Un diolo", "Un anello aromatico"], answer: 0 },
-        { question: "17. Quale intermedio ciclico si ipotizza nella decarbossilazione termica dei beta-chetoacidi o beta-diasidi?", options: ["Uno stato di transizione ciclico a sei membri", "Un radicale libero planare", "Un anello aziridinico", "Un carbocatione terziario"], answer: 0 },
-        { question: "18. Quale classe di acidi carbossilici a lunga catena idrocarburica è fondamentale in biochimica come componente dei lipidi?", options: ["Acidi grassi", "Acidi nucleici", "Aminoacidi essenziali", "Acidi sulfonici"], answer: 0 },
-        { question: "19. Gli acidi grassi saturi presentano:", options: ["Solo legami semplici lungo la catena carboniosa", "Almeno un doppio legame cis", "Tripli legami coniugati", "Strutture cicliche aromatiche"], answer: 0 },
-        { question: "20. Gli acidi grassi insaturi naturali presentano tipicamente doppi legami con configurazione geometrica:", options: ["Cis", "Trans", "Racema", "Inattiva"], answer: 0 },
-        { question: "21. Quale proprietà fisica degli acidi carbossilici è influenzata fortemente dai legami a idrogeno intermolecolari (spesso sotto forma di dimeri)?", options: ["Punti di ebollizione elevati rispetto agli idrocarburi di pari massa", "Colore e odore intenso", "Solubilità esclusiva in solventi apolari", "Conducibilità elettrica allo stato puro"], answer: 0 },
-        { question: "22. Quale reagente converte un nitrile in un'aldeide tramite riduzione controllata (es. idruro specifico o Stephen)?", options: ["DIBAH o cloruro stannoso in HCl", "LiAlH4 in eccesso", "KMnO4", "NaOH concentrato"], answer: 0 },
-        { question: "23. Come si ottengono i saponi industriali a partire dai grassi (trigliceridi)?", options: ["Tramite idrolisi basica (saponificazione) con NaOH o KOH", "Tramite idrolisi acida con HCl", "Per riduzione con LiAlH4", "Per idrogenazione catalitica"], answer: 0 },
-        { question: "24. Quale parte della molecola di un sapone è idrofila (affine all'acqua)?", options: ["Il gruppo carbossilato ionizzato (–COO⁻ Na⁺)", "La lunga catena alchilica", "Il legame estere centrale", "Il glicerolo libero"], answer: 0 },
-        { question: "25. Quale parte di un acido grasso o sapone è lipofila / idrofobica?", options: ["La coda idrocarburica alchilica", "Il gruppo –COOH", "I doppi legami", "I legami a idrogeno"], answer: 0 },
-        { question: "26. Come si definiscono le strutture sferiche che i saponi formano in acqua per inglobare lo sporco grasso?", options: ["Miscele micellari (micelle)", "Cristalli covalenti", "Polimeri lineari", "Liposomi proteici"], answer: 0 },
-        { question: "27. Quale dei seguenti acidi carbossilici è unacido bicarbossilico a 4 atomi di carbonio molto usato per produrre il Nylon 66?", options: ["Acido adipico", "Acido acetico", "Acido formico", "Acido benzoico"], answer: 0 },
-        { question: "28. Quale composto si forma quando un acido carbossilico reagisce con un'ammina a freddo?", options: ["Un sale di ammonio dell'acido carbossilico", "Un'ammide direttamente senza riscaldamento", "Un nitrile", "Un'immina"], answer: 0 },
-        { question: "29. Per trasformare il sale di ammonio di un acido e un'ammina in un'ammide, cosa è necessario fare?", options: ["Riscaldare vigorosamente per eliminare acqua", "Aggiungere acqua fredda", "Raffreddare a -80°C", "Aggiungere acido cloridrico concentrato"], answer: 0 },
-        { question: "30. Quale derivato degli acidi carbossilici è il più reattivo nelle sostituzioni aciliche nucleofile?", options: ["Cloruro acilico", "Estere", "Ammide", "Carbossilato"], answer: 0 },
-        { question: "31. Quale derivato degli acidi carbossilici è il meno reattivo nelle sostituzioni aciliche nucleofile?", options: ["Ammide", "Anidride", "Cloruro acilico", "Estere"], answer: 0 },
-        { question: "32. Quale reagente si usa per esterificare gli acidi carbossilici senza passare per condizioni acide forti, agendo tramite attivazione (es. DCC)?", options: ["Dicicloesilcarbodiimmide (DCC)", "KMnO4", "NaCl", "H2SO4 diluito"], answer: 0 },
-        { question: "33. Quale molecola biologica attiva gli acidi grassi formando tioesteri con il Coenzima A prima della beta-ossidazione?", options: ["Acil-CoA sintetasi (consumando ATP)", "ATP sintasi", "Glucosio-6-fosfato", "NADH deidrogenasa"], answer: 0 },
-        { question: "34. Quale effetto ha la presenza di doppi legami cis sugli acidi grassi nei riguardi del punto di fusione?", options: ["Abbassano il punto di fusione creando "gomiti" nella catena che impediscono un impaccamento compatto", "Innalzano drasticamente il punto di fusione", "Rendono i grassi solidi a temperatura ambiente", "Non alterano il punto di fusione"], answer: 0 },
-        { question: "35. Quale test chimico permette di distinguere un acidulo/acido carbossilico da un fenolo sfruttando la liberazione di CO2?", options: ["Reazione con bicarbonato di sodio (NaHCO3) che effervesce", "Test di Tollens", "Saggio dello iodoformio", "Test di Lucas"], answer: 0 },
-        { question: "36. Come si comporta l'acido formico (metanoico) rispetto agli altri acidi carbossilici nel saggio di Tollens?", options: ["Dà positività al saggio di Tollens perché possiede anche un gruppo aldeidico strutturale", "È completamente inerte a qualsiasi ossidante", "Si trasforma in etere", "Polimerizza istantaneamente"], answer: 0 },
-        { question: "37. Quale reazione permette di convertire un acido carbossilico in un'ammina con un atomo di carbonio in meno?", options: ["Degradazione di Hofmann degli acidi o ammidi", "Sintesi di Williamson", "Reazione di Wittig", "Condensazione aldolica"], answer: 0 },
-        { question: "38. Quale nome porta la reazione in cui un estere reagisce con un alcol in presenza di catalizzatori acido/basici per scambiare il gruppo alcolico?", options: ["Transesterificazione", "Saponificazione", "Aminolisi", "Idrolisi totale"], answer: 0 },
-        { question: "39. Quale intermedio comune si forma in tutte le reazioni di sostituzione acilica nucleofila dei derivati degli acidi?", options: ["Intermedio tetraedrico", "Carbocatione planare", "Radicale libero", "Carbanione lineare"], answer: 0 },
-        { question: "40. Quale fattore spiega perché i cloruri acilici sono estremamente reattivi?", options: ["Lo ione cloruro è un eccellente gruppo uscente ed è una base debolissima", "Il cloro dona elettroni per risonanza stabilizzando il carbonile", "Il legame C–Cl è apolare", "Non possiedono il gruppo carbonilico"], answer: 0 },
-        { question: "41. Quale dei seguenti composti è un'anidride acida mista o simmetrica?", options: ["R–C(=O)–O–C(=O)–R", "R–O–R", "R–C≡N", "R–SO3H"], answer: 0 },
-        { question: "42. Cosa si ottiene idrolizzando un'anidride acida con acqua?", options: ["Due molecole di acido carbossilico", "Un alcol e un'aldeide", "Un chetone e acqua", "Un nitrile"], answer: 0 },
-        { question: "43. Quale intermedio si forma nella reazione di un estere con un eccesso di reagente di Grignard prima dell'aggiunta di acido?", options: ["Un sale di alcossido da cui si ottiene un alcol terziario", "Un'aldeide stabile isolabile", "Un acido carbossilico puro", "Un nitrile"], answer: 0 },
-        { question: "44. Quale reagente riduce selettivamente un estere ad aldeide a basse temperature senza procedere fino all'alcol?", options: ["DIBAH (diisobutilalluminio idruro) a -78°C", "LiAlH4 in eccesso a caldo", "NaBH4 in acqua", "KMnO4"], answer: 0 },
-        { question: "45. Quale proprietà chimica rende le ammidi primarie e secondarie straordinariamente stabili all'idrolisi rispetto agli esteri?", options: ["La forte donazione di elettroni per risonanza dell'azoto sul carbonile, che riduce l'elettrofilia del carbonio", "L'assenza totale di polarità nel legame C=O", "La presenza di atomi di cloro", "L'incapacità di formare legami a idrogeno"], answer: 0 },
-        { question: "46. Quale enzima biologico idrolizza i legami ammidici (peptidici) nelle proteine durante la digestione?", options: ["Proteasi (o peptidasi)", "Lipasi", "Amilasi", "Esterasi"], answer: 0 },
-        { question: "47. Quale composto si ottiene dalla disidratazione di un'ammide primaria con pentossido di fosforo (P2O5) o cloruri acilici?", options: ["Un nitrile", "Un'isocianina", "Un alcol", "Un estere"], answer: 0 }
+        { question: "1. Come si separano acido benzoico e naftalene in laboratorio?", options: ["Distillazione semplice", "Estrazione con base acquosa", "Cristallizzazione frazionata", "Riduzione con LiAlH4"], answer: 1 },
+        { question: "2. Quale effetto dei sostituenti aumenta l'acidità di un acido carbossilico?", options: ["Effetto induttivo elettron‑attrattore", "Effetto donatore per risonanza", "Iperconiugazione", "Ingombro sterico"], answer: 0 },
+        { question: "3. La reazione di un reagente di Grignard con CO2 seguita da idrolisi produce:", options: ["Un alcol", "Un estere", "Un'ammina primaria", "Un acido carbossilico"], answer: 3 },
+        { question: "4. Perché gli acidi carbossilici sono più acidi degli alcoli?", options: ["Perché contengono più idrogeni", "Perché gli alcoli non formano legami idrogeno", "Perché gli acidi carbossilici sono più pesanti", "Perché l'anione carbossilato è stabilizzato per risonanza su due atomi di ossigeno"], answer: 3 },
+        { question: "5. Quale composto ha l'acidità maggiore?", options: ["Acido trifluoroacetico", "Acido acetico", "Etanolo", "Acido propanoico"], answer: 0 },
+        { question: "6. Quale specie è predominante per un acido carbossilico a pH fisiologico (~7,3)?", options: ["Acido carbossilico neutro", "Alcol", "Anione carbossilato", "Carbocatione"], answer: 2 },
+        { question: "7. Quale fenomeno spiega l'alto punto di ebollizione degli acidi carbossilici?", options: ["Presenza di legami tripli", "Assenza di interazioni intermolecolari", "Elevata massa atomica del carbonio", "Formazione di dimeri tramite doppi legami a idrogeno"], answer: 3 },
+        { question: "8. Quale reagente ossida un alcol primario fino ad acido carbossilico?", options: ["NaBH4", "CrO3/H3O+", "H2/Pd", "LiAlH4"], answer: 1 },
+        { question: "9. Durante l'idrolisi di un nitrile quale composto si forma inizialmente?", options: ["Un chetone", "Un'ammide", "Un etere", "Un alcol"], answer: 1 },
+        { question: "10. Perché CF3CO2H è più acido di CH3CO2H?", options: ["Maggiore ingombro sterico", "Presenza di doppi legami", "Effetto induttivo elettron‑attrattore dei fluori", "Maggiore massa molecolare"], answer: 2 },
+        { question: "11. Quale specie stabilizza maggiormente un anione carbossilato?", options: ["Aumento della temperatura", "Ingombro sterico", "Riduzione della polarità", "Delocalizzazione elettronica"], answer: 3 },
+        { question: "12. Quale proprietà rende il carbonio del nitrile suscettibile ad attacco nucleofilo?", options: ["L'assenza di legami π", "La presenza di carica positiva sull'azoto", "La forte polarizzazione del legame C≡N", "La presenza di carica negativa sul carbonio"], answer: 2 },
+        { question: "13. La riduzione di un nitrile con LiAlH4 porta alla formazione di:", options: ["Un alcol secondario", "Un'ammina primaria", "Un acido carbossilico", "Un chetone"], answer: 1 },
+        { question: "14. Quale sostituente aumenta maggiormente l'acidità dell'acido benzoico?", options: ["CH3", "NH2", "NO2", "OCH3"], answer: 2 },
+        { question: "15. L'equazione di Henderson–Hasselbalch collega:", options: ["pH e temperatura", "pH e massa molecolare", "pH, pKa e rapporto tra base coniugata e acido", "pH e solubilità"], answer: 2 },
+        { question: "16. Quando pH = pKa il rapporto [A−]/[HA] vale:", options: ["1", "10", "0,1", "100"], answer: 0 },
+        { question: "17. Quale metodo consente di aumentare di un carbonio la catena partendo da un alogenuro alchilico?", options: ["Sostituzione con CN− seguita da idrolisi", "Riduzione con NaBH4", "Idrogenazione catalitica", "Ossidazione con CrO3"], answer: 0 },
+        { question: "18. Quale prodotto si ottiene dalla riduzione di un acido carbossilico con LiAlH4?", options: ["Un alcol secondario", "Un alcol primario", "Un estere", "Un'ammina"], answer: 1 },
+        { question: "19. L'idrolisi basica di un nitrile produce inizialmente:", options: ["Un alcol", "Un'anione carbossilato", "Un estere", "Un etere"], answer: 1 },
+        { question: "20. Quale composto è più acido?", options: ["Acido benzoico", "Fenolo", "Etanolo", "Metanolo"], answer: 0 },
+        { question: "21. Quale fattore aumenta la stabilità di un carbossilato?", options: ["Effetto induttivo elettron‑attrattore", "Aumento del numero di idrogeni", "Assenza di risonanza", "Riduzione della polarità"], answer: 0 },
+        { question: "22. Quale prodotto si ottiene dall'idrolisi completa di un nitrile?", options: ["Aldeide", "Etere", "Acido carbossilico", "Alcano"], answer: 2 },
+        { question: "23. Quale tipo di reazione avviene al carbonile degli acidi carbossilici nei derivati acilici?", options: ["Sostituzione nucleofila acilica", "Eliminazione elettrofila", "Sostituzione radicalica", "Addizione radicalica"], answer: 0 },
+        { question: "24. Quale fattore rende gli acidi carbossilici buoni reagenti nelle sintesi biologiche?", options: ["Possono formare numerosi derivati acilici", "Sono completamente inerti", "Non formano sali", "Non reagiscono con nucleofili"], answer: 0 },
+        { question: "25. Quale specie si forma quando un acido carbossilico perde un protone?", options: ["Alcano", "Aldeide", "Anione carbossilato", "Chetone"], answer: 2 },
+        { question: "26. Quale composto è più acido tra i seguenti?", options: ["p‑Metossibenzoico", "Toluene", "p‑Metilbenzoico", "p‑Nitrobenzoico"], answer: 3 },
+        { question: "27. Quale proprietà caratterizza il gruppo carbossilico?", options: ["Triplo legame carbonio‑carbonio", "Presenza di due azoti", "Presenza simultanea di carbonile e ossidrile", "Solo legami singoli"], answer: 2 },
+        { question: "28. Quale reazione produce un'ammina primaria da nitrile?", options: ["Alchilazione", "Ossidazione con KMnO4", "Riduzione con LiAlH4", "Esterificazione"], answer: 2 },
+        { question: "29. Quale sostanza è più acida?", options: ["Metano", "Acido formico", "Acido acetico", "Etanolo"], answer: 1 },
+        { question: "30. Quale caratteristica dei nitrili li rende analoghi ai composti carbonilici?", options: ["Carica negativa permanente", "Presenza di un carbonio elettrofilo", "Assenza di polarità", "Presenza di due ossigeni"], answer: 1 },
+        { question: "31. Quale caratteristica rende i nitrili relativamente reattivi?", options: ["La forte polarizzazione del triplo legame C≡N", "L'assenza di carica", "La presenza di legami C–C singoli", "La completa simmetria elettronica"], answer: 0 },
+        { question: "32. Quale reagente è necessario per preparare un reagente di Grignard?", options: ["KMnO4", "HCl", "Mg in etere anidro", "NaOH"], answer: 2 },
+        { question: "33. Quale gruppo rende un acido benzoico meno acido?", options: ["CN", "CF3", "OCH3", "NO2"], answer: 2 },
+        { question: "34. Quale reazione trasforma un nitrile in acido carbossilico?", options: ["Idrogenazione", "Alchilazione", "Idrolisi acida o basica", "Riduzione catalitica"], answer: 2 },
+        { question: "35. Quale specie si forma quando un acido carbossilico reagisce con NaOH?", options: ["Un nitrile", "Un estere", "Un'ammina", "Un sale carbossilato"], answer: 3 },
+        { question: "36. Quale composto è più solubile in acqua?", options: ["Esano", "Sodio acetato", "Benzene", "Acido butanoico"], answer: 1 },
+        { question: "37. Quale valore di pKa indica un acido più forte?", options: ["15", "3", "7", "10"], answer: 1 },
+        { question: "38. Quale proprietà strutturale caratterizza gli acidi carbossilici?", options: ["Assenza di ibridazione", "Carbonio sp3 tetraedrico", "Carbonio sp lineare", "Carbonio carbonilico sp2 planare"], answer: 3 },
+        { question: "39. Quale reagente converte un nitrile in un chetone?", options: ["Reagente di Grignard seguito da idrolisi", "LiAlH4", "NaBH4", "H2/Pd"], answer: 0 },
+        { question: "40. Quale composto si forma dalla reazione tra nitrile e reagente di Grignard dopo idrolisi?", options: ["Un chetone", "Un alcol primario", "Un'ammide", "Un estere"], answer: 0 }
     ],
     24: [
-        { question: "1. Quale derivato degli acidi carbossilici deriva formalmente dalla sostituzione dell' –OH con un atomo di cloro?", options: ["Cloruro acilico (o acil cloruro)", "Estere", "Ammide", "Anidride"], answer: 0 },
-        { question: "2. Quale dei seguenti derivati degli acidi carbossilici possiede la maggiore reattività nelle sostituzioni aciliche nucleofile?", options: ["Cloruro acilico", "Anidride", "Estere", "Ammide"], answer: 0 },
-        { question: "3. Nella sostituzione acilica nucleofila, qual è l'intermedio chiave che si forma dopo l'attacco del nucleofilo al carbonile?", options: ["Intermedio tetraedrico", "Carbocatione sp2", "Radicale libero", "Enolo aromatico"], answer: 0 },
-        { question: "4. Quale reagente converte un acido carbossilico in un cloruro acilico?", options: ["SOCl2 (cloruro di tionile)", "NaBH4", "H2SO4", "CH3OH"], answer: 0 },
-        { question: "5. Cosa si ottiene facendo reagire un cloruro acilico con un'ammina primaria in eccesso?", options: ["Un'ammide", "Un estere", "Un nitrile", "Un acido carbossilico"], answer: 0 },
-        { question: "6. Quale sottoprodotto gassoso si libera spesso nella preparazione di cloruri acilici con SOCl2?", options: ["HCl e SO2", "Cl2 e H2", "CO2 e NH3", "O2 e N2"], answer: 0 },
-        { question: "7. Le anidridi degli acidi carbossilici si formano tipicamente per:", options: ["Disidratazione termica di acidi bicarbossilici o reazione tra un cloruro acilico e un sale di carbossilato", "Riduzione con LiAlH4", "Idrolisi basica", "Reazione con Grignard"], answer: 0 },
-        { question: "8. Quale prodotto si ottiene dalla reazione di un'anidride acetica con un alcol?", options: ["Un estere e un acido carbossilico", "Due aldeidi", "Un'ammina", "Un etere"], answer: 0 },
-        { question: "9. L'aspirina (acido acetilsalicilico) viene sinteticamente prodotta acetilando l'acido salicilico mediante l'uso di:", options: ["Anidride acetica", "Cloruro di metile", "Acido formico", "Acetone"], answer: 0 },
-        { question: "10. Quale reazione descrive la formazione di un estere a partire da un acido carbossilico e un alcol in ambiente acido?", options: ["Esterificazione di Fischer", "Sintesi di Williamson", "Reazione di Wittig", "Saponificazione"], answer: 0 },
-        { question: "11. L'esterificazione di Fischer è una reazione:", options: ["Equilibrio reversibile", "Completamente irreversibile", "Radicalica a catena", "Fotochimica"], answer: 0 },
-        { question: "12. Come si può spostare l'equilibrio di un'esterificazione di Fischer verso la formazione dell'estere?", options: ["Usando un eccesso di alcol o rimuovendo l'acqua formata", "Aggiungendo acqua in grande quantità", "Operando a bassissima temperatura senza catalizzatore", "Usando basi forti in stecchiometria"], answer: 0 },
-        { question: "13. Quale nome prende l'idrolisi basica di un estere (es. con NaOH)?", options: ["Saponificazione", "Esterificazione", "Aminolisi", "Transesterificazione"], answer: 0 },
-        { question: "14. Perché la saponificazione è una reazione praticamente irreversibile?", options: ["Perché lo ione carbossilato formato è stabilizzato per risonanza e non viene attaccato facilmente dall'alcol", "Perché l'acqua evapora subito", "Perché si forma un gas che fuoriesce", "Perché il catalizzatore acido distrugge l'alcol"], answer: 0 },
-        { question: "15. Cosa succede quando un estere reagisce con due equivalenti di un reattivo di Grignard (seguito da acidificazione)?", options: ["Si forma un alcol terziario", "Si forma un'aldeide", "Si forma un acido carbossilico", "Si forma un etere"], answer: 0 },
-        { question: "16. Quale reagente riduce selettivamente un estere ad aldeide a -78°C?", options: ["DIBAH", "LiAlH4 in eccesso", "NaBH4", "KMnO4"], answer: 0 },
-        { question: "17. Quale reagente riduce un estere completamente a due alcoli (alcol primario derivato dall'acilico + alcol legato all'estere)?", options: ["LiAlH4", "NaBH4", "H2SO4", "AgNO3"], answer: 0 },
-        { question: "18. La reazione tra un estere e un'ammina per formare un'ammide è detta:", options: ["Aminolisi degli esteri", "Saponificazione", "Idrolisi acida", "Alchilazione"], answer: 0 },
-        { question: "19. Quale gruppo uscente si allontana durante l'aminolisi di un estere?", options: ["Uno ione alcossido (o alcol)", "Uno ione cloruro", "Una molecola d'acqua", "Un idruro"], answer: 0 },
-        { question: "20. Le ammidi sono i derivati degli acidi carbossilici meno reattivi perché:", qoptions: ["La coppia di elettroni dell'azoto è delocalizzata per risonanza con il carbonile, riducendo la parziale carica positiva del carbonio", "Il legame C–N è ionico", "L'azoto è molto elettronegativo e attrae tutti gli elettroni verso di sé", "Non possiedono il gruppo carbonilico"], answer: 0 },
-        { question: "21. Quale prodotto si ottiene dalla riduzione di un'ammide con LiAlH4?", options: ["Un'ammina primaria o secondaria (il C=O diventa –CH2–)", "Un alcol primario", "Un'aldeide", "Un acido carbossilico"], answer: 0 },
-        { question: "22. L'idrolisi acida di un'ammide produce:", options: ["Un acido carbossilico e un sale d'ammonio (o ammina protonata)", "Un estere e acqua", "Un nitrile e idrogeno", "Un chetone"], answer: 0 },
-        { question: "23. L'idrolisi basica di un'ammide produce:", options: ["Un sale di carbossilato e un'ammina (o ammoniaca)", "Un alcol primario", "Un'aldeide", "Un'anidride"], answer: 0 },
-        { question: "24. Perché l'idrolisi delle ammidi richiede condizioni più drastiche (caldo, acidi o basi forti prolungati) rispetto agli esteri?", options: ["Perché l'ammina è un gruppo uscente molto scarso (una base forte)", "Perché le ammidi sono apolari", "Perché non formano intermedi tetraedrici", "Perché l'acqua non bagna le ammidi"], answer: 0 },
-        { question: "25. Quale polimero di condensazione (poliammide) si ottiene dalla reazione di acido adipico e esametilendiammina?", options: ["Nylon 6,6", "PET (Polietilene tereftalato)", "Plexiglas", "Bachelite"], answer: 0 },
-        { question: "26. Quale polimero di condensazione (poliestere) si ottiene dalla reazione tra dimetil tereftalato (o acido tereftalico) ed etilenglicole?", options: ["PET (Polietilene tereftalato)", "Nylon 6,6", "Polietilene ad alta densità", "Polistirene"], answer: 0 },
-        { question: "27. Le polimerizzazioni a crescita per stadi (step-growth polymerization) richiedono monomeri che possiedano:", options: ["Almeno due gruppi funzionali reattivi", "Un doppio legame radicalico", "Un anello aromatico instabile", "Un atomo di carbonio quaternario"], answer: 0 },
-        { question: "28. Nei sistemi biologici, gli acidi carbossilici vengono comunemente attivati per le reazioni di acilazione sotto forma di:", options: ["Tioesteri (es. Acetil-CoA) o acil fosfati", "Cloruri acilici", "Anidridi miste con acido cloridrico", "Nitrili stabili"], answer: 0 },
-        { question: "29. Quale caratteristica strutturale rende i tioesteri biologici più reattivi degli esteri normali nei confronti dei nucleofili?", options: ["Il legame C–S è meno stabilizzato per risonanza rispetto al legame C–O dell'estere", "Lo zolfo è un gas nobile", "I tioesteri non hanno il carbonile", "Il legame C–S è ionico"], answer: 0 },
-        { question: "30. Quale coenzima contiene un gruppo tiolico (–SH) che forma legami tioestere con i gruppi acilici nel metabolismo energetico?", options: ["Coenzima A", "NAD+", "FAD", "ATP"], answer: 0 },
-        { question: "31. Durante la digestione dei grassi nel corpo umano, i trigliceridi (che sono esteri del glicerolo) vengono idrolizzati da enzimi specifici chiamati:", options: ["Lipasi", "Proteasi", "Amilasi", "Nucleasi"], answer: 0 },
-        { question: "32. Durante la digestione delle proteine, i legami ammidici (peptidici) vengono scissi da:", options: ["Proteasi", "Lipasi", "Esterasi", "Glicosilasi"], answer: 0 },
-        { question: "33. Quale composto si forma quando un cloruro acilico reagisce con un alcol?", options: ["Un estere", "Un'ammina", "Un etere", "Un acido carbossilico"], answer: 0 },
-        { question: "34. Quale composto si forma quando un cloruro acilico reagisce con acqua?", options: ["Un acido carbossilico", "Un'aldeide", "Un alcol terziario", "Un alcano"], answer: 0 },
-        { question: "35. Come si chiama la reazione in cui un'ammide viene convertita in un'ammina con un atomo di carbonio in meno per trattamento con bromo e base?", options: ["Degradazione di Hofmann delle ammidi", "Sintesi di Gabriel", "Reazione di Wittig", "Sintesi di Williamson"], answer: 0 },
-        { question: "36. Quale classe di composti si ottiene dalla reazione di disidratazione delle ammidi primarie?", options: ["Nitrili", "Isocianati", "Eteri", "Enamine"], answer: 0 },
-        { question: "37. Quale intermedio si forma nella reazione di conversione di un nitrile in un'ammide per idrolisi parziale?", options: ["Un'ammide", "Un'aldeide", "Un alcol", "Un estere"], answer: 0 },
-        { question: "38. Quale reagente permette la sintesi di ammidi partendo da acidi carbossilici e ammine a temperatura ambiente tramite attivazione con dicicloesilcarbodiimmide (DCC)?", options: ["DCC", "NaOH", "KMnO4", "NaCl"], answer: 0 },
-        { question: "39. Quale proprietà fisica differenzia le ammidi primarie (non terziarie) dalle altre classi di derivati in termini di punti di ebollizione?", options: ["Formano forti legami a idrogeno intermolecolari, avendo punti di ebollizione molto elevati", "Sono gassose a temperatura ambiente", "Hanno punti di ebollizione inferiori agli idrocarburi", "Sono insolubili in qualsiasi solvente polare"], answer: 0 },
-        { question: "40. Quale delle seguenti molecole NON è un derivato degli acidi carbossilici?", options: ["Chetone", "Cloruro acilico", "Anidride", "Ammide"], answer: 0 }
-    ],
-    25: [
-        { question: "1. Il polietilene tereftalato (PET) deriva da:", options: ["Benzene e etanolo", "Acido acetico e ammoniaca", "Metanolo e acetone", "Dimetil tereftalato ed etilenglicole"], answer: 3 },
-        { question: "2. Il motivo della reattività dei tioesteri biologici è:", options: ["Sono radicali liberi", "Lo zolfo elimina sempre protoni", "Il carbonile è assente", "Il legame C–S è meno stabilizzato per risonanza"], answer: 3 },
-        { question: "3. Nel metabolismo, molti intermedi energetici sono:", options: ["Tioesteri", "Alcani", "Alcheni", "Aldeidi"], answer: 0 },
-        { question: "4. Quale intermediato comune appare nella maggior parte delle sostituzioni aciliche nucleofile?", options: ["Intermedio tetraedrico", "Radicale libero", "Carbocatione", "Enolo aromatico"], answer: 0 },
-        { question: "5. Quale derivato degli acidi carbossilici è generalmente il meno reattivo?", options: ["Tioestere", "Anidride", "Ammide", "Cloruro acilico"], answer: 2 },
-        { question: "6. Nel meccanismo di idrolisi degli esteri il nucleofilo iniziale è:", options: ["H2", "NH3", "OH− o H2O", "Cl−"], answer: 2 },
-        { question: "7. Quale gruppo uscente lascia durante la aminolisi degli esteri?", options: ["Ammoniaca", "Cloruro", "Un alcol", "Idruro"], answer: 2 },
-        { question: "8. La reazione tra un estere e un'ammina è detta:", options: ["Ossidazione", "Isomerizzazione", "Riduzione", "Aminolisi"], answer: 3 },
-        { question: "9. Qual è il motivo della stabilità biologica delle ammidi?", options: ["La presenza di radicali", "L’assenza di dipolo", "La forte risonanza tra N e carbonile", "La presenza di cloro"], answer: 2 },
-        { question: "10. Durante la digestione delle proteine:", options: ["Le ammidi si riducono spontaneamente", "Le ammidi vengono idrolizzate da proteasi", "Le ammidi si polimerizzano", "Le ammidi diventano esteri"], answer: 1 },
-        { question: "11. Durante la digestione dei grassi negli organismi:", options: ["Gli esteri diventano nitrili", "Gli esteri diventano cloruri", "Gli esteri vengono ossidati da ossigeno", "Gli esteri vengono idrolizzati da lipasi"], answer: 3 },
-        { question: "12. Nei polimeri step-growth:", options: ["Serve sempre un iniziatore radicalico", "Ogni legame si forma indipendentemente", "I monomeri devono avere doppi legami", "La crescita avviene solo da radicali"], answer: 1 },
-        { question: "13. Le reazioni che formano poliesteri e poliammidi sono esempi di:", options: ["Reazione SN1", "Addizione elettrofila", "Polimerizzazione a crescita per stadi", "Polimerizzazione radicalica"], answer: 2 },
-        { question: "14. Nei sistemi biologici gli acidi carbossilici vengono spesso attivati come:", options: ["Aldeidi", "Cloruri acilici", "Alcoli", "Acil fosfati o tioesteri"], answer: 3 },
-        { question: "15. I poliesteri si formano tipicamente dalla reazione tra:", options: ["Ammina e alchene", "Nitrile e acqua", "Diolo e diacido", "Chetone e alcol"], answer: 2 },
-        { question: "16. Perché l'idrolisi basica degli esteri (saponificazione) è praticamente irreversibile?", options: ["Perché l'acqua agisce da catalizzatore permanente", "Perché il carbonile viene distrutto permanentemente", "Perché si forma un carbossilato stabilizzato che non è facilmente riesterificato", "Perché l'alcol formato è più acido dell'acido carbossilico"], answer: 2 },
-        { question: "17. Nylon 66 deriva dalla reazione tra:", options: ["Fenolo e acetone", "Acido acetico e metanolo", "Benzene e ammoniaca", "Acido adipico e esametilendiammina"], answer: 3 },
-        { question: "18. Le ammidi sono meno reattive degli altri derivati degli acidi carbossilici perché:", options: ["Non possono reagire con nucleofili", "Non possiedono carbonile", "Sono sempre aromatiche", "L’azoto dona elettroni per risonanza stabilizzando il carbonile"], answer: 3 },
-        { question: "19. Perché il chetone intermedio nella reazione estere-Grignard non si isola normalmente?", options: ["Perché precipita come sale", "Perché evapora", "Perché si ossida spontaneamente", "Perché reagisce immediatamente con un secondo equivalente di Grignard"], answer: 3 },
-        { question: "20. Gli esteri reagiscono con 2 equivalenti di Grignard producendo:", options: ["Un alcol terziario", "Un nitrile", "Un alcol primario", "Un’ammide"], answer: 0 },
-        { question: "21. Quale reagente permette la riduzione parziale di un estere ad aldeide?", options: ["HCl", "NaBH4", "DIBAH", "LiAlH4"], answer: 2 },
-        { question: "22. Quale intermedio si forma durante la riduzione di un estere con LiAlH4?", options: ["Un’aldeide intermedia", "Un carbocatione benzilico", "Un nitrile", "Un radicale alcossilico"], answer: 0 },
-        { question: "23. Quale reagente riduce gli esteri ad alcoli primari?", options: ["KMnO4", "NaCl", "H2SO4", "LiAlH4"], answer: 3 },
-        { question: "24. Nella aminolisi di un estere con NH3 si ottiene:", options: ["Un nitrile", "Un’ammide", "Un chetone", "Un acido carbossilico"], answer: 1 },
-        { question: "25. L'idrolisi acido-catalizzata di un estere è essenzialmente:", options: ["La reazione inversa dell’esterificazione di Fischer", "Una riduzione del carbonile", "Una reazione radicalica", "Una reazione di eliminazione E2"], answer: 0 },
-        { question: "26. Qual è il prodotto principale dell'idrolisi basica di un estere?", options: ["Un carbossilato e un alcol", "Un'amide e un alcol", "Un chetone e un alcano", "Un'aldeide e acqua"], answer: 0 },
-        { question: "27. Perché gli esteri sono meno reattivi dei cloruri acilici nelle sostituzioni aciliche nucleofile?", options: ["Perché l'alcossido è un gruppo uscente peggiore del cloruro", "Perché il carbonile è completamente non polare", "Perché l'ossigeno non può donare elettroni", "Perché gli esteri non hanno carbonile"], answer: 0 },
-        { question: "28. Durante la saponificazione di un estere, quale legame viene rotto?", options: ["Il legame C–OR’ dell’estere", "Il legame C=O del carbonile", "Il legame C–C adiacente al carbonile", "Il legame O–H dell’acqua"], answer: 0 },
-        { question: "29. Nel meccanismo di idrolisi basica degli esteri, l'intermedio chiave è:", options: ["Un carbocatione planare", "Un enolato aromatico", "Un intermedio tetraedrico alcossido", "Un radicale carbonilico"], answer: 2 },
-        { question: "30. Il gruppo funzionale caratteristico di un tioestere è:", options: ["C(=O)–S–R", "C–Cl", "C(=O)–O–R", "C≡N"], answer: 0 },
-        { question: "31. Quale composto biologico contiene un legame tioestere?", options: ["Acetil-CoA", "Glucosio", "ATP", "Etanolo"], answer: 0 },
-        { question: "32. La formazione di acetil-CoA avviene tramite:", options: ["Addizione radicalica", "Trasposizione sigmatropica", "Sostituzione acilica nucleofila", "Eliminazione E2"], answer: 2 },
-        { question: "33. I tioesteri biologici più comuni sono:", options: ["Acil-CoA", "Cloruri-CoA", "Aldeidi-CoA", "Nitrili-CoA"], answer: 0 },
-        { question: "34. Qual è l’effetto complessivo della riduzione di un’ammide?", options: ["Ossidazione del carbonio", "Formazione di un estere", "Conversione del gruppo C=O in CH2", "Formazione di un nitrile"], answer: 2 },
-        { question: "35. La riduzione delle ammidi con LiAlH4 produce:", options: ["Aldeidi", "Acidi carbossilici", "Ammine", "Alcoli"], answer: 2 },
-        { question: "36. L’idrolisi basica di un’ammide produce:", options: ["Un carbossilato e ammoniaca", "Un estere", "Un aldeide", "Un alcol"], answer: 0 },
-        { question: "37. L’idrolisi acida di un’ammide produce:", options: ["Un estere e ammoniaca", "Un nitrile e acqua", "Un acido carbossilico e ammonio", "Un alcol e ammina"], answer: 2 },
-        { question: "38. L’idrolisi delle ammidi richiede condizioni più drastiche perché:", options: ["Le ammidi non sono polari", "Non esiste un intermedio tetraedrico", "L’amide è molto stabile e NH2− è un cattivo gruppo uscente", "Il carbonile è assente"], answer: 2 },
-        { question: "39. Le poliammidi si formano dalla reazione tra:", options: ["Alchene e alcol", "Acido e nitrile", "Diammina e diacido", "Chetone e ammina"], answer: 2 },
-        { question: "40. Quale molecola reagisce con l’acil adenilato per formare acetil-CoA?", options: ["Acetato", "Coenzima A", "Glucosio", "ATP"], answer: 1 }
+        { question: "1. La reazione tra un cloruro acilico e un alcol dà:", options: ["Un’acido carbossilico", "Un nitrile", "Un’amide", "Un estere"], answer: 3 },
+        { question: "2. Nell’alcolisi dei cloruri acilici, quale ordine di reattività degli alcoli è riportato?", options: ["Secondari > primari > terziari", "Terziari > secondari > primari", "Primari > secondari > terziari", "Tutti reagiscono alla stessa velocità"], answer: 2 },
+        { question: "3. Un cloruro acilico reagisce con NH3 per dare:", options: ["Un’ammide", "Un tioestere", "Un estere", "Un’anidride"], answer: 0 },
+        { question: "4. Perché nella preparazione di ammidi da cloruri acilici servono spesso 2 equivalenti di ammina?", options: ["Uno reagisce con il cloruro acilico e l’altro neutralizza HCl", "Perché l’ammina agisce prima da ossidante e poi da nucleofilo", "Perché il primo equivalente riduce il carbonile", "Perché il secondo equivalente converte l’ammide in estere"], answer: 0 },
+        { question: "5. Un cloruro acilico trattato con LiAlH4 porta infine a:", options: ["Un alcol primario", "Un chetone", "Un’aldeide isolabile stabile", "Un’amide"], answer: 0 },
+        { question: "6. Perché l’aldeide intermedia nella riduzione di un cloruro acilico con LiAlH4 non viene isolata?", options: ["Perché complessa irreversibilmente il cloruro", "Perché è più reattiva del cloruro acilico e viene ridotta ulteriormente", "Perché viene ossidata dall’idruro", "Perché evapora immediatamente"], answer: 1 },
+        { question: "7. Un cloruro acilico trattato con un Grignard porta generalmente a:", options: ["Un alcol terziario", "Un’amide secondaria", "Un’estere", "Un chetone isolabile"], answer: 0 },
+        { question: "8. Quale reagente permette invece di fermarsi al chetone partendo da un cloruro acilico?", options: ["Un reattivo di Gilman (R2CuLi)", "Un eccesso di LiAlH4", "Un eccesso di CH3MgBr", "NaBH4 in metanolo"], answer: 0 },
+        { question: "9. Perché con i Grignard il chetone intermedio da cloruro acilico non si isola di norma?", options: ["Perché il chetone è meno reattivo del cloruro acilico", "Perché il magnesio lo trasforma in nitrile", "Perché subisce subito una seconda addizione del reagente di Grignard", "Perché viene idrolizzato prima della formazione"], answer: 2 },
+        { question: "10. Quale affermazione sui reattivi di Gilman è corretta nel contesto del capitolo?", options: ["Reagiscono con ammidi per dare aldeidi", "Reagiscono con cloruri acilici per dare chetoni isolabili", "Reagiscono con esteri per dare alcoli terziari", "Non reagiscono con nessun derivato acilico"], answer: 1 },
+        { question: "11. Perché le anidridi sono considerate meno efficienti dei cloruri acilici per introdurre gruppi acilici diversi dall’acetile?", options: ["Perché non reagiscono con ammine", "Perché sono più inerti delle ammidi", "Perché solo metà della molecola viene trasferita e l’altra metà diventa gruppo uscente", "Perché vengono ridotte spontaneamente"], answer: 2 },
+        { question: "12. L’acetilazione dell’acido salicilico con anidride acetica porta a:", options: ["Acetanilide", "Aspirina", "Acetammide", "Benzoato di sodio"], answer: 1 },
+        { question: "13. Nella preparazione dell’acetaminofene da p-idrossianilina e anidride acetica reagisce preferenzialmente:", options: ["Il gruppo -NH2, più nucleofilo del gruppo -OH", "Entrambi i gruppi con uguale velocità dando sempre miscela 1:1", "Solo l’anello aromatico", "Il gruppo -OH, perché più acido"], answer: 0 },
+        { question: "14. In biochimica, l’attivazione di un acido carbossilico avviene spesso tramite formazione di:", options: ["Un bromuro acilico", "Un nitrile", "Un cloruro acilico", "Un acil adenilato (acil adenosil fosfato)"], answer: 3 },
+        { question: "15. Nel meccanismo biologico mostrato per la biosintesi degli acidi grassi, il gruppo uscente nella conversione dell’ATP in acil adenilato è:", options: ["Pirofosfato (PPi)", "Ammoniaca", "Cloruro", "Acetato"], answer: 0 },
+        { question: "16. Perché l’idrolisi dei cloruri acilici si esegue spesso in presenza di base come piridina o NaOH?", options: ["Per trasformare l’acqua in un gruppo uscente", "Per ridurre il carbonile", "Per neutralizzare l’HCl formato ed evitare reazioni collaterali", "Per generare radicali cloruro"], answer: 2 },
+        { question: "17. La reazione tra un cloruro acilico e un carbossilato dà:", options: ["Un’anidride", "Un tioestere", "Un’amide", "Un’aldeide"], answer: 0 },
+        { question: "18. Quale descrizione è corretta per la riduzione di un acido carbossilico con LiAlH4?", options: ["Porta ad un alcol terziario", "Porta ad un alcol primario passando per un’aldeide non isolabile", "Porta direttamente a un’amide", "Si arresta sempre al cloruro acilico"], answer: 1 },
+        { question: "19. Un cloruro acilico trattato con acqua dà principalmente:", options: ["Un’amide", "Un acido carbossilico", "Un’estere", "Un alchene"], answer: 1 },
+        { question: "20. Come si nominano in genere gli esteri?", options: ["Prima l’acile e poi l’alcol con suffisso -ammide", "Come aldeidi sostituite", "Prima il gruppo alchilico legato all’ossigeno, poi il nome del carbossilato", "Sempre con il suffisso -carbonile"], answer: 2 },
+        { question: "21. Quale differenza strutturale fondamentale consente ai derivati degli acidi carbossilici di subire sostituzione acilica nucleofila, a differenza di aldeidi e chetoni?", options: ["La presenza di un doppio legame C=C coniugato", "La presenza di un carbonio sp3 sul carbonile", "La presenza di un gruppo uscente legato al carbonile", "La presenza obbligatoria di un idrogeno in alfa"], answer: 2 },
+        { question: "22. Quale tra i seguenti derivati acilici è generalmente il più reattivo?", options: ["Tioestere", "Ammide", "Cloruro acilico", "Estere"], answer: 2 },
+        { question: "23. Quale tra i seguenti derivati acilici è generalmente il meno reattivo?", options: ["Anidride", "Tioestere", "Cloruro acilico", "Ammide"], answer: 3 },
+        { question: "24. Quale ordine di reattività è corretto per i derivati acilici?", options: ["Anidride > ammide > estere > tioestere > cloruro acilico", "Estere > cloruro acilico > ammide > anidride > tioestere", "Cloruro acilico > anidride > tioestere > estere > ammide", "Ammide > estere > tioestere > anidride > cloruro acilico"], answer: 2 },
+        { question: "25. Perché i cloruri acilici sono più reattivi delle ammidi?", options: ["Perché il cloro sottrae elettroni per induzione mentre l’azoto dona elettroni per risonanza", "Perché il cloro è un miglior donatore per risonanza dell’azoto", "Perché i cloruri acilici non formano intermedi tetraedrici", "Perché le ammidi sono prive di legame carbonilico"], answer: 0 },
+        { question: "26. La fase generalmente determinante la velocità nella sostituzione acilica nucleofila è:", options: ["La deprotonazione in alfa", "L’espulsione del gruppo uscente", "L’addizione iniziale del nucleofilo al carbonile", "La protonazione finale"], answer: 2 },
+        { question: "27. Quale fattore sterico favorisce maggiormente una sostituzione acilica nucleofila?", options: ["L’assenza di polarizzazione del carbonile", "Un carbonile tetrasostituito", "La presenza di due gruppi tert-butile in alfa", "Un carbonile poco ingombrato"], answer: 3 },
+        { question: "28. Un anidride asimmetrica si nomina citando:", options: ["Prima il gruppo più lungo e poi il più corto seguiti da “ammide”", "Il gruppo alchilico legato all’ossigeno seguito da “oato”", "Solo il primo dei due acili seguito da “anidride”", "I due acidi in ordine alfabetico seguiti da “anidride”"], answer: 3 },
+        { question: "29. Qual è il nome corretto per CH3COCl?", options: ["Clorammide acetica", "Acido cloroacetico", "Acetato di cloro", "Cloruro di acetile"], answer: 3 },
+        { question: "30. Nel meccanismo di sostituzione acilica nucleofila, l’intermedio chiave è:", options: ["Un radicale acilico", "Un carbocatione planare", "Un enolato aromatico", "Un intermedio tetraedrico alcossido"], answer: 3 },
+        { question: "31. In N-metilpropanammide, il prefisso N- indica che il sostituente è legato:", options: ["Al carbonio alfa", "All’azoto dell’ammide", "All’ossigeno del carbonile", "Al carbonio carbonilico"], answer: 1 },
+        { question: "32. Quale reagente converte tipicamente un acido carbossilico in bromuro acilico?", options: ["PBr3", "DMSO", "LiAlH4", "NaOH"], answer: 0 },
+        { question: "33. Perché la sostituzione acilica diretta di un acido carbossilico è difficile?", options: ["Perché -OH è un cattivo gruppo uscente", "Perché gli acidi non formano intermedi tetraedrici", "Perché il carbonile degli acidi non è elettrofilo", "Perché l’idrogeno acido blocca completamente il nucleofilo"], answer: 0 },
+        { question: "34. La Fischer esterificazione è favorita quando:", options: ["Si usa necessariamente un alcol terziario", "Si usa un eccesso di alcol o si rimuove l’acqua", "Si opera solo in ambiente fortemente basico", "Si usa un eccesso di acqua"], answer: 1 },
+        { question: "35. Nel meccanismo della Fischer esterificazione, la prima attivazione del carbonile avviene tramite:", options: ["Rimozione del gruppo -OH come HO−", "Formazione di un radicale cationico", "Deprotonazione dell’alcol", "Protonazione dell’ossigeno carbonilico"], answer: 3 },
+        { question: "36. Negli esperimenti con metanolo marcato con 18O nella Fischer esterificazione, l’isotopo 18O finisce:", options: ["Nel carbonile dell’acido residuo", "Nell’acqua eliminata", "Nell’ossigeno alcossilico dell’estere", "Sempre nel catalizzatore"], answer: 2 },
+        { question: "37. Perché non si preparano facilmente ammidi trattando semplicemente un acido carbossilico con un’ammina?", options: ["L’ammina viene sempre ossidata dall’acido", "Si forma esclusivamente un estere", "L’ammina deprotona l’acido formando un carbossilato poco reattivo", "L’acido si riduce spontaneamente ad alcol"], answer: 2 },
+        { question: "38. Quale reagente è tipicamente usato per attivare un acido carbossilico nella sintesi di ammidi in laboratorio?", options: ["SO2", "NaCN", "DCC", "PCC"], answer: 2 },
+        { question: "39. Nella reazione con DCC, il sottoprodotto caratteristico è:", options: ["Dicicloesilurea", "Cloruro di ammonio", "Anidride simmetrica", "Acido acetico"], answer: 0 },
+        { question: "40. Quale reagente converte tipicamente un acido carbossilico in cloruro acilico?", options: ["KMnO4", "NaBH4", "H2/Pd", "SOCl2"], answer: 3 }
     ]
 };
 
-function startQuiz(chapterNum) {
-    currentChapter = chapterNum;
+let currentQuestions = [];
+let userAnswers = {};
+
+function startQuiz(lessonNum) {
+    currentQuestions = allQuestions[lessonNum];
     userAnswers = {};
     
+    document.getElementById('quiz-title').innerText = `Lezione 0${lessonNum}`;
     document.getElementById('menu-view').classList.add('hidden');
     document.getElementById('quiz-view').classList.remove('hidden');
-    
-    document.getElementById('quiz-title').innerText = `Lezione 0${chapterNum < 10 ? '0' + chapterNum : chapterNum}`.replace('00', '0');
-    document.getElementById('quiz-subtitle').innerText = `Set Domande - Chimica Organica (eCampus) - ${allQuestions[chapterNum].length} Domande`;
+    document.getElementById('submit-btn').style.display = 'block';
+    document.getElementById('score-screen').innerHTML = '';
     
     const container = document.getElementById('quiz-container');
-    container.innerHTML = '';
-    
-    document.getElementById('score-screen').innerHTML = '';
-    document.getElementById('submit-btn').style.display = 'block';
-
-    allQuestions[chapterNum].forEach((q, index) => {
-        const card = document.createElement('div');
-        card.className = 'question-card';
-        
-        let optionsHtml = '<ul class="options-list">';
-        q.options.forEach((opt, optIndex) => {
-            optionsHtml += `<li class="option-item" onclick="selectOption(${index}, ${optIndex}, this)">${opt}</li>`;
-        });
-        optionsHtml += '</ul>';
-
-        card.innerHTML = `
+    let html = '';
+    currentQuestions.forEach((q, qIndex) => {
+        html += `<div class="question-card" id="q-card-${qIndex}">
             <div class="question-title">${q.question}</div>
-            ${optionsHtml}
-        `;
-        container.appendChild(card);
+            <ul class="options-list">`;
+        q.options.forEach((opt, optIndex) => {
+            html += `<li class="option-item" onclick="selectOption(${qIndex}, ${optIndex}, this)">${opt}</li>`;
+        });
+        html += `</ul></div>`;
     });
-    
+    container.innerHTML = html;
     window.scrollTo(0, 0);
-}
-
-function selectOption(qIndex, optIndex, element) {
-    const parent = element.parentElement;
-    const items = parent.getElementsByClassName('option-item');
-    for(let item of items) {
-        item.classList.remove('selected');
-    }
-    element.classList.add('selected');
-    userAnswers[qIndex] = optIndex;
-}
-
-function checkAnswers() {
-    const questions = allQuestions[currentChapter];
-    let score = 0;
-    
-    questions.forEach((q, index) => {
-        const card = document.getElementsByClassName('question-card')[index];
-        const options = card.getElementsByClassName('option-item');
-        
-        const userSelection = userAnswers[index];
-        
-        if(userSelection !== undefined) {
-            if(userSelection === q.answer) {
-                options[userSelection].classList.add('correct');
-                score++;
-            } else {
-                options[userSelection].classList.add('incorrect');
-                options[q.answer].classList.add('correct');
-            }
-        } else {
-            options[q.answer].classList.add('correct');
-        }
-        
-        // Disattiva i click dopo la verifica
-        for(let opt of options) {
-            opt.style.pointerEvents = 'none';
-        }
-    });
-    
-    document.getElementById('submit-btn').style.display = 'none';
-    const percentage = Math.round((score / questions.length) * 100);
-    document.getElementById('score-screen').innerHTML = `Punteggio finale: ${score} / ${questions.length} (${percentage}%)`;
-    window.scrollTo(0, document.body.scrollHeight);
 }
 
 function returnToMenu() {
     document.getElementById('quiz-view').classList.add('hidden');
     document.getElementById('menu-view').classList.remove('hidden');
     window.scrollTo(0, 0);
+}
+
+function selectOption(qIndex, optIndex, element) {
+    userAnswers[qIndex] = optIndex;
+    const parent = element.parentElement;
+    parent.querySelectorAll('.option-item').forEach(li => li.classList.remove('selected'));
+    element.classList.add('selected');
+}
+
+function checkAnswers() {
+    let score = 0;
+    currentQuestions.forEach((q, qIndex) => {
+        const card = document.getElementById(`q-card-${qIndex}`);
+        const items = card.querySelectorAll('.option-item');
+        const userAns = userAnswers[qIndex];
+        
+        items.forEach((item, optIndex) => {
+            item.style.pointerEvents = 'none';
+            if (optIndex === q.answer) {
+                item.classList.add('correct');
+            }
+            if (userAns === optIndex && userAns !== q.answer) {
+                item.classList.add('incorrect');
+            }
+        });
+
+        if (userAns === q.answer) {
+            score++;
+        }
+    });
+
+    document.getElementById('submit-btn').style.display = 'none';
+    const scoreScreen = document.getElementById('score-screen');
+    scoreScreen.innerHTML = `Punteggio totale: ${score} / ${currentQuestions.length} (${Math.round((score/currentQuestions.length)*100)}%)`;
+    window.scrollTo(0, document.body.scrollHeight);
 }
 </script>
 
