@@ -1,1 +1,528 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Chimica Organica - eCampus</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        h1 { color: #1a73e8; font-size: 1.4rem; text-align: center; margin-top: 0; }
+        h2 { color: #1a73e8; font-size: 1.2rem; margin-top: 0; }
+        .question { font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; color: #333; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px 15px;
+            margin: 10px 0;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+            box-sizing: border-box;
+        }
+        .btn:hover:not(:disabled) { background: #f1f3f4; border-color: #1a73e8; }
+        .btn.correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724; }
+        .btn.wrong { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
+        .primary-btn {
+            background: #1a73e8;
+            color: white;
+            text-align: center;
+            border: none;
+            font-weight: bold;
+        }
+        .primary-btn:hover { background: #1557b0; }
+        #next-btn {
+            display: none;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #quiz-screen, #score-screen { display: none; }
+        .score-box { text-align: center; font-size: 1.3rem; font-weight: bold; margin: 20px 0; color: #333; }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <!-- MENU DI SELEZIONE CAPITOLI -->
+    <div id="menu-screen">
+        <h1>Chimica Organica 🧪</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 25px;">Scegli il capitolo su cui esercitarti:</p>
+        
+        <button class="btn primary-btn" onclick="startChapter(9)">Capitolo 9: Cinetica, Termodinamica, Intermedi e Reazioni Biologiche</button>
+        <button class="btn primary-btn" onclick="startChapter(10)">Capitolo 10: Alcheni e Stereochimica</button>
+        <button class="btn primary-btn" onclick="startChapter(11)">Capitolo 11: Addizioni Elettrofile agli Alcheni</button>
+        <button class="btn primary-btn" onclick="startChapter(12)">Lezione 12: Ozonolisi, Diidrossilazione, Alogenazione e Alchini</button>
+        <button class="btn primary-btn" onclick="startChapter(13)">Lezione 13: Aromaticità e Composti Aromatici</button>
+        <button class="btn primary-btn" onclick="startChapter(14)">Lezione 14: Reazioni dei Composti Aromatici</button>
+        <button class="btn primary-btn" onclick="startChapter(15)">Lezione 15: Stereochimica, Chiralità e Attività Ottica</button>
+        <button class="btn primary-btn" onclick="startChapter(16)">Lezione 16: Sostituzione Nucleofila Bimolecolare ($SN_2$)</button>
+    </div>
+
+    <!-- SCHERMATA QUIZ -->
+    <div id="quiz-screen">
+        <h2 id="counter">Domanda 1/40</h2>
+        <div class="question" id="question-text">Caricamento...</div>
+        <div id="options-container"></div>
+        <button id="next-btn" onclick="nextQuestion()">Prossima Domanda</button>
+    </div>
+
+    <!-- SCHERMATA RISULTATO -->
+    <div id="score-screen">
+        <h2>Quiz Completato! 🎉</h2>
+        <div class="score-box" id="final-score"></div>
+        <button class="btn primary-btn" onclick="returnToMenu()">Torna al Menu Principale</button>
+    </div>
+</div>
+
+<script>
+    const chaptersData = {
+        9: [
+            { q: "Gli enzimi accelerano le reazioni biologiche principalmente perché:", options: ["Stabilizzano lo stato di transizione", "Modificano la stechiometria", "Aumentano l'energia dei reagenti", "Distruggono gli intermedi"], correct: "Stabilizzano lo stato di transizione" },
+            { q: "Quale relazione esiste tra stabilità degli intermedi e velocità di reazione?", options: ["Intermedi più stabili tendono a ridurre l'energia di attivazione degli stadi successivi", "Non esiste relazione", "Intermedi stabili aumentano sempre l'energia totale", "Gli intermedi non influenzano la velocità"], correct: "Intermedi più stabili tendono a ridurre l'energia di attivazione degli stadi successivi" },
+            { q: "Quale proprietà descrive la forza di un legame chimico?", options: ["Energia di dissociazione del legame", "Polarità molecolare", "Energia libera di Gibbs", "Costante di equilibrio"], correct: "Energia di dissociazione del legame" },
+            { q: "Quale caratteristica distingue una reazione polare da una radicalica?", options: ["Il movimento di coppie elettroniche con formazione di specie cariche", "La presenza esclusiva di radicali", "La rottura omolitica dei legami", "L'assenza di intermedi di reazione"], correct: "Il movimento di coppie elettroniche con formazione di specie cariche" },
+            { q: "In un diagramma energetico multistadio, cosa rappresentano le valli tra i picchi?", options: ["Intermedi di reazione", "Catalizzatori", "Reagenti", "Prodotti finali"], correct: "Intermedi di reazione" },
+            { q: "In una reazione polare, quale specie dona una coppia elettronica per formare un nuovo legame?", options: ["Nucleofilo", "Carbocatione", "Radicale", "Elettrofilo"], correct: "Nucleofilo" },
+            { q: "Quale specie è definita elettrofilo secondo la teoria di Lewis?", options: ["Accettore di coppia elettronica", "Donatore di coppia elettronica", "Donatore di protoni", "Accettore di radicali"], correct: "Accettore di coppia elettronica" },
+            { q: "Quale caratteristica rende una specie un buon nucleofilo?", options: ["Elevata densità elettronica e disponibilità di una coppia solitaria", "Elevata elettronegatività e carica positiva", "Presenza di un orbitale completamente vuoto", "Assenza di elettroni non condivisi"], correct: "Elevata densità elettronica e disponibilità di una coppia solitaria" },
+            { q: "Quale processo richiede energia per rompere un legame covalente?", options: ["Processo endotermico", "Processo spontaneo", "Processo esotermico", "Processo catalitico"], correct: "Processo endotermico" },
+            { q: "Una maggiore energia di dissociazione del legame indica che:", options: ["Il legame è più forte", "Il legame è più debole", "Il legame è instabile", "Il legame è ionico"], correct: "Il legame è più forte" },
+            { q: "In un diagramma di coordinata di reazione, il punto di energia massima rappresenta:", options: ["Lo stato di transizione", "Il prodotto principale", "Il reagente limitante", "L'intermedio stabile"], correct: "Lo stato di transizione" },
+            { q: "Quale tipo di specie è più probabile che agisca come nucleofilo forte?", options: ["Ione con carica negativa e coppie elettroniche libere", "Molecola senza elettroni disponibili", "Radicale neutro", "Carbocatione"], correct: "Ione con carica negativa e coppie elettroniche libere" },
+            { q: "Secondo la teoria delle collisioni, una reazione avviene solo se:", options: ["Le molecole collidono con energia sufficiente e orientazione corretta", "Le molecole sono identiche", "La temperatura è sempre costante", "Le molecole collidono lentamente"], correct: "Le molecole collidono con energia sufficiente e orientazione corretta" },
+            { q: "Quale parametro determina la velocità di una reazione chimica?", options: ["Energia di attivazione", "Polarità del solvente", "Energia di dissociazione del legame", "Entalpia di formazione"], correct: "Energia di attivazione" },
+            { q: "Quale parametro descrive la posizione dell'equilibrio di una reazione?", options: ["Differenza di energia libera tra reagenti e prodotti", "Numero di intermedi", "Energia di attivazione", "Velocità della reazione"], correct: "Differenza di energia libera tra reagenti e prodotti" },
+            { q: "In un meccanismo di reazione, una freccia curva parte sempre da:", options: ["Una coppia elettronica o un legame", "Un radicale", "Un orbitale vuoto", "Un atomo positivo"], correct: "Una coppia elettronica o un legame" },
+            { q: "Quale tipo di freccia viene utilizzato nei meccanismi per indicare il movimento di una coppia elettronica?", options: ["Freccia curva a punta piena", "Freccia lineare", "Freccia tratteggiata", "Freccia a mezzo uncino"], correct: "Freccia curva a punta piena" },
+            { q: "Quale fattore stabilizza maggiormente un carbocatione intermedio?", options: ["Iperconiugazione e delocalizzazione elettronica", "Geometria tetraedrica rigida", "Elevata elettronegatività del carbonio", "Assenza di sostituenti"], correct: "Iperconiugazione e delocalizzazione elettronica" },
+            { q: "Perché il carbocatione è altamente reattivo?", options: ["Possiede un orbitale p vuoto e un ottetto incompleto", "Contiene sempre un radicale", "Possiede troppi elettroni di valenza", "È completamente stabile energeticamente"], correct: "Possiede un orbitale p vuoto e un ottetto incompleto" },
+            { q: "Nel meccanismo di addizione di acqua all'etene in ambiente acido, qual è il primo passaggio?", options: ["Protonazione del doppio legame con formazione di un carbocatione", "Deprotonazione dell'alcol", "Formazione di un radicale", "Attacco nucleofilo dell'acqua"], correct: "Protonazione del doppio legame con formazione di un carbocatione" },
+            { q: "Quale specie intermedia si forma durante l'idratazione acido‑catalizzata di un alchene?", options: ["Carbocatione", "Carbanione", "Radicale", "Intermedio periciclico"], correct: "Carbocatione" },
+            { q: "Quale concetto descrive la differenza energetica tra reagenti e stato di transizione?", options: ["Energia di attivazione", "Energia di ionizzazione", "Entropia", "Energia di dissociazione"], correct: "Energia di attivazione" },
+            { q: "Se una reazione ha bassa energia di attivazione ma prodotti instabili:", options: ["La reazione può essere veloce ma sfavorita termodinamicamente", "La reazione è impossibile", "La reazione è sempre irreversibile", "La reazione non produce intermedi"], correct: "La reazione può essere veloce ma sfavorita termodinamicamente" },
+            { q: "Quale concetto descrive il fatto che la struttura dello stato di transizione assomiglia alla specie più vicina in energia?", options: ["Principio di Hammond", "Principio di Pauli", "Regola di Markovnikov", "Principio di Le Chatelier"], correct: "Principio di Hammond" },
+            { q: "Quale differenza fondamentale esiste tra stato di transizione e intermedio?", options: ["Lo stato di transizione non è isolabile mentre l'intermedio sì", "Gli intermedi hanno energia maggiore", "Gli stati di transizione sono prodotti", "Lo stato di transizione è stabile"], correct: "Lo stato di transizione non è isolabile mentre l'intermedio sì" },
+            { q: "Quale fattore può abbassare l'energia di attivazione di una reazione?", options: ["Catalizzatore", "Diminuzione della temperatura", "Aumento della massa molecolare", "Riduzione del numero di reagenti"], correct: "Catalizzatore" },
+            { q: "Quale caratteristica distingue molte reazioni biologiche da quelle di laboratorio?", options: ["Sono catalizzate da enzimi altamente specifici", "Sono sempre radicaliche", "Avvengono senza intermedi", "Non richiedono energia"], correct: "Sono catalizzate da enzimi altamente specifici" },
+            { q: "In un meccanismo polare, quale specie è più probabile che attacchi un carbocatione?", options: ["Nucleofilo", "Protone", "Elettrofilo", "Radicale"], correct: "Nucleofilo" },
+            { q: "Quale processo rappresenta la formazione di un nuovo legame quando entrambi gli elettroni provengono dallo stesso reagente?", options: ["Formazione polare del legame", "Isomerizzazione", "Formazione radicalica", "Rottura omolitica"], correct: "Formazione polare del legame" },
+            { q: "Quale condizione favorisce l'addizione nucleofila ad un carbocatione?", options: ["Elevata densità elettronica del nucleofilo", "Assenza di coppie elettroniche", "Elevata energia del legame", "Carica positiva del nucleofilo"], correct: "Elevata densità elettronica del nucleofilo" },
+            { q: "Quale tipo di specie reagisce più facilmente con un elettrofilo?", options: ["Nucleofilo", "Acido forte", "Radicale", "Carbocatione"], correct: "Nucleofilo" },
+            { q: "In una reazione reversibile, cosa determina la direzione netta della reazione?", options: ["Differenza di energia libera tra reagenti e prodotti", "Numero di elettroni", "Presenza di radicali", "Numero di atomi"], correct: "Differenza di energia libera tra reagenti e prodotti" },
+            { q: "Quale parametro descrive la rapidità con cui si raggiunge l'equilibrio?", options: ["Costante di velocità", "Entropia", "Costante di equilibrio", "Energia di dissociazione"], correct: "Costante di velocità" },
+            { q: "Quale affermazione descrive correttamente la relazione tra cinetica e termodinamica?", options: ["La cinetica riguarda la velocità, la termodinamica la stabilità dei prodotti", "Sono concetti identici", "La cinetica determina sempre l'equilibrio", "La termodinamica determina la velocità"], correct: "La cinetica riguarda la velocità, la termodinamica la stabilità dei prodotti" },
+            { q: "Quale caratteristica rende una reazione biologica altamente selettiva?", options: ["Il sito attivo specifico degli enzimi", "Assenza di catalizzatori", "Elevata temperatura", "La presenza di radicali"], correct: "Il sito attivo specifico degli enzimi" },
+            { q: "Quale processo implica la formazione di un intermedio ad energia relativamente bassa tra due stati di transizione?", options: ["Reazione multistadio", "Reazione radicalica", "Reazione elementare", "Reazione concertata"], correct: "Reazione multistadio" },
+            { q: "Quale caratteristica distingue uno stato di transizione?", options: ["È il punto di energia massima lungo il percorso di reazione", "È un composto isolabile", "È sempre stabile", "È il prodotto finale"], correct: "È il punto di energia massima lungo il percorso di reazione" },
+            { q: "Perché gli intermedi di reazione possono talvolta essere osservati sperimentalmente?", options: ["Hanno una vita media finita e minima stabilità", "Sono completamente stabili", "Non partecipano alla reazione", "Sono prodotti finali"], correct: "Hanno una vita media finita e minima stabilità" },
+            { q: "Quale fattore influenza maggiormente la probabilità di collisioni efficaci tra molecole?", options: ["Temperatura", "Massa molecolare", "Numero di legami", "Numero atomico"], correct: "Temperatura" },
+            { q: "Quale processo descrive la formazione di un legame tramite contributo di un elettrone da ciascun reagente?", options: ["Formazione radicalica del legame", "Protonazione", "Formazione polare", "Rottura eterolitica"], correct: "Formazione radicalica del legame" }
+        ],
+        10: [
+            { q: "Quale sistema viene utilizzato per descrivere stereochimica complessa degli alcheni?", options: ["Sistema E/Z", "Sistema R/S", "Sistema cis/trans", "Sistema D/L"], correct: "Sistema E/Z" },
+            { q: "Nel sistema E/Z cosa significa E?", options: ["Gruppi prioritari opposti", "Gruppi non legati", "Gruppi identici", "Gruppi dalla stessa parte"], correct: "Gruppi prioritari opposti" },
+            { q: "Qual è la barriera energetica alla rotazione di un doppio legame?", options: ["Circa 350 kJ/mol", "12 kJ/mol", "5 kJ/mol", "50 kJ/mol"], correct: "Circa 350 kJ/mol" },
+            { q: "Quale condizione è necessaria per l'isomeria cis-trans negli alcheni?", options: ["Entrambi i carboni del doppio legame devono avere due gruppi diversi", "Un carbonio deve avere due idrogeni", "Deve esserci un anello", "Deve esserci un triplo legame"], correct: "Entrambi i carboni del doppio legame devono avere due gruppi diversi" },
+            { q: "Quale suffisso indica un triplo legame?", options: ["-yne", "-olo", "-ano", "-ene"], correct: "-yne" },
+            { q: "Quale suffisso indica la presenza di un doppio legame?", options: ["-ene", "-ano", "-ino", "-olo"], correct: "-ene" },
+            { q: "Nel calcolo dell'insaturazione l'azoto:", options: ["Aumenta gli idrogeni", "Riduce di uno il numero di idrogeni", "Raddoppia il numero di doppi legami", "Non influisce"], correct: "Aumenta gli idrogeni" },
+            { q: "Nel calcolo dell'insaturazione l'ossigeno:", options: ["Non influisce sul calcolo", "Raddoppia il numero di carboni", "Riduce gli idrogeni", "Si somma agli idrogeni"], correct: "Non influisce sul calcolo" },
+            { q: "Quale modifica si applica al calcolo dell'insaturazione per gli alogeni?", options: ["Si sommano agli idrogeni", "Si ignorano completamente", "Si moltiplicano per due", "Si sottraggono dagli idrogeni"], correct: "Si sommano agli idrogeni" },
+            { q: "Quanti gradi di insaturazione possiede un composto con formula C6H10?", options: ["2", "4", "1", "3"], correct: "2" },
+            { q: "Qual è la formula generale degli alcheni aciclici?", options: ["CnH2n", "CnH2n+2", "CnH2n−2", "CnHn"], correct: "CnH2n" },
+            { q: "Come si chiamano composti con due doppi legami?", options: ["Dieni", "Chetoni", "Alcani", "Alchini"], correct: "Dieni" },
+            { q: "Nel sistema E/Z cosa significa Z?", options: ["Gruppi prioritari dalla stessa parte", "Gruppi identici", "Gruppi opposti", "Gruppi con stessa massa"], correct: "Gruppi prioritari dalla stessa parte" },
+            { q: "Quale tipo di legame impedisce la rotazione libera negli alcheni?", options: ["Legame π", "Legame σ", "Legame metallico", "Legame ionico"], correct: "Legame π" },
+            { q: "Quale alchene è più stabile tra cis e trans?", options: ["Trans", "Uguali", "Dipende dal catalizzatore", "Cis"], correct: "Trans" },
+            { q: "Qual è la relazione tra stabilità e calore di idrogenazione?", options: ["Maggiore stabilità → minore calore", "Maggiore stabilità → maggiore calore", "Non c'è relazione", "Sono identici"], correct: "Maggiore stabilità → minore calore" },
+            { q: "Quale gruppo è chiamato metilene?", options: ["H2C=", "H3C-", "CH≡C–", "CH2CH3–"], correct: "H2C=" },
+            { q: "Quale gruppo è chiamato allile?", options: ["H2C=CHCH2–", "CH≡CH–", "CH2CH3–", "CH3–"], correct: "H2C=CHCH2–" },
+            { q: "Quale geometria hanno i carboni sp2 negli alcheni?", options: ["Trigonale planare", "Tetraedrica", "Lineare", "Planare quadrata"], correct: "Trigonale planare" },
+            { q: "Qual è l'angolo tipico degli orbitali sp2?", options: ["120°", "109.5°", "180°", "90°"], correct: "120°" },
+            { q: "Quale tipo di molecola non può avere isomeria E/Z?", options: ["Una con due gruppi identici sullo stesso carbonio", "Una con sostituenti diversi", "Una con doppio legame", "Una con quattro sostituenti"], correct: "Una con due gruppi identici sullo stesso carbonio" },
+            { q: "Quale alchene è più stabile: but-1-ene o but-2-ene?", options: ["But-2-ene", "But-1-ene", "Dipende dal solvente", "Uguali"], correct: "But-2-ene" },
+            { q: "Quale fattore aumenta la stabilità degli alcheni?", options: ["Numero di sostituenti", "Numero di radicali", "Numero di anelli", "Numero di idrogeni"], correct: "Numero di sostituenti" },
+            { q: "Quale interazione stabilizza la doppia legame con sostituenti?", options: ["Iperconiugazione", "Idrogenazione", "Interazione dipolo", "Legame ionico"], correct: "Iperconiugazione" },
+            { q: "Quale proprietà distingue gli alcheni dagli alcani?", options: ["Presenza di doppio legame C=C", "Struttura ciclica", "Presenza di azoto", "Presenza di ossigeno"], correct: "Presenza di doppio legame C=C" },
+            { q: "Quale gruppo è chiamato vinile?", options: ["H2C=CH–", "CH≡C–", "CH3–", "CH2CH3–"], correct: "H2C=CH–" },
+            { q: "Quale alchene ha maggiore calore di idrogenazione?", options: ["Il meno stabile", "Quello trans", "Quello più sostituito", "Il più stabile"], correct: "Il meno stabile" },
+            { q: "Quale tipo di orbitale forma il legame π?", options: ["p non ibridati", "d", "sp", "sp3"], correct: "p non ibridati" },
+            { q: "Quale tipo di legame si forma tra carbonio sp2 e sp3?", options: ["Legame più forte rispetto a sp3-sp3", "Legame più debole", "Legame triplo", "Legame ionico"], correct: "Legame più forte rispetto a sp3-sp3" },
+            { q: "Quale tipo di interazione contribuisce alla stabilità degli alcheni sostituiti?", options: ["Interazione π–σ", "Legami metallici", "Interazioni dipolari", "Legami ionici"], correct: "Interazione π–σ" },
+            { q: "Quale effetto stabilizza gli alcheni sostituiti?", options: ["Iperconiugazione", "Effetto induttivo negativo", "Ionizzazione", "Risonanza aromatica"], correct: "Iperconiugazione" },
+            { q: "Quale alchene è generalmente più stabile?", options: ["Tetrasostituito", "Monosostituito", "Vinilico", "Disostituito"], correct: "Tetrasostituito" },
+            { q: "Quale parametro energetico misura la stabilità relativa degli alcheni?", options: ["Calore di idrogenazione", "Energia di ionizzazione", "Energia di legame C-H", "Energia nucleare"], correct: "Calore di idrogenazione" },
+            { q: "Quale catalizzatore è tipico nell'idrogenazione degli alcheni?", options: ["Pd", "H2SO4", "NaCl", "NH3"], correct: "Pd" },
+            { q: "Quale reazione permette di confrontare la stabilità degli alcheni?", options: ["Idrogenazione", "Sostituzione", "Polimerizzazione", "Ossidazione"], correct: "Idrogenazione" },
+            { q: "Qual è la causa principale della minore stabilità del cis-alchene?", options: ["Steric strain", "Ionizzazione", "Angle strain", "Torsional strain"], correct: "Steric strain" },
+            { q: "Quale isomero di but-2-ene è più stabile?", options: ["Trans", "Dipende dalla temperatura", "Cis", "Entrambi uguali"], correct: "Trans" },
+            { q: "Quale dei seguenti NON può mostrare isomeria cis-trans?", options: ["CH3CH=CH2", "ClCH=CHCl", "CH3CH=CHCH3", "BrCH=CHCl"], correct: "CH3CH=CH2" },
+            { q: "Quale gruppo ha priorità maggiore?", options: ["Cl", "CH2CH3", "H", "CH3"], correct: "Cl" },
+            { q: "Quale regola determina la priorità nel sistema CIP?", options: ["Numero atomico", "Numero di neutroni", "Numero di legami", "Massa molecolare"], correct: "Numero atomico" }
+        ],
+        11: [
+            { q: "Quale passo è generalmente determinante per la velocità nelle addizioni elettrofile agli alcheni?", options: ["Formazione del carbocatione", "Diffusione molecolare", "Attacco nucleofilo finale", "Deprotonazione finale"], correct: "Formazione del carbocatione" },
+            { q: "Quale carbocatione è più stabile?", options: ["Terziario", "Primario", "Metilico", "Secondario"], correct: "Terziario" },
+            { q: "Quale effetto contribuisce alla stabilizzazione dei carbocationi?", options: ["Iperconiugazione", "Effetto mesomerico negativo", "Repulsione sterica", "Effetto isotopico"], correct: "Iperconiugazione" },
+            { q: "Quale molecola agisce come base nell'addizione di acqua catalizzata da acido?", options: ["Acqua", "Carbocatione", "Alchene", "Cl-"], correct: "Acqua" },
+            { q: "Secondo la regola di Markovnikov, dove si lega l’idrogeno nell’addizione di HX a un alchene asimmetrico?", options: ["Al carbonio con più idrogeni", "Casualmente", "Al carbonio più sostituito", "Al carbonio con più gruppi alchilici"], correct: "Al carbonio con più idrogeni" },
+            { q: "Qual è l'intermedio chiave nella maggior parte delle addizioni elettrofile agli alcheni?", options: ["Carbocatione", "Radicale libero", "Complesso π stabile", "Carbanione"], correct: "Carbocatione" },
+            { q: "Nel meccanismo di addizione elettrofila agli alcheni, quale specie agisce inizialmente come nucleofilo?", options: ["Il doppio legame π dell'alchene", "L'acqua", "L'acido HX", "Lo ione alogenuro"], correct: "Il doppio legame π dell'alchene" },
+            { q: "Nel postulato di Hammond, lo stato di transizione di una reazione endoergonica assomiglia maggiormente a:", options: ["Il prodotto", "Il reagente", "Il catalizzatore", "Il solvente"], correct: "Il prodotto" },
+            { q: "Quale fenomeno spiega perché carbocationi più stabili si formano più velocemente?", options: ["Postulato di Hammond", "Principio di Pauli", "Legge di Raoult", "Regola di Hund"], correct: "Postulato di Hammond" },
+            { q: "Quale tipo di ibridazione possiede il carbonio del carbocatione?", options: ["sp2", "sp", "sp3", "sp3d"], correct: "sp2" },
+            { q: "Quale tipo di riarrangiamento comporta lo spostamento di un idrogeno con la sua coppia elettronica?", options: ["Shift dell'idrogeno", "Trasferimento del protone", "Shift del radicale", "Shift del metile"], correct: "Shift dell'idrogeno" },
+            { q: "Quale specie si rigenera nella reazione catalizzata da acido con acqua?", options: ["H3O+", "OH-", "Cl-", "H2"], correct: "H3O+" },
+            { q: "Quale passaggio finale produce l'alcol neutro?", options: ["Deprotonazione", "Ossidazione", "Protonazione", "Riduzione"], correct: "Deprotonazione" },
+            { q: "Quale tipo di reazione porta a riarrangiamenti carbocationici?", options: ["Reazioni con intermedi carbocationici", "Sostituzioni SN2", "Reazioni radicaliche", "Reazioni pericicliche"], correct: "Reazioni con intermedi carbocationici" },
+            { q: "Quale struttura carbocationica permette maggiore iperconiugazione?", options: ["Terziaria", "Primaria", "Lineare", "Metilica"], correct: "Terziaria" },
+            { q: "Quale fattore abbassa l'energia dello stato di transizione?", options: ["Stabilizzazione dell'intermedio", "Aumento della temperatura", "Presenza di radicali", "Riduzione del solvente"], correct: "Stabilizzazione dell'intermedio" },
+            { q: "Quale specie è il nucleofilo nell’idratazione degli alcheni?", options: ["Acqua", "Br2", "Cl-", "H+"], correct: "Acqua" },
+            { q: "Quale tipo di addizione produce alcoli da alcheni?", options: ["Addizione acido-catalizzata di acqua", "Sostituzione nucleofila", "Riduzione catalitica", "Addizione radicalica"], correct: "Addizione acido-catalizzata di acqua" },
+            { q: "Quale proprietà del doppio legame lo rende reattivo verso elettrofili?", options: ["Elevata densità elettronica", "Simmetria molecolare", "Carca positiva", "Bassa energia"], correct: "Elevata densità elettronica" },
+            { q: "Quale trasformazione dimostra l'esistenza di carbocationi?", options: ["Riarrangiamenti molecolari", "Isomeria ottica", "Idrogenazione", "Rotazione libera"], correct: "Riarrangiamenti molecolari" },
+            { q: "Secondo Hammond, se uno stato di transizione è simile al prodotto allora il passo è:", options: ["Endoergonico", "Esoergonico", "Isotermico", "Catalitico"], correct: "Endoergonico" },
+            { q: "Quale passaggio dell'addizione elettrofila è endoergonico?", options: ["Formazione del carbocatione", "Deprotonazione finale", "Solvatazione", "Attacco nucleofilo"], correct: "Formazione del carbocatione" },
+            { q: "Quale orbitale interagisce con legami C-H nell’iperconiugazione?", options: ["Orbitale p vuoto", "Orbitale d", "Orbitale π pieno", "Orbitale s pieno"], correct: "Orbitale p vuoto" },
+            { q: "Quale riarrangiamento comporta lo spostamento di un gruppo alchilico?", options: ["Shift del metile", "Shift dell'idrogeno", "Shift sigmatropico", "Shift dell'elettrofilo"], correct: "Shift del metile" },
+            { q: "Quando due carboni del doppio legame hanno uguale sostituzione cosa succede?", options: ["Si forma un solo prodotto", "Non avviene reazione", "Si forma radicale", "Si ottiene una miscela di prodotti"], correct: "Si forma un solo prodotto" },
+            { q: "Quale effetto elettronico spiega la stabilizzazione tramite gruppi alchilici?", options: ["Effetto induttivo", "Effetto piezoelettrico", "Effetto isotopico", "Effetto fotoelettrico"], correct: "Effetto induttivo" },
+            { q: "Quale tipo di reazione subiscono gli alchini con HX?", options: ["Addizione elettrofila", "Eliminazione", "Condensazione", "Sostituzione nucleofila"], correct: "Addizione elettrofila" },
+            { q: "Quale intermediario si forma dopo la protonazione dell’alchene?", options: ["Carbocatione", "Complesso σ stabile", "Carbanione", "Radicale"], correct: "Carbocatione" },
+            { q: "Quale orbitale è vuoto in un carbocatione tipico?", options: ["Orbitale p", "Orbitale π pieno", "Orbitale s", "Orbitale d"], correct: "Orbitale p" },
+            { q: "Qual è la geometria del carbonio in un carbocatione?", options: ["Trigonale planare", "Piramidale", "Tetraedrica", "Lineare"], correct: "Trigonale planare" },
+            { q: "Quale specie si forma dopo l'attacco nucleofilo dell'acqua su un carbocatione?", options: ["Alcol protonato", "Alchene", "Etere", "Carbanione"], correct: "Alcol protonato" },
+            { q: "Quale fattore aumenta la stabilità di un carbocatione?", options: ["Maggiore sostituzione alchilica", "Maggiore tensione sterica", "Presenza di atomi altamente elettronegativi", "Assenza di legami C-H"], correct: "Maggiore sostituzione alchilica" },
+            { q: "Quale specie agisce come elettrofilo nell’addizione di HBr a un alchene?", options: ["H+", "Alchene", "Br-", "Acqua"], correct: "H+" },
+            { q: "Perché l'alchene agisce come nucleofilo?", options: ["Perché il doppio legame π è ricco di elettroni", "Perché contiene idrogeni", "Perché è aromatico", "Perché è carico positivamente"], correct: "Perché il doppio legame π è ricco di elettroni" },
+            { q: "Quale prodotto principale si ottiene dall'addizione di HCl a pent-1-ene?", options: ["2-cloropentano", "3-cloropentano", "Pentano", "1-cloropentano"], correct: "2-cloropentano" },
+            { q: "Quale fattore stabilizza il carbocatione tramite donazione elettronica dai legami C-H vicini?", options: ["Iperconiugazione", "Interazione ionica", "Risonanza aromatica", "Induzione negativa"], correct: "Iperconiugazione" },
+            { q: "Un carbocatione secondario può riarrangiarsi in terziario perché:", options: ["Il terziario è più stabile", "Non cambia energia", "Il primario è più stabile", "Il secondario è aromatico"], correct: "Il terziario è più stabile" },
+            { q: "In un diagramma energetico di addizione elettrofila, quanti stati di transizione principali compaiono?", options: ["Due", "Nessuno", "Tre", "Uno"], correct: "Due" },
+            { q: "Quale specie attacca il carbocatione dopo la sua formazione nell'addizione di HX?", options: ["Lo ione alogenuro", "Un carbocatione", "Il solvente", "Un radicale"], correct: "Lo ione alogenuro" },
+            { q: "Se due possibili carbocationi possono formarsi, quale si forma più velocemente?", options: ["Quello più stabile", "Quello con meno sostituenti", "Entrambi ugualmente", "Quello meno stabile"], correct: "Quello più stabile" }
+        ],
+        12: [
+            { q: "Quale molecola subisce addizione elettrofila più lentamente?", options: ["Alcano", "Diene", "Alchene", "Alchino"], correct: "Alcano" },
+            { q: "Quale fattore determina se l'ozonolisi produce aldeidi o acidi?", options: ["Condizioni di lavoro riduttive o ossidative", "Presenza di luce", "Temperatura di reazione", "Numero di doppi legami"], correct: "Condizioni di lavoro riduttive o ossidative" },
+            { q: "Quale caratteristica stereochimica ha la diidrossilazione con OsO4?", options: ["Addizione sin", "Addizione casuale", "Addizione radicalica", "Addizione anti"], correct: "Addizione sin" },
+            { q: "Quale trasformazione rompe completamente un doppio legame formando due carbonili?", options: ["Ozonolisi", "Sostituzione nucleofila", "Addizione radicalica", "Idrogenazione"], correct: "Ozonolisi" },
+            { q: "Quale reagente consente la scissione ossidativa degli alcheni senza ulteriore ossidazione degli aldeidi?", options: ["Ozonolisi seguita da riduzione", "H2SO4", "KMnO4 caldo", "Br2"], correct: "Ozonolisi seguita da riduzione" },
+            { q: "Quale prodotto si forma se l'alchene terminale subisce scissione ossidativa forte?", options: ["Acido carbossilico e CO2", "Etere", "Alcol", "Alcano"], correct: "Acido carbossilico e CO2" },
+            { q: "Quale prodotto si ottiene da KMnO4 caldo e concentrato su un alchene?", options: ["Scissione ossidativa del doppio legame", "Aldeide stabile", "Alcano", "Diolo"], correct: "Scissione ossidativa del doppio legame" },
+            { q: "Quale reagente produce dioli tramite ossidazione blanda degli alcheni?", options: ["KMnO4 freddo diluito", "H2SO4", "KMnO4 caldo concentrato", "H2"], correct: "KMnO4 freddo diluito" },
+            { q: "Quale intermedio si forma nella reazione con OsO4 prima dell'idrolisi?", options: ["Estere osmiato ciclico", "Radicale", "Carbocatione", "Carbanione"], correct: "Estere osmiato ciclico" },
+            { q: "Quale reagente produce dioli vicinali tramite addizione sin altamente selettiva?", options: ["OsO4", "NaBH4", "HCl", "Cl2"], correct: "OsO4" },
+            { q: "Quale reagente converte un alchene in un diolo vicinale tramite ossidazione sin?", options: ["KMnO4 diluito e freddo", "Br2", "HBr", "NaH"], correct: "KMnO4 diluito e freddo" },
+            { q: "Quale reagente riducente è comunemente usato dopo l'ozonolisi?", options: ["Zn/H2O", "HCl", "KMnO4", "Br2"], correct: "Zn/H2O" },
+            { q: "Quale principio spiega la regioselettività nelle bromoidrine?", options: ["Stabilizzazione della carica parziale positiva", "Regola di Zaitsev", "Regola di Baeyer", "Effetto isotopico"], correct: "Stabilizzazione della carica parziale positiva" },
+            { q: "Nella formazione di una bromoidrina quale atomo si lega al carbonio più sostituito?", options: ["Ossigeno dell'acqua", "Bromo", "Idrogeno", "Cloro"], correct: "Ossigeno dell'acqua" },
+            { q: "Il prodotto principale dell'addizione di Br2 in acqua ad un alchene è:", options: ["Bromoidrina", "Alcano", "Etere", "Diolo vicinale"], correct: "Bromoidrina" },
+            { q: "Quale nucleofilo attacca lo ione bromonio se la reazione avviene in acqua?", options: ["H2O", "Br2", "HBr", "H+"], correct: "H2O" },
+            { q: "Quale prodotto si ottiene tipicamente dall'addizione di Br2 a cicloesene?", options: ["1,2-dibromocicloesano trans", "1,2-dibromocicloesano cis", "1,1-dibromocicloesano", "Bromocicloesano"], correct: "1,2-dibromocicloesano trans" },
+            { q: "Perché l'addizione di Br2 agli alcheni avviene con stereochimica anti?", options: ["L'attacco nucleofilo avviene dal lato opposto dello ione bromonio", "Il bromuro attacca dallo stesso lato del bromo", "Il doppio legame ruota liberamente", "Si forma un carbocatione planare"], correct: "L'attacco nucleofilo avviene dal lato opposto dello ione bromonio" },
+            { q: "Nell'addizione di Br2 ad un alchene in solvente inerte, quale intermedio si forma inizialmente?", options: ["Ione bromonio ciclico", "Radicale bromuro", "Carbocatione libero", "Carbanione vinilico"], correct: "Ione bromonio ciclico" },
+            { q: "Dopo il riarrangiamento del molozonide nell'ozonolisi si forma:", options: ["Ozonide", "Carbocatione", "Alcol", "Alcano"], correct: "Ozonide" },
+            { q: "Quale specie intermedia si forma nell'ozonolisi prima della riduzione?", options: ["Molozonide", "Carbocatione", "Carbanione", "Radicale"], correct: "Molozonide" },
+            { q: "Quale prodotto si ottiene dall'ozonolisi riduttiva di un alchene interno?", options: ["Aldeidi o chetoni", "Esteri", "Solo alcani", "Alcoli"], correct: "Aldeidi o chetoni" },
+            { q: "Quale tipo di addizione avviene negli alchini con idrogenazione catalitica completa?", options: ["Riduzione a alcani", "Addizione radicalica", "Addizione anti", "Sostituzione"], correct: "Riduzione a alcani" },
+            { q: "Quale trasformazione produce un diolo cis da un alchene?", options: ["Diidrossilazione con OsO4", "Addizione di HBr", "Idrogenazione", "Ozonolisi"], correct: "Diidrossilazione con OsO4" },
+            { q: "Quale fattore determina la stereoselettività nelle riduzioni degli alchini?", options: ["Tipo di catalizzatore o meccanismo radicalico", "Polarità del solvente", "Numero di atomi di carbonio", "Temperatura ambiente"], correct: "Tipo di catalizzatore o meccanismo radicalico" },
+            { q: "Quale prodotto si ottiene dalla riduzione con Na/NH3?", options: ["Alchene trans", "Alchene cis", "Alcano", "Diolo"], correct: "Alchene trans" },
+            { q: "Quale meccanismo avviene nella riduzione con Na/NH3?", options: ["Addizione radicalica stepwise", "Addizione carbocationica", "Sostituzione nucleofila", "Addizione sin concertata"], correct: "Addizione radicalica stepwise" },
+            { q: "Quale reagente riduce un alchino ad alchene trans?", options: ["Na/NH3 liquida", "HCl", "KMnO4", "H2/Pd"], correct: "Na/NH3 liquida" },
+            { q: "Quale reagente produce addizione radicalica anti-Markovnikov di HBr agli alcheni?", options: ["Perossidi", "Cl2", "Acqua", "Acidi forti"], correct: "Perossidi" },
+            { q: "Quale catalizzatore riduce un alchino ad alchene cis?", options: ["Catalizzatore di Lindlar", "Pd/C", "FeCl3", "Ni Raney"], correct: "Catalizzatore di Lindlar" },
+            { q: "Quale prodotto si ottiene con catalizzatore di Lindlar?", options: ["Alchene cis", "Diene", "Alchene trans", "Alcano"], correct: "Alchene cis" },
+            { q: "Quale prodotto si ottiene con due moli di HX su un alchino?", options: ["Dialogenuro geminale", "Alcano", "Aldeide", "Diolo"], correct: "Dialogenuro geminale" },
+            { q: "Quale prodotto si ottiene con addizione di una mole di HX ad un alchino terminale?", options: ["Alchene alogenato", "Alcano", "Diolo", "Etere"], correct: "Alchene alogenato" },
+            { q: "Perché i carbocationi vinilici sono instabili?", options: ["La carica positiva è su carbonio sp", "Sono aromatici", "Sono saturi", "Hanno troppi elettroni"], correct: "La carica positiva è su carbonio sp" },
+            { q: "Quale intermedio si forma nell'addizione elettrofila agli alchini?", options: ["Carbocatione vinilico", "Carbanione", "Radicale metilico", "Ozonide"], correct: "Carbocatione vinilico" },
+            { q: "Quale passaggio propaga la catena radicalica?", options: ["Astrarre H da HBr", "Formare HBr", "Ridurre l'alchene", "Rompere Br2"], correct: "Astrarre H da HBr" },
+            { q: "Quale specie radicalica si forma dopo l'attacco iniziale di Br· all'alchene?", options: ["Radicale alchilico", "Carbanione", "Carbocatione", "Radicale idrogeno"], correct: "Radicale alchilico" },
+            { q: "Perché l'addizione radicalica di HBr è anti-Markovnikov?", options: ["La formazione del radicale più stabile guida la regioselettività", "La reazione è catalizzata da acidi", "La reazione è concertata", "Si forma un carbocatione stabile"], correct: "La formazione del radicale più stabile guida la regioselettività" },
+            { q: "Quale tipo di meccanismo avviene nell'addizione di HBr in presenza di perossidi?", options: ["Meccanismo radicalico", "Meccanismo carbocationico", "Sostituzione nucleofila", "Eliminazione"], correct: "Meccanismo radicalico" }
+        ],
+        13: [
+            { q: "Quale composto è un esempio di idrocarburo aromatico policiclico?", options: ["Antracene", "Cicloesano", "Etano", "Propene"], correct: "Antracene" },
+            { q: "Perché il benzene non subisce facilmente reazioni di addizione come gli alcheni?", options: ["L'addizione distruggerebbe l'aromaticità", "Il benzene non ha doppi legami", "Il benzene è saturo", "Gli elettroni π sono localizzati"], correct: "L'addizione distruggerebbe l'aromaticità" },
+            { q: "Quale proprietà caratterizza i composti aromatici policiclici?", options: ["Sistemi π estesi delocalizzati", "Struttura tetraedrica", "Legami solo singoli", "Assenza di doppi legami"], correct: "Sistemi π estesi delocalizzati" },
+            { q: "Quale condizione impedisce al cicloottatetraene di essere aromatico?", options: ["Non è planare", "È ionico", "Ha troppi elettroni", "È saturo"], correct: "Non è planare" },
+            { q: "Quale composto aromatico è noto per essere presente nel fumo di tabacco e cancerogeno?", options: ["Benzo[a]pirene", "Toluene", "Fenolo", "Benzaldeide"], correct: "Benzo[a]pirene" },
+            { q: "Quale reazione tipica subiscono gli anelli aromatici con elettrofili?", options: ["Sostituzione elettrofila", "Sostituzione nucleofila SN2", "Addizione radicalica", "Eliminazione"], correct: "Sostituzione elettrofila" },
+            { q: "Quale composto ha due anelli benzenici fusi?", options: ["Naftalene", "Benzene", "Toluene", "Fenolo"], correct: "Naftalene" },
+            { q: "Quale eterociclo aromatico contiene due atomi di azoto?", options: ["Pirimidina", "Piridina", "Furano", "Tiofene"], correct: "Pirimidina" },
+            { q: "Quale molecola contiene un anello imidazolico?", options: ["Istidina", "Valina", "Alanina", "Glicina"], correct: "Istidina" },
+            { q: "Quale base azotata del DNA contiene un anello purinico?", options: ["Adenina", "Uracile", "Timina", "Citosina"], correct: "Adenina" },
+            { q: "Quale composto aromatico contiene tre anelli fusi linearmente?", options: ["Antracene", "Naftalene", "Toluene", "Benzene"], correct: "Antracene" },
+            { q: "Quale proprietà del benzene indica che tutti i legami C–C sono equivalenti?", options: ["Tutti i legami hanno la stessa lunghezza", "È non planare", "Ha doppi legami localizzati", "Reagisce rapidamente con Br2"], correct: "Tutti i legami hanno la stessa lunghezza" },
+            { q: "Quale molecola contiene un sistema aromatico con eteroatomi?", options: ["Piridina", "Propano", "Cicloesano", "Butano"], correct: "Piridina" },
+            { q: "Quale delle seguenti specie può essere aromatica anche se carica?", options: ["Catione cicloeptatrienile", "Propene", "Cicloesano", "Ciclobutadiene"], correct: "Catione cicloeptatrienile" },
+            { q: "Quale requisito è fondamentale per la delocalizzazione degli elettroni π?", options: ["Orbitali p paralleli", "Orbitali s pieni", "Legami ionici", "Struttura tetraedrica"], correct: "Orbitali p paralleli" },
+            { q: "Quale fattore rende i composti aromatici relativamente meno reattivi degli alcheni?", options: ["Stabilità di risonanza", "Presenza di idrogeni", "Legami più lunghi", "Maggiore polarità"], correct: "Stabilità di risonanza" },
+            { q: "Quale composto possiede due sistemi aromatici fusi contenenti azoto?", options: ["Purina", "Fenolo", "Anilina", "Toluene"], correct: "Purina" },
+            { q: "Quale proprietà elettronica caratterizza l'aromaticità?", options: ["Delocalizzazione degli elettroni π", "Presenza di cariche positive", "Ibridazione sp3", "Assenza di doppi legami"], correct: "Delocalizzazione degli elettroni π" },
+            { q: "Quale delle seguenti molecole soddisfa la regola 4n+2 con n=2?", options: ["Sistema con 10 elettroni π", "Sistema con 12 elettroni π", "Sistema con 8 elettroni π", "Sistema con 4 elettroni π"], correct: "Sistema con 10 elettroni π" },
+            { q: "Quale molecola NON è aromatica nonostante possieda doppi legami?", options: ["Cicloottatetraene", "Naftalene", "Benzene", "Piridina"], correct: "Cicloottatetraene" },
+            { q: "Quale molecola biologica contiene un anello indolico?", options: ["Triptofano", "Serina", "Lisina", "Alanina"], correct: "Triptofano" },
+            { q: "Quanti orbitali molecolari π risultano dalla combinazione dei 6 orbitali p del benzene?", options: ["6", "12", "3", "4"], correct: "6" },
+            { q: "Quale gruppo rappresenta il gruppo fenile?", options: ["C6H5–", "CH3–", "C6H6–", "C6H4–"], correct: "C6H5–" },
+            { q: "Quale rappresentazione viene talvolta usata per indicare la delocalizzazione nel benzene?", options: ["Esagono con un cerchio interno", "Tre doppi legami separati", "Legami ionici", "Struttura tetraedrica"], correct: "Esagono con un cerchio interno" },
+            { q: "Quale delle seguenti condizioni NON è necessaria affinché una molecola sia aromatica?", options: ["La molecola deve essere neutra", "La molecola deve essere ciclica", "La molecola deve avere un sistema coniugato", "La molecola deve essere planare"], correct: "La molecola deve essere neutra" },
+            { q: "Secondo la regola di Hückel, quale numero di elettroni π rende aromatico un sistema?", options: ["4n + 2", "4n", "n + 2", "2n"], correct: "4n + 2" },
+            { q: "Quanti elettroni π possiede il benzene?", options: ["6", "10", "4", "8"], correct: "6" },
+            { q: "Qual è la lunghezza media dei legami C–C nel benzene?", options: ["139 pm", "120 pm", "154 pm", "134 pm"], correct: "139 pm" },
+            { q: "Quale tra i seguenti composti è antiaromatico secondo la regola di Hückel?", options: ["Ciclobutadiene", "Benzene", "Piridina", "Naftalene"], correct: "Ciclobutadiene" },
+            { q: "Quale molecola contiene 10 elettroni π ed è aromatica?", options: ["Naftalene", "Butadiene", "Cicloottatetraene", "Cicloesano"], correct: "Naftalene" },
+            { q: "Quale prefisso indica una disostituzione 1,3 su un anello benzenico?", options: ["meta", "orto", "iso", "para"], correct: "meta" },
+            { q: "Quale gruppo rappresenta il gruppo benzile?", options: ["C6H5CH2–", "C6H4CH3–", "C6H5–", "CH2C6H6–"], correct: "C6H5CH2–" },
+            { q: "Quale composto è un eterociclo aromatico?", options: ["Piridina", "Propano", "Etilene", "Cicloesano"], correct: "Piridina" },
+            { q: "Quanti elettroni π possiede il naftalene?", options: ["10", "6", "8", "12"], correct: "10" },
+            { q: "Quale tra i seguenti composti contiene un azoto che contribuisce con due elettroni π?", options: ["Pirrolo", "Nitrobenzene", "Piridina", "Anilina"], correct: "Pirrolo" },
+            { q: "Quale tra i seguenti composti ha un doppietto elettronico NON coinvolto nel sistema aromatico?", options: ["Piridina", "Tiofene", "Pirrolo", "Furano"], correct: "Piridina" },
+            { q: "Quale specie è aromatica tra le seguenti?", options: ["Anione ciclopentadienile", "Ciclobutadiene", "Radicale ciclopentadienile", "Catione ciclopentadienile"], correct: "Anione ciclopentadienile" },
+            { q: "Quanti elettroni π possiede l'anione ciclopentadienile?", options: ["6", "4", "8", "5"], correct: "6" },
+            { q: "Quale specie è aromatica tra le seguenti?", options: ["Catione cicloeptatrienile", "Radicale cicloeptatrienile", "Cicloottatetraene", "Anione cicloeptatrienile"], correct: "Catione cicloeptatrienile" },
+            { q: "Quale fenomeno rende il benzene più stabile di un ipotetico cicloesatriene?", options: ["Delocalizzazione elettronica", "Ibridazione sp3", "Polarità dei legami", "Interazioni ioniche"], correct: "Delocalizzazione elettronica" }
+        ],
+        14: [
+            { q: "Quale prodotto principale si forma nella nitrurazione del toluene?", options: ["Orto e para nitrotoluene", "Solo para", "Solo meta nitrotoluene", "Solo orto"], correct: "Orto e para nitrotoluene" },
+            { q: "Perché i prodotti orto e para sono favoriti con gruppi attivanti?", options: ["Stabilizzazione per risonanza dell'intermedio", "Maggiore massa molecolare", "Maggiore polarità", "Assenza di protoni"], correct: "Stabilizzazione per risonanza dell'intermedio" },
+            { q: "Quale gruppo è orto/para orientante ma disattivante?", options: ["Cl", "COOH", "CN", "NO2"], correct: "Cl" },
+            { q: "Perché gli alogeni sono orto/para orientanti?", options: ["Donazione elettronica per risonanza", "Effetto induttivo positivo", "Carca positiva", "Assenza di doppietti"], correct: "Donazione elettronica per risonanza" },
+            { q: "Quale reazione può ossidare un gruppo alchilico su un anello aromatico?", options: ["Ossidazione con KMnO4", "Idrogenazione", "Clorurazione", "Nitrurazione"], correct: "Ossidazione con KMnO4" },
+            { q: "Quale prodotto si ottiene ossidando il toluene con KMnO4 forte?", options: ["Acido benzoico", "Fenolo", "Benzaldeide", "Benzeno"], correct: "Acido benzoico" },
+            { q: "Quale reazione riduce un anello aromatico completamente?", options: ["Idrogenazione catalitica", "Nitrurazione", "Clorurazione", "Ossidazione"], correct: "Idrogenazione catalitica" },
+            { q: "Quale condizione è necessaria affinché un gruppo laterale venga ossidato a acido carbossilico?", options: ["Presenza di idrogeni benzilici", "Assenza di idrogeni", "Presenza di azoto", "Presenza di doppio legame"], correct: "Presenza di idrogeni benzilici" },
+            { q: "Quale prodotto si ottiene dall'idrogenazione completa del benzene?", options: ["Cicloesano", "Fenolo", "Toluene", "Cicloesene"], correct: "Cicloesano" },
+            { q: "Quale tipo di sostituzione avviene negli alogenuri aromatici con nucleofili forti?", options: ["Sostituzione nucleofila aromatica", "Addizione radicalica", "Eliminazione", "Ossidazione"], correct: "Sostituzione nucleofila aromatica" },
+            { q: "Quale condizione favorisce la sostituzione nucleofila aromatica?", options: ["Presenza di gruppi elettron-attrattori", "Presenza di gruppi alchilici", "Assenza di sostituenti", "Alta temperatura solo"], correct: "Presenza di gruppi elettron-attrattori" },
+            { q: "Quale gruppo facilita maggiormente la sostituzione nucleofila aromatica?", options: ["NO2", "NH2", "CH3", "OH"], correct: "NO2" },
+            { q: "Quale meccanismo può coinvolgere un intermedio benzyne?", options: ["Meccanismo di eliminazione-addizione", "SN2", "SN1", "E1"], correct: "Meccanismo di eliminazione-addizione" },
+            { q: "Quale composto è meno reattivo nella sostituzione elettrofila?", options: ["Nitrobenzene", "Toluene", "Anilina", "Fenolo"], correct: "Nitrobenzene" },
+            { q: "Quale sostituente attiva fortemente l'anello aromatico?", options: ["OH", "NO2", "COOH", "CN"], correct: "OH" },
+            { q: "Quale intermedio si forma durante una sostituzione elettrofila aromatica?", options: ["Complesso σ (ione arenio)", "Carbanione", "Radicale benzilico", "Ione vinilico"], correct: "Complesso σ (ione arenio)" },
+            { q: "Quale composto reagisce più velocemente nella sostituzione elettrofila?", options: ["Anilina", "Nitrobenzene", "Benzoico", "Benzaldeide"], correct: "Anilina" },
+            { q: "Quale prodotto si forma nella nitrurazione del benzene?", options: ["Nitrobenzene", "Anilina", "Fenolo", "Toluene"], correct: "Nitrobenzene" },
+            { q: "Quale tipo di reazione è più caratteristica dei composti aromatici?", options: ["Sostituzione elettrofila aromatica", "Eliminazione E2", "Sostituzione nucleofila SN2", "Addizione elettrofila"], correct: "Sostituzione elettrofila aromatica" },
+            { q: "Perché il benzene tende a subire sostituzione piuttosto che addizione?", options: ["L'addizione distruggerebbe l'aromaticità", "Gli elettroni sono localizzati", "Il benzene è saturo", "Il benzene non possiede elettroni π"], correct: "L'addizione distruggerebbe l'aromaticità" },
+            { q: "Quale specie agisce tipicamente come elettrofilo nelle sostituzioni aromatiche?", options: ["Una specie povera di elettroni", "Una base forte", "Una specie ricca di elettroni", "Un radicale libero"], correct: "Una specie povera di elettroni" },
+            { q: "Quale composto aromatico reagisce più rapidamente nella nitrurazione?", options: ["Fenolo", "Acido benzoico", "Nitrobenzene", "Benzene"], correct: "Fenolo" },
+            { q: "Quale caratteristica possiede il complesso σ?", options: ["Perdita temporanea dell'aromaticità", "Carica negativa distribuita", "Doppio numero di elettroni π", "Ibridazione sp3 su tutti i carboni"], correct: "Perdita temporanea dell'aromaticità" },
+            { q: "Quale passaggio ristabilisce l'aromaticità nella sostituzione elettrofila?", options: ["Perdita di un protone", "Addizione di H+", "Riduzione", "Formazione di radicale"], correct: "Perdita di un protone" },
+            { q: "Quale catalizzatore è spesso utilizzato per la bromurazione del benzene?", options: ["FeBr3", "KMnO4", "H2SO4", "NaOH"], correct: "FeBr3" },
+            { q: "Quale specie elettrofila si forma nella nitrurazione del benzene?", options: ["NO2+", "NO3−", "NH2+", "N2"], correct: "NO2+" },
+            { q: "Quali reagenti producono lo ione nitronio?", options: ["HNO3 e H2SO4", "HCl e NaNO3", "NH3 e HNO3", "HNO3 e NaOH"], correct: "HNO3 e H2SO4" },
+            { q: "Quale reagente genera Cl+ per la clorurazione aromatica?", options: ["Cl2 con FeCl3", "HCl", "NaCl", "Cl2 con acqua"], correct: "Cl2 con FeCl3" },
+            { q: "Quale effetto elettronico aumenta la densità elettronica dell'anello?", options: ["Effetto donatore di elettroni", "Effetto induttivo negativo", "Effetto campo", "Effetto sterico"], correct: "Effetto donatore di elettroni" },
+            { q: "Quale prodotto si forma dalla clorurazione del benzene?", options: ["Clorobenzene", "Fenolo", "Benzoato", "Cloroetano"], correct: "Clorobenzene" },
+            { q: "Quale reazione introduce un gruppo alchilico su un anello aromatico?", options: ["Alchilazione di Friedel–Crafts", "Nitrurazione", "Solfonazione", "Ossidazione"], correct: "Alchilazione di Friedel–Crafts" },
+            { q: "Quale catalizzatore è tipico della reazione di Friedel–Crafts?", options: ["AlCl3", "KMnO4", "H2", "NaOH"], correct: "AlCl3" },
+            { q: "Quale problema può verificarsi nell'alchilazione di Friedel–Crafts?", options: ["Riarrangiamento del carbocatione", "Eliminazione E2", "Riduzione dell'anello", "Formazione di radicali"], correct: "Riarrangiamento del carbocatione" },
+            { q: "Quale reazione introduce un gruppo acilico sull'anello aromatico?", options: ["Acilazione di Friedel–Crafts", "Clorurazione", "Idrogenazione", "Ozonolisi"], correct: "Acilazione di Friedel–Crafts" },
+            { q: "Quale vantaggio ha l'acilazione rispetto all'alchilazione?", options: ["Non avvengono riarrangiamenti del carbocatione", "Produce sempre due prodotti", "Non richiede catalizzatore", "Forma radicali"], correct: "Non avvengono riarrangiamenti del carbocatione" },
+            { q: "Quale gruppo è fortemente disattivante e meta-orientante?", options: ["NO2", "OH", "NH2", "CH3"], correct: "NO2" },
+            { q: "Quale gruppo è attivante e orto/para-orientante?", options: ["OH", "COOH", "SO3H", "NO2"], correct: "OH" },
+            { q: "Quale gruppo dirige meta nelle sostituzioni elettrofile aromatiche?", options: ["COOH", "CH3", "NH2", "OCH3"], correct: "COOH" },
+            { q: "Quale gruppo è fortemente attivante per effetto di risonanza?", options: ["NH2", "NO2", "CF3", "COOH"], correct: "NH2" },
+            { q: "Quale proprietà rende gli intermedi arenio relativamente stabili?", options: ["Delocalizzazione della carica positiva", "Presenza di carica negativa", "Legami ionici", "Ibridazione sp3 completa"], correct: "Delocalizzazione della carica positiva" },
+            { q: "Quale fattore influenza maggiormente l'orientamento nelle sostituzioni aromatiche?", options: ["Natura elettronica del sostituente", "Numero di atomi", "Pressione", "Temperatura"], correct: "Natura elettronica del sostituente" }
+        ],
+        15: [
+            { q: "Quale proprietà descrive la capacità di una molecola di ruotare la luce polarizzata?", options: ["Attività ottica", "Basicità", "Polarità", "Acidità"], correct: "Attività ottica" },
+            { q: "Quale rappresentazione è spesso usata per stereochimica?", options: ["Proiezione di Fischer", "Struttura di Lewis", "Proiezione di Haworth", "Proiezione di Newman"], correct: "Proiezione di Fischer" },
+            { q: "Nella proiezione di Fischer le linee verticali rappresentano:", options: ["Legami dietro il piano", "Doppi legami", "Legami davanti al piano", "Legami ionici"], correct: "Legami dietro il piano" },
+            { q: "Nella proiezione di Fischer le linee orizzontali rappresentano:", options: ["Legami davanti al piano", "Doppi legami", "Legami ionici", "Legami dietro il piano"], correct: "Legami davanti al piano" },
+            { q: "Come si chiama il processo di separazione di enantiomeri?", options: ["Risoluzione", "Filtrazione", "Distillazione", "Cristallizzazione"], correct: "Risoluzione" },
+            { q: "Quale tipo di luce viene utilizzato nei polarimetri?", options: ["Luce polarizzata", "Luce fluorescente", "Luce ultravioletta", "Luce infrarossa"], correct: "Luce polarizzata" },
+            { q: "Come si chiamano gli stereoisomeri che differiscono per un solo centro chirale?", options: ["Epimeri", "Tautomeri", "Conformeri", "Enantiomeri"], correct: "Epimeri" },
+            { q: "Quale tipo di stereoisomeria deriva da restrizioni di rotazione?", options: ["Isomeria configurazionale", "Isomeria conformazionale", "Isomeria isotopica", "Isomeria nucleare"], correct: "Isomeria configurazionale" },
+            { q: "Quale stereoisomeria include enantiomeri e diastereoisomeri?", options: ["Isomeria configurazionale", "Isomeria conformazionale", "Isomeria costituzionale", "Isomeria nucleare"], correct: "Isomeria configurazionale" },
+            { q: "Come si chiama una molecola con piano di simmetria interno ma centri chirali?", options: ["Composto meso", "Composto aromatico", "Composto racemico", "Composto ionico"], correct: "Composto meso" },
+            { q: "Quale termine descrive molecole non chirali?", options: ["Achirali", "Enantiomeriche", "Mesomeriche", "Diastereomeriche"], correct: "Achirali" },
+            { q: "Quale relazione esiste tra enantiomeri?", options: ["Immagini speculari non sovrapponibili", "Conformeri", "Strutture identiche", "Isomeri costituzionali"], correct: "Immagini speculari non sovrapponibili" },
+            { q: "Quale tipo di isomeria coinvolge la disposizione nello spazio?", options: ["Stereoisomeria", "Isomeria strutturale", "Isomeria isotopica", "Isomeria nucleare"], correct: "Stereoisomeria" },
+            { q: "Quale caratteristica è tipica dei centri stereogenici?", options: ["Quattro sostituenti diversi", "Un legame ionico", "Due sostituenti identici", "Un doppio legame"], correct: "Quattro sostituenti diversi" },
+            { q: "Un composto meso è otticamente attivo?", options: ["No", "Sì", "Solo allo stato solido", "Solo in soluzione"], correct: "No" },
+            { q: "Che cosa studia la stereochimica?", options: ["La disposizione tridimensionale degli atomi nelle molecole", "La polarità dei solventi", "La velocità delle reazioni", "La massa molecolare"], correct: "La disposizione tridimensionale degli atomi nelle molecole" },
+            { q: "Quale termine indica una molecola con due enantiomeri in proporzione uguale?", options: ["Racemato", "Isomero", "Diastereomero", "Epimero"], correct: "Racemato" },
+            { q: "Cosa rappresenta la configurazione R/S?", options: ["Configurazione assoluta del centro chirale", "Direzione della rotazione ottica", "Numero di atomi", "Energia della molecola"], correct: "Configurazione assoluta del centro chirale" },
+            { q: "Quanti stereoisomeri massimi può avere una molecola con n centri chirali?", options: ["2ⁿ", "n!", "n²", "n+1"], correct: "2ⁿ" },
+            { q: "Come si chiama un composto con più di un centro stereogenico?", options: ["Composto polichirale", "Composto planare", "Composto aromatico", "Composto ionico"], correct: "Composto polichirale" },
+            { q: "Qual è la rotazione ottica di una miscela racemica?", options: ["Zero", "Positiva", "Negativa", "Massima"], correct: "Zero" },
+            { q: "Cosa indica una miscela racemica?", options: ["Miscela 1:1 di enantiomeri", "Miscela di tre stereoisomeri", "Miscela di conformeri", "Miscela di alcani"], correct: "Miscela 1:1 di enantiomeri" },
+            { q: "Se il gruppo a priorità più bassa è rivolto verso l’osservatore cosa si deve fare?", options: ["Invertire il risultato", "Raddoppiare il risultato", "Ignorarlo", "Lasciarlo invariato"], correct: "Invertire il risultato" },
+            { q: "Quale atomo ha priorità maggiore?", options: ["Quello con numero atomico maggiore", "Quello con massa maggiore", "Quello con più idrogeni", "Quello più distante"], correct: "Quello con numero atomico maggiore" },
+            { q: "Qual è il primo criterio per assegnare priorità CIP?", options: ["Numero atomico", "Massa molecolare", "Numero di elettroni", "Numero di protoni e neutroni"], correct: "Numero atomico" },
+            { q: "Quale sistema viene usato per assegnare R/S?", options: ["Regole di Cahn–Ingold–Prelog", "Regole di Hund", "Regole di Arrhenius", "Regole di Lewis"], correct: "Regole di Cahn–Ingold–Prelog" },
+            { q: "Qual è il simbolo per la rotazione sinistrorsa?", options: ["(-)", "(S)", "(R)", "(+)"], correct: "(-)" },
+            { q: "Quando una molecola è chirale?", options: ["Quando non è sovrapponibile alla sua immagine speculare", "Quando è planare", "Quando contiene doppi legami", "Quando ha un piano di simmetria"], correct: "Quando non è sovrapponibile alla sua immagine speculare" },
+            { q: "Qual è il simbolo per la rotazione destrorsa?", options: ["(+)", "(R)", "(-)", "(S)"], correct: "(+)" },
+            { q: "Come si chiama una sostanza che ruota il piano della luce polarizzata?", options: ["Otticamente attiva", "Ionica", "Aromatica", "Planare"], correct: "Otticamente attiva" },
+            { q: "Quale strumento viene utilizzato per misurare la rotazione ottica?", options: ["Polarimetro", "Cromatografo", "Spettrometro", "Microscopio"], correct: "Polarimetro" },
+            { q: "Quale proprietà distingue gli enantiomeri?", options: ["Rotazione della luce polarizzata", "Punto di ebollizione", "Massa molecolare", "Formula molecolare"], correct: "Rotazione della luce polarizzata" },
+            { q: "Come vengono chiamati gli isomeri che non sono immagini speculari?", options: ["Diastereoisomeri", "Enantiomeri", "Conformeri", "Isotopi"], correct: "Diastereoisomeri" },
+            { q: "Qual è il requisito principale per un centro stereogenico?", options: ["Carbonio legato a quattro gruppi diversi", "Carbonio con tre legami", "Carbonio con doppio legame", "Carbonio con carica positiva"], correct: "Carbonio legato a quattro gruppi diversi" },
+            { q: "Come si chiama una coppia di molecole immagini speculari non sovrapponibili?", options: ["Enantiomeri", "Diastereoisomeri", "Isomeri costituzionali", "Conformeri"], correct: "Enantiomeri" },
+            { q: "Quale oggetto è comunemente usato per spiegare la chiralità?", options: ["Le mani", "Un cilindro", "Una sfera", "Un cubo"], correct: "Le mani" },
+            { q: "Quale proprietà può differire negli enantiomeri in ambiente biologico?", options: ["Attività biologica", "Formula molecolare", "Massa molecolare", "Numero di legami"], correct: "Attività biologica" },
+            { q: "Quale delle seguenti molecole è sempre achirale?", options: ["Metano", "2-clorobutano", "2-butanolo", "Acido lattico"], correct: "Metano" },
+            { q: "Quale proprietà fisica è identica negli enantiomeri in ambiente achirale?", options: ["Punto di ebollizione", "Segno della rotazione", "Interazione con enzimi", "Rotazione ottica"], correct: "Punto di ebollizione" },
+            { q: "Come si chiamano gli stereoisomeri di zuccheri che differiscono in un solo centro?", options: ["Epimeri", "Conformeri", "Diastereomeri", "Enantiomeri"], correct: "Epimeri" }
+        ],
+        16: [
+            { q: "Qual è la caratteristica fondamentale del meccanismo SN2?", options: ["È una reazione concertata con un solo stato di transizione", "Avviene tramite radicali", "Avviene tramite carbocatione intermedio", "È sempre catalizzata da acidi forti"], correct: "È una reazione concertata con un solo stato di transizione" },
+            { q: "Quale alogenuro reagisce più velocemente in SN2?", options: ["CH3I", "CH3F", "CH3Cl", "CH3Br"], correct: "CH3I" },
+            { q: "Quale effetto ha la solvatazione sui nucleofili?", options: ["Riduce la nucleofilicità nei solventi protici", "Trasforma i nucleofili in elettrofili", "Non ha effetto", "Aumenta sempre la nucleofilicità"], correct: "Riduce la nucleofilicità nei solventi protici" },
+            { q: "Quale specie è più nucleofila in solvente aprotico?", options: ["F⁻", "H₂O", "Cl⁻", "I⁻"], correct: "F⁻" },
+            { q: "Quale fattore influenza maggiormente la nucleofilicità?", options: ["Carica e polarizzabilità", "Temperatura", "Pressione", "Numero di atomi di carbonio"], correct: "Carica e polarizzabilità" },
+            { q: "Quale tra questi substrati non subisce SN2 facilmente?", options: ["Alogenuro vinilico", "Alogenuro primario", "Metil bromuro", "Alogenuro secondario"], correct: "Alogenuro vinilico" },
+            { q: "Quale tra i seguenti nucleofili è più debole?", options: ["H₂O", "I⁻", "CN⁻", "OH⁻"], correct: "H₂O" },
+            { q: "Quale fattore aumenta la velocità di SN2?", options: ["Miglior gruppo uscente", "Maggiore ingombro sterico", "Solvente protico", "Substrato terziario"], correct: "Miglior gruppo uscente" },
+            { q: "Perché l'attacco frontside è sfavorito in SN2?", options: ["Repulsione elettronica con il gruppo uscente", "Elevata polarità", "Maggiore stabilità energetica", "Assenza di orbitali"], correct: "Repulsione elettronica con il gruppo uscente" },
+            { q: "Quale nucleofilo è tipico nella sintesi di Williamson?", options: ["Alcossido", "Acqua", "Ammoniaca", "Alogeno"], correct: "Alcossido" },
+            { q: "Quale orientamento deve avere il nucleofilo per reagire in SN2?", options: ["Attacco backside", "Attacco frontside", "Attacco casuale", "Attacco laterale"], correct: "Attacco backside" },
+            { q: "Quale struttura descrive lo stato di transizione SN2?", options: ["Carbonio pentacoordinato parziale", "Radicale", "Carbocatione planare", "Carbanione"], correct: "Carbonio pentacoordinato parziale" },
+            { q: "Nel diagramma energetico di una reazione SN2:", options: ["Esiste un solo stato di transizione", "Si forma un carbocatione stabile", "La reazione è radicalica", "Sono presenti due intermedi"], correct: "Esiste un solo stato di transizione" },
+            { q: "Quale legame si rompe durante una reazione SN2?", options: ["Legame C–X", "Legame C=C", "Legame C–H", "Legame C–C"], correct: "Legame C–X" },
+            { q: "Quale caratteristica rende un gruppo uscente efficace?", options: ["Stabilità della specie uscente", "Elevata basicità", "Bassa massa molecolare", "Elevata nucleofilicità"], correct: "Stabilità della specie uscente" },
+            { q: "Quale specie è un buon gruppo uscente?", options: ["I⁻", "CH₃⁻", "OH⁻", "NH₂⁻"], correct: "I⁻" },
+            { q: "Quale fattore riduce la velocità di una reazione SN2?", options: ["Ingombro sterico vicino al carbonio reattivo", "Buon gruppo uscente", "Solvente aprotico", "Elevata nucleofilicità"], correct: "Ingombro sterico vicino al carbonio reattivo" },
+            { q: "Quale reazione SN2 produce etere da un alogenuro alchilico?", options: ["Sintesi di Williamson", "Riduzione catalitica", "Reazione di Friedel‑Crafts", "Ozonolisi"], correct: "Sintesi di Williamson" },
+            { q: "Quale substrato è più adatto per la sintesi di Williamson?", options: ["Alogenuro primario", "Alogenuro vinilico", "Alogenuro aromatico", "Alogenuro terziario"], correct: "Alogenuro primario" },
+            { q: "Quale legge cinetica descrive correttamente una reazione SN2?", options: ["v = k[substrato][nucleofilo]", "v = k[nucleofilo]", "v = k[substrato]", "v = k[substrato]^2"], correct: "v = k[substrato][nucleofilo]" },
+            { q: "Quale composto subisce SN2 più velocemente?", options: ["CH3CH2Br", "C6H5Br", "CH3CHBrCH3", "C(CH3)3Br"], correct: "CH3CH2Br" },
+            { q: "Quale stereochimica caratterizza una reazione SN2?", options: ["Inversione di configurazione", "Isomerizzazione cis‑trans", "Racemizzazione", "Retenzione di configurazione"], correct: "Inversione di configurazione" },
+            { q: "L'inversione di configurazione nelle reazioni SN2 è nota come:", options: ["Inversione di Walden", "Principio di Hammond", "Regola di Markovnikov", "Regola di Zaitsev"], correct: "Inversione di Walden" },
+            { q: "Quale substrato reagisce più velocemente in una reazione SN2?", options: ["Metil alogenuro", "Alogenuro vinilico", "Alogenuro secondario fortemente ingombrato", "Alogenuro terziario"], correct: "Metil alogenuro" },
+            { q: "Perché gli alogenuri terziari reagiscono lentamente con SN2?", options: ["Ingombro sterico", "Elevata polarità", "Carica negativa", "Stabilità del radicale"], correct: "Ingombro sterico" },
+            { q: "Quale fattore determina la stabilità del gruppo uscente?", options: ["Debole basicità", "Bassa massa", "Elevata nucleofilicità", "Alta basicità"], correct: "Debole basicità" },
+            { q: "Quale trasformazione avviene durante SN2?", options: ["Sostituzione nucleofila bimolecolare", "Addizione radicalica", "Eliminazione unimolecolare", "Sostituzione elettrofila"], correct: "Sostituzione nucleofila bimolecolare" },
+            { q: "Quale proprietà del nucleofilo accelera SN2?", options: ["Elevata densità elettronica", "Elevata massa", "Assenza di carica", "Elevata elettronegatività"], correct: "Elevata densità elettronica" },
+            { q: "Quale fattore determina la selettività stereochimica SN2?", options: ["Attacco backside", "Addizione sin", "Radicali", "Risonanza"], correct: "Attacco backside" },
+            { q: "Quale reazione compete spesso con SN2?", options: ["E2", "Sostituzione aromatica", "Addizione elettrofila", "Ossidazione"], correct: "E2" },
+            { q: "Quale prodotto si ottiene dalla SN2 tra CH3I e CN⁻?", options: ["CH3CN", "CH2O", "CH4", "CH3OH"], correct: "CH3CN" },
+            { q: "Quale specie è il miglior nucleofilo tra questi?", options: ["CN⁻", "H₂O", "NH₄⁺", "ROH"], correct: "CN⁻" },
+            { q: "Perché i nucleofili più polarizzabili sono spesso più reattivi?", options: ["Gli elettroni sono più facilmente deformabili", "Sono più stabili", "Sono più piccoli", "Hanno meno elettroni"], correct: "Gli elettroni sono più facilmente deformabili" },
+            { q: "Quale orbitale è coinvolto nell'attacco nucleofilo SN2?", options: ["Orbitale antibonding σ*", "Orbitale π", "Orbitale s", "Orbitale d"], correct: "Orbitale antibonding σ*" },
+            { q: "Quale tra i seguenti è il miglior nucleofilo in solvente aprotico?", options: ["F⁻", "H₂O", "I⁻", "NH₃"], correct: "F⁻" },
+            { q: "Quale prodotto si ottiene dalla reazione SN2 di CH3Br con OH⁻?", options: ["CH3OH", "CH4", "CH2O", "CH3Cl"], correct: "CH3OH" },
+            { q: "Quale condizione favorisce E2 rispetto a SN2?", options: ["Base forte e substrato ingombrato", "Nucleofilo debole", "Solvente aprotico", "Temperatura bassa"], correct: "Base forte e substrato ingombrato" },
+            { q: "Quale parametro determina la velocità della SN2?", options: ["Concentrazione di nucleofilo e substrato", "Solo pressione", "Solo concentrazione del substrato", "Solo temperatura"], correct: "Concentrazione di nucleofilo e substrato" },
+            { q: "Quale tra i seguenti è un solvente polare aprotico?", options: ["DMSO", "H₂O", "CH₃OH", "NH₃"], correct: "DMSO" },
+            { q: "Quale solvente favorisce maggiormente SN2?", options: ["Solvente polare aprotico", "Solvente protico fortemente acido", "Solvente aromatico", "Solvente non polare"], correct: "Solvente polare aprotico" }
+        ]
+    };
+
+    let currentChapter = null;
+    let questionsPool = [];
+    let currentQuestionIndex = 0;
+    let score = 0;
+
+    function startChapter(chapterNum) {
+        currentChapter = chapterNum;
+        questionsPool = [...chaptersData[chapterNum]].sort(() => Math.random() - 0.5);
+        currentQuestionIndex = 0;
+        score = 0;
+
+        document.getElementById("menu-screen").style.display = "none";
+        document.getElementById("quiz-screen").style.display = "block";
+        document.getElementById("score-screen").style.display = "none";
+
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        document.getElementById("next-btn").style.display = "none";
+        const qData = questionsPool[currentQuestionIndex];
+
+        document.getElementById("counter").innerText = `Domanda ${currentQuestionIndex + 1}/${questionsPool.length}`;
+        document.getElementById("question-text").innerText = qData.q;
+
+        const optionsContainer = document.getElementById("options-container");
+        optionsContainer.innerHTML = "";
+
+        const shuffledOptions = [...qData.options].sort(() => Math.random() - 0.5);
+
+        shuffledOptions.forEach(option => {
+            const btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = option;
+            btn.onclick = () => selectAnswer(btn, option, qData.correct);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedBtn, chosen, correct) {
+        const buttons = document.getElementById("options-container").getElementsByTagName("button");
+        
+        for (let btn of buttons) {
+            btn.disabled = true;
+            if (btn.innerText === correct) {
+                btn.classList.add("correct");
+            } else if (btn.innerText === chosen && chosen !== correct) {
+                btn.classList.add("wrong");
+            }
+        }
+
+        if (chosen === correct) {
+            score++;
+        }
+
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questionsPool.length) {
+            loadQuestion();
+        } else {
+            showScore();
+        }
+    }
+
+    function showScore() {
+        document.getElementById("quiz-screen").style.display = "none";
+        document.getElementById("score-screen").style.display = "block";
+        
+        const percentage = Math.round((score / questionsPool.length) * 100);
+        document.getElementById("final-score").innerText = `Hai risposto correttamente a ${score} su ${questionsPool.length} domande (${percentage}%)`;
+    }
+
+    function returnToMenu() {
+        document.getElementById("score-screen").style.display = "none";
+        document.getElementById("menu-screen").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
