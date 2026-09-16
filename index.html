@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Chimica Organica - eCampus</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        h1 { color: #1a73e8; font-size: 1.4rem; text-align: center; margin-top: 0; }
+        h2 { color: #1a73e8; font-size: 1.2rem; margin-top: 0; }
+        .question { font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; color: #333; }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px 15px;
+            margin: 10px 0;
+            background: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: 0.2s;
+            box-sizing: border-box;
+        }
+        .btn:hover:not(:disabled) { background: #f1f3f4; border-color: #1a73e8; }
+        .btn.correct { background: #d4edda !important; border-color: #28a745 !important; color: #155724; }
+        .btn.wrong { background: #f8d7da !important; border-color: #dc3545 !important; color: #721c24; }
+        .primary-btn {
+            background: #1a73e8;
+            color: white;
+            text-align: center;
+            border: none;
+            font-weight: bold;
+        }
+        .primary-btn:hover { background: #1557b0; }
+        #next-btn {
+            display: none;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #quiz-screen, #score-screen { display: none; }
+        .score-box { text-align: center; font-size: 1.3rem; font-weight: bold; margin: 20px 0; color: #333; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- MENU DI SELEZIONE CAPITOLI (Aggiungi qui i nuovi pulsanti man mano) -->
+    <div id="menu-screen">
+        <h1>Chimica Organica 🧪</h1>
+        <p style="text-align: center; color: #666; margin-bottom: 25px;">Scegli il capitolo su cui esercitarti:</p>
+        
+        <button class="btn primary-btn" onclick="startChapter(1)">Capitolo 1: Struttura, Legami e Ibridazione</button>
+        <button class="btn primary-btn" onclick="startChapter(2)">Capitolo 2: Acidi, Basi ed Effetti Elettronici</button>
+        <!-- ESEMPIO PER IL CAPITOLO 3: -->
+        <!-- <button class="btn primary-btn" onclick="startChapter(3)">Capitolo 3: Nome del capitolo</button> -->
+    </div>
+
+    <!-- SCHERMATA QUIZ -->
+    <div id="quiz-screen">
+        <h2 id="counter">Domanda 1/30</h2>
+        <div class="question" id="question-text">Caricamento...</div>
+        <div id="options-container"></div>
+        <button id="next-btn" onclick="nextQuestion()">Prossima Domanda</button>
+    </div>
+
+    <!-- SCHERMATA RISULTATO -->
+    <div id="score-screen">
+        <h2>Quiz Completato! 🎉</h2>
+        <div class="score-box" id="final-score"></div>
+        <button class="btn primary-btn" onclick="returnToMenu()">Torna al Menu Principale</button>
+    </div>
+</div>
+
+<script>
+    /* ==========================================================
+       ARCHIVIO CAPITOLI E DOMANDE
+       Ogni capitolo ha il suo numero identificativo (1, 2, 3...)
+       ========================================================== */
+    const chaptersData = {
+        1: [
+            { q: "Qual è l'angolo approssimativo tra orbitali sp2?", options: ["109,5°", "120°", "180°", "90°"], correct: "120°" },
+            { q: "In una struttura scheletrica, gli idrogeni legati al carbonio sono:", options: ["Sempre rappresentati esplicitamente", "Sottintesi e non disegnati", "Sostituiti da simboli speciali", "Rappresentati solo con punti"], correct: "Sottintesi e non disegnati" },
+            { q: "Nelle strutture scheletriche degli idrocarburi, cosa rappresentano le estremità delle linee?", options: ["Atomi di carbonio", "Elettroni di valenza", "Atomi di ossigeno", "Atomi di idrogeno"], correct: "Atomi di carbonio" },
+            { q: "Quante coppie solitarie possiede l'ossigeno nella molecola di metanolo?", options: ["1", "0", "3", "2"], correct: "2" },
+            { q: "Quale elemento tra i seguenti forma tipicamente tre legami covalenti?", options: ["Idrogeno", "Ossigeno", "Azoto", "Carbonio"], correct: "Azoto" },
+            { q: "Che cosa indica la forza di legame?", options: ["La velocità di formazione del legame", "L'energia necessaria per rompere il legame", "La distanza tra gli atomi", "La massa degli atomi coinvolti"], correct: "L'energia necessaria per rompere il legame" },
+            { q: "Che cosa rappresenta la lunghezza di legame?", options: ["La distanza tra due elettroni", "La distanza tra i nuclei degli atomi legati", "La distanza tra due orbitali", "La distanza tra elettrone e nucleo"], correct: "La distanza tra i nuclei degli atomi legati" },
+            { q: "Quale tipo di orbitale molecolare ha energia più bassa?", options: ["Orbitale atomico", "Orbitale molecolare di legame", "Orbitale ionico", "Orbitale molecolare antilegame"], correct: "Orbitale molecolare di legame" },
+            { q: "Secondo la teoria degli orbitali molecolari, cosa si forma combinando orbitali atomici?", options: ["Orbitali ionici", "Orbitali molecolari", "Orbitali nucleari", "Orbitali ibridi"], correct: "Orbitali molecolari" },
+            { q: "Quale teoria descrive il legame covalente come sovrapposizione di orbitali atomici?", options: ["Teoria del legame di valenza", "Teoria cinetica", "Teoria VSEPR", "Teoria degli orbitali molecolari"], correct: "Teoria del legame di valenza" },
+            { q: "Quanti legami pi sono presenti in un triplo legame carbonio-carbonio?", options: ["2", "0", "3", "1"], correct: "2" },
+            { q: "Qual è l'angolo di legame tipico negli orbitali sp?", options: ["180°", "120°", "90°", "109,5°"], correct: "180°" },
+            { q: "Quanti legami sigma e pi sono presenti in un doppio legame C=C?", options: ["2 sigma", "2 pi", "1 sigma e 2 pi", "1 sigma e 1 pi"], correct: "1 sigma e 1 pi" },
+            { q: "Qual è l'ibridazione del carbonio nell'acetilene (C2H2)?", options: ["sp3", "sp2", "dsp", "sp"], correct: "sp" },
+            { q: "Qual è l'ibridazione del carbonio nell'etilene (C2H4)?", options: ["sp3", "dsp2", "sp", "sp2"], correct: "sp2" },
+            { q: "Quale regola afferma che gli orbitali degeneri vengono occupati prima singolarmente con spin paralleli?", options: ["Principio di Pauli", "Principio di indeterminazione", "Principio di Aufbau", "Regola di Hund"], correct: "Regola di Hund" },
+            { q: "Qual è la relazione tra numero atomico (Z) e massa atomica (A)?", options: ["Z indica protoni e neutroni insieme", "Z indica il numero di protoni, mentre A è la somma di protoni e neutroni", "Z indica il numero di elettroni di valenza", "A indica solo i neutroni"], correct: "Z indica il numero di protoni, mentre A è la somma di protoni e neutroni" },
+            { q: "Quale tipo di orbitale ha una forma sferica?", options: ["Orbitale d", "Orbitale p", "Orbitale f", "Orbitale s"], correct: "Orbitale s" },
+            { q: "Qual è il numero massimo di elettroni che può contenere il secondo livello energetico?", options: ["18", "2", "8", "10"], correct: "8" },
+            { q: "Quanti orbitali ibridi sp3 si formano dalla combinazione di un orbitale s e tre p?", options: ["4", "6", "3", "2"], correct: "4" },
+            { q: "Quale principio stabilisce che due elettroni nello stesso orbitale devono avere spin opposto?", options: ["Principio di esclusione di Pauli", "Principio di Aufbau", "Regola dell'ottetto", "Regola di Hund"], correct: "Principio di esclusione di Pauli" },
+            { q: "Secondo il principio di Aufbau, quale orbitale si riempie prima?", options: ["1s", "2p", "4s", "3s"], correct: "1s" },
+            { q: "Qual è la configurazione elettronica fondamentale del carbonio?", options: ["1s2 2s2 2p6", "1s2 2s2 2p4", "1s2 2s1 2p3", "1s2 2s2 2p2"], correct: "1s2 2s2 2p2" },
+            { q: "Perché il carbonio può formare una grande varietà di composti?", options: ["Ha il raggio atomico più grande", "È il più elettronegativo", "Può formare quattro legami covalenti e legarsi con altri atomi di carbonio", "Forma solo legami ionici"], correct: "Può formare quattro legami covalenti e legarsi con altri atomi di carbonio" },
+            { q: "Qual è la geometria molecolare del carbonio nel metano?", options: ["Trigonale planare", "Tetraedrica", "Lineare", "Angolare"], correct: "Tetraedrica" },
+            { q: "Qual è l'angolo di legame H-C-H nel metano?", options: ["120°", "90°", "109,5°", "180°"], correct: "109,5°" },
+            { q: "Quale tipo di legame si forma dalla sovrapposizione frontale di orbitali atomici?", options: ["Legame pi", "Legame metallico", "Legame sigma", "Legame ionico"], correct: "Legame sigma" },
+            { q: "Quale tipo di legame deriva dalla sovrapposizione laterale di orbitali p?", options: ["Legame sigma", "Legame ionico", "Legame pi", "Legame coordinato"], correct: "Legame pi" },
+            { q: "Qual è l'ibridazione del carbonio nel metano?", options: ["sp2", "sp", "sp3", "dsp3"], correct: "sp3" },
+            { q: "Quale caratteristica distingue principalmente i composti organici secondo la definizione moderna?", options: ["La provenienza esclusiva da organismi viventi", "Un punto di fusione basso", "La presenza dell'elemento carbonio", "La presenza obbligatoria di ossigeno"], correct: "La presenza dell'elemento carbonio" }
+        ],
+        2: [
+            { q: "Qual è la base coniugata dell'acido acetico?", options: ["Etanolo", "Ione acetato", "Ione carbonato", "Metano"], correct: "Ione acetato" },
+            { q: "Quale fattore strutturale può ridurre la basicità?", options: ["Effetto donatore di elettroni", "Maggiore densità elettronica", "Delocalizzazione elettronica", "Effetto elettron-attrattore"], correct: "Delocalizzazione elettronica" },
+            { q: "Quale tendenza dell'elettronegatività si osserva nella tavola periodica?", options: ["Diminuisce da sinistra a destra", "Rimane costante lungo i periodi", "Aumenta da destra a sinistra", "Aumenta da sinistra a destra e dal basso verso l'alto"], correct: "Aumenta da sinistra a destra e dal basso verso l'alto" },
+            { q: "Secondo la teoria di Brønsted-Lowry, una base è:", options: ["Una specie che dona protoni", "Una specie che accetta elettroni", "Una specie che dona neutroni", "Una specie che accetta protoni"], correct: "Una specie che accetta protoni" },
+            { q: "Quale elemento ha generalmente la più alta elettronegatività?", options: ["Cloro", "Ossigeno", "Azoto", "Fluoro"], correct: "Fluoro" },
+            { q: "Un legame è considerato polare quando:", options: ["Il legame è ionico puro", "Il legame è metallico", "Gli atomi hanno la stessa elettronegatività", "Gli atomi hanno differente elettronegatività"], correct: "Gli atomi hanno differente elettronegatività" },
+            { q: "Quale concetto descrive la distribuzione non uniforme della densità elettronica?", options: ["Polarizzazione del legame", "Ibridazione", "Delocalizzazione nucleare", "Risonanza"], correct: "Polarizzazione del legame" },
+            { q: "Quando un acido perde un protone si forma:", options: ["Un orbitale vuoto", "Un radicale libero", "Un catione metallico", "La sua base coniugata"], correct: "La sua base coniugata" },
+            { q: "Secondo la definizione di Brønsted-Lowry, un acido è:", options: ["Una specie che accetta neutroni", "Eine specie che dona elettroni", "Una specie che accetta protoni", "Una specie che dona protoni"], correct: "Una specie che dona protoni" },
+            { q: "Quale fattore riduce l'acidità di un composto?", options: ["Delocalizzazione della carica", "Elevata elettronegatività", "Effetto induttivo elettron-attrattore", "Instabilità della base coniugata"], correct: "Instabilità della base coniugata" },
+            { q: "Quale parametro riflette la tendenza di un atomo ad attrarre elettroni in un legame?", options: ["Numero di massa", "Raggio atomico", "Elettronegatività", "Numero quantico"], correct: "Elettronegatività" },
+            { q: "La stabilità della base coniugata aumenta quando:", options: ["La molecola è più piccola", "Gli orbitali sono pieni", "La carica è concentrata su un solo atomo", "La carica negativa è distribuita su più atomi"], correct: "La carica negativa è distribuita su più atomi" },
+            { q: "Quale fenomeno descrive l'interazione spaziale tra gruppi voluminosi?", options: ["Effetto mesomerico", "Effetto sterico", "Effetto quantico", "Effetto induttivo"], correct: "Effetto sterico" },
+            { q: "Quale specie ha maggiore acidità?", options: ["Acido con base coniugata instabile", "Acido con legami sigma", "Acido con massa molecolare bassa", "Acido con base coniugata stabile"], correct: "Acido con base coniugata stabile" },
+            { q: "Quale fattore influenza maggiormente l'elettronegatività di un elemento?", options: ["La carica nucleare efficace", "Il numero di isotopi", "La massa atomica", "Il numero di neutroni"], correct: "La carica nucleare efficace" },
+            { q: "Quale struttura rappresenta correttamente un ibrido di risonanza?", options: ["Una singola struttura di Lewis", "Una struttura con elettroni localizzati", "Una struttura ionica pura", "Una struttura con carica delocalizzata"], correct: "Una struttura con carica delocalizzata" },
+            { q: "Quale fattore stabilizza maggiormente una base coniugata?", options: ["La massa molecolare", "La delocalizzazione della carica", "La simmetria nucleare", "La presenza di idrogeno"], correct: "La delocalizzazione della carica" },
+            { q: "Un gruppo elettron-attrattore tende a:", options: ["Ridurre la polarità", "Stabilizzare la base coniugata", "Indebolire l'acidità", "Aumentare la basicità"], correct: "Stabilizzare la base coniugata" },
+            { q: "Quale gruppo è fortemente elettron-attrattore?", options: ["CH2CH3", "NO2", "H", "CH3"], correct: "NO2" },
+            { q: "Quale fattore aumenta l'acidità di un composto?", options: ["Stabilità della base coniugata", "Presenza di legami metallici", "Dimensione della molecola", "Numero di legami sigma"], correct: "Stabilità della base coniugata" },
+            { q: "L'acidità aumenta lungo il gruppo degli alogeni perché:", options: ["Diminuisce la massa", "Aumenta l'elettronegatività", "Diminuisce il numero di elettroni", "Aumenta la dimensione atomica"], correct: "Aumenta la dimensione atomica" },
+            { q: "La risonanza stabilizza una base coniugata perché:", options: ["Forma legami ionici", "Delocalizza la carica negativa", "Riduce il numero di orbitali", "Aumenta la massa molecolare"], correct: "Delocalizza la carica negativa" },
+            { q: "Quale parametro misura quantitativamente la forza di un acido?", options: ["Energia di ionizzazione", "Numero di Avogadro", "pH", "pKa"], correct: "pKa" },
+            { q: "Un acido forte ha tipicamente:", options: ["pKa alto", "pH sempre maggiore di 7", "pKa basso", "pH neutro"], correct: "pKa basso" },
+            { q: "Quale effetto descrive la trasmissione della polarizzazione attraverso legami sigma?", options: ["Effetto isotopico", "Effetto induttivo", "Effetto mesomerico", "Effetto sterico"], correct: "Effetto induttivo" },
+            { q: "Quale specie è una base di Lewis?", options: ["H+", "BF3", "NH3", "AlCl3"], correct: "NH3" },
+            { q: "Quale teoria definisce acidi e basi in termini di accettazione o donazione di coppie elettroniche?", options: ["Teoria cinetica", "Teoria di Lewis", "Teoria di Dalton", "Teoria di Arrhenius"], correct: "Teoria di Lewis" },
+            { q: "Quale specie è un tipico acido di Lewis?", options: ["NH3", "BF3", "CH4", "H2O"], correct: "BF3" },
+            { q: "Secondo Lewis, un acido è:", options: ["Donatore di elettroni", "Donatore di neutroni", "Accettore di coppia elettronica", "Donatore di protoni"], correct: "Accettore di coppia elettronica" },
+            { q: "Secondo Lewis, una base è:", options: ["Donatore di coppia elettronica", "Donatore di protoni", "Accettore di protoni", "Accettore di neutroni"], correct: "Donatore di coppia elettronica" }
+        ]
+    };
+
+    let activeQuestions = [];
+    let currentIdx = 0;
+    let score = 0;
+    let answered = false;
+    let currentCorrectAnswer = "";
+
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex !== 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    function startChapter(chapterNum) {
+        activeQuestions = shuffle([...chaptersData[chapterNum]]);
+        currentIdx = 0;
+        score = 0;
+        document.getElementById("menu-screen").style.display = "none";
+        document.getElementById("score-screen").style.display = "none";
+        document.getElementById("quiz-screen").style.display = "block";
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        answered = false;
+        document.getElementById("next-btn").style.display = "none";
+        const q = activeQuestions[currentIdx];
+        document.getElementById("counter").innerText = `Domanda ${currentIdx + 1}/${activeQuestions.length}`;
+        document.getElementById("question-text").innerText = q.q;
+        
+        currentCorrectAnswer = q.correct;
+        let shuffledOptions = shuffle([...q.options]);
+
+        const optionsContainer = document.getElementById("options-container");
+        optionsContainer.innerHTML = "";
+        
+        shuffledOptions.forEach((opt) => {
+            const btn = document.createElement("button");
+            btn.className = "btn";
+            btn.innerText = opt;
+            btn.onclick = () => selectOption(opt, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function selectOption(selectedText, btn) {
+        if (answered) return;
+        answered = true;
+        
+        const buttons = document.querySelectorAll("#options-container .btn");
+        
+        if (selectedText === currentCorrectAnswer) {
+            btn.classList.add("correct");
+            score++;
+        } else {
+            btn.classList.add("wrong");
+            buttons.forEach(b => {
+                if (b.innerText === currentCorrectAnswer) {
+                    b.classList.add("correct");
+                }
+            });
+        }
+        
+        document.getElementById("next-btn").style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentIdx++;
+        if (currentIdx < activeQuestions.length) {
+            loadQuestion();
+        } else {
+            document.getElementById("quiz-screen").style.display = "none";
+            document.getElementById("score-screen").style.display = "block";
+            document.getElementById("final-score").innerText = `Hai totalizzato ${score} su ${activeQuestions.length} risposte esatte!`;
+        }
+    }
+
+    function returnToMenu() {
+        document.getElementById("score-screen").style.display = "none";
+        document.getElementById("menu-screen").style.display = "block";
+    }
+</script>
+
+</body>
+</html>
