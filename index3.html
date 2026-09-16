@@ -1,1 +1,636 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Chimica Organica - eCampus</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+        }
+        .link-home {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .link-home:hover {
+            text-decoration: underline;
+        }
+        /* Menu di selezione capitoli */
+        .chapters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .chapter-card {
+            background: #fafbfc;
+            border: 2px solid #e1e4e8;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .chapter-card:hover {
+            background-color: #f1f8ff;
+            border-color: #1a73e8;
+            transform: translateY(-2px);
+        }
+        .chapter-card h3 {
+            margin: 0 0 10px 0;
+            color: #1a73e8;
+        }
+        .chapter-card p {
+            margin: 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        /* Quiz styles */
+        .question-card {
+            background: #fafbfc;
+            border: 1px solid #e1e4e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .question-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #24292e;
+        }
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .option-item {
+            background: white;
+            border: 1px solid #d1d5da;
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .option-item:hover {
+            background-color: #f1f8ff;
+            border-color: #1a73e8;
+        }
+        .option-item.selected {
+            background-color: #e8f0fe;
+            border-color: #1a73e8;
+            font-weight: bold;
+        }
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: #28a745 !important;
+            color: #155724;
+        }
+        .option-item.incorrect {
+            background-color: #f8d7da !important;
+            border-color: #dc3545 !important;
+            color: #721c24;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: #1a73e8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 30px;
+            transition: background 0.2s;
+        }
+        .btn-submit:hover {
+            background: #1557b0;
+        }
+        #score-screen {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-top: 20px;
+            color: #333;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <div id="menu-view">
+        <a href="index.html" class="link-home">← Torna al menu principale</a>
+        <h1>Quiz Chimica Organica</h1>
+        <p class="subtitle">Seleziona la lezione che desideri esercitare:</p>
+        
+        <div class="chapters-grid">
+            <div class="chapter-card" onclick="startQuiz(25)">
+                <h3>Lezione 025</h3>
+                <p>40 Domande (Derivati, Tioesteri e Polimeri)</p>
+            </div>
+            <div class="chapter-card" onclick="startQuiz(26)">
+                <h3>Lezione 026</h3>
+                <p>40 Domande (Enoli, Enolati e Alchilazioni)</p>
+            </div>
+            <div class="chapter-card" onclick="startQuiz(27)">
+                <h3>Lezione 027</h3>
+                <p>39 Domande (Condensazioni Aldoliche e Claisen)</p>
+            </div>
+            <div class="chapter-card" onclick="startQuiz(28)">
+                <h3>Lezione 028</h3>
+                <p>41 Domande (Ammine, Basicità ed Eterocicli)</p>
+            </div>
+            <div class="chapter-card" onclick="startQuiz(29)">
+                <h3>Lezione 029</h3>
+                <p>40 Domande (Eterocicli Aromatici, Ammine e Hofmann)</p>
+            </div>
+            <div class="chapter-card" onclick="startQuiz(30)">
+                <h3>Lezione 030</h3>
+                <p>41 Domande (Amminoacidi, Peptidi e Proteine)</p>
+            </div>
+            <div class="chapter-card" onclick="startQuiz(31)">
+                <h3>Lezione 031</h3>
+                <p>41 Domande (Carboidrati e Polisaccaridi)</p>
+            </div>
+            <div class="chapter-card" onclick="startQuiz(32)">
+                <h3>Lezione 032</h3>
+                <p>40 Domande (Acidi Nucleici e Lipidi)</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="quiz-view" class="hidden">
+        <a class="link-home" onclick="returnToMenu()">← Torna alla scelta lezioni</a>
+        <h1 id="quiz-title">Lezione</h1>
+        <p class="subtitle" id="quiz-subtitle">Set Domande - Scienze Biologiche (eCampus)</p>
+
+        <div id="quiz-container"></div>
+
+        <button class="btn-submit" id="submit-btn" onclick="checkAnswers()">Verifica Risposte</button>
+        <div id="score-screen"></div>
+    </div>
+</div>
+
+<script>
+let currentChapter = null;
+let userAnswers = {};
+
+const allQuestions = {
+    25: [
+        { question: "1. Il polietilene tereftalato (PET) deriva da:", options: ["Benzene e etanolo", "Acido acetico e ammoniaca", "Metanolo e acetone", "Dimetil tereftalato ed etilenglicole"], answer: 3 },
+        { question: "2. Il motivo della reattività dei tioesteri biologici è:", options: ["Sono radicali liberi", "Lo zolfo elimina sempre protoni", "Il carbonile è assente", "Il legame C–S è meno stabilizzato per risonanza"], answer: 3 },
+        { question: "3. Nel metabolismo, molti intermedi energetici sono:", options: ["Tioesteri", "Alcani", "Alcheni", "Aldeidi"], answer: 0 },
+        { question: "4. Quale intermediato comune appare nella maggior parte delle sostituzioni aciliche nucleofile?", options: ["Intermedio tetraedrico", "Radicale libero", "Carbocatione", "Enolo aromatico"], answer: 0 },
+        { question: "5. Quale derivato degli acidi carbossilici è generalmente il meno reattivo?", options: ["Tioestere", "Anidride", "Ammide", "Cloruro acilico"], answer: 2 },
+        { question: "6. Nel meccanismo di idrolisi degli esteri il nucleofilo iniziale è:", options: ["H2", "NH3", "OH− o H2O", "Cl−"], answer: 2 },
+        { question: "7. Quale gruppo uscente lascia durante la aminolisi degli esteri?", options: ["Ammoniaca", "Cloruro", "Un alcol", "Idruro"], answer: 2 },
+        { question: "8. La reazione tra un estere e un'ammina è detta:", options: ["Ossidazione", "Isomerizzazione", "Riduzione", "Aminolisi"], answer: 3 },
+        { question: "9. Qual è il motivo della stabilità biologica delle ammidi?", options: ["La presenza di radicali", "L’assenza di dipolo", "La forte risonanza tra N e carbonile", "La presenza di cloro"], answer: 2 },
+        { question: "10. Durante la digestione delle proteine:", options: ["Le ammidi si riducono spontaneamente", "Le ammidi vengono idrolizzate da proteasi", "Le ammidi si polimerizzano", "Le ammidi diventano esteri"], answer: 1 },
+        { question: "11. Durante la digestione dei grassi negli organismi:", options: ["Gli esteri diventano nitrili", "Gli esteri diventano cloruri", "Gli esteri vengono ossidati da ossigeno", "Gli esteri vengono idrolizzati da lipasi"], answer: 3 },
+        { question: "12. Nei polimeri step-growth:", options: ["Serve sempre un iniziatore radicalico", "Ogni legame si forma indipendentemente", "I monomeri devono avere doppi legami", "La crescita avviene solo da radicali"], answer: 1 },
+        { question: "13. Le reazioni che formano poliesteri e poliammidi sono esempi di:", options: ["Reazione SN1", "Addizione elettrofila", "Polimerizzazione a crescita per stadi", "Polimerizzazione radicalica"], answer: 2 },
+        { question: "14. Nei sistemi biologici gli acidi carbossilici vengono spesso attivati come:", options: ["Aldeidi", "Cloruri acilici", "Alcoli", "Acil fosfati o tioesteri"], answer: 3 },
+        { question: "15. I poliesteri si formano tipicamente dalla reazione tra:", options: ["Ammina e alchene", "Nitrile e acqua", "Diolo e diacido", "Chetone e alcol"], answer: 2 },
+        { question: "16. Perché l'idrolisi basica degli esteri (saponificazione) è praticamente irreversibile?", options: ["Perché l'acqua agisce da catalizzatore permanente", "Perché il carbonile viene distrutto permanentemente", "Perché si forma un carbossilato stabilizzato che non è facilmente riesterificato", "Perché l'alcol formato è più acido dell'acido carbossilico"], answer: 2 },
+        { question: "17. Nylon 66 deriva dalla reazione tra:", options: ["Fenolo e acetone", "Acido acetico e metanolo", "Benzene e ammoniaca", "Acido adipico e esametilendiammina"], answer: 3 },
+        { question: "18. Le ammidi sono meno reattive degli altri derivati degli acidi carbossilici perché:", options: ["Non possono reagire con nucleofili", "Non possiedono carbonile", "Sono sempre aromatiche", "L’azoto dona elettroni per risonanza stabilizzando il carbonile"], answer: 3 },
+        { question: "19. Perché il chetone intermedio nella reazione estere-Grignard non si isola normalmente?", options: ["Perché precipita come sale", "Perché evapora", "Perché si ossida spontaneamente", "Perché reagisce immediatamente con un secondo equivalente di Grignard"], answer: 3 },
+        { question: "20. Gli esteri reagiscono con 2 equivalenti di Grignard producendo:", options: ["Un alcol terziario", "Un nitrile", "Un alcol primario", "Un’ammide"], answer: 0 },
+        { question: "21. Quale reagente permette la riduzione parziale di un estere ad aldeide?", options: ["HCl", "NaBH4", "DIBAH", "LiAlH4"], answer: 2 },
+        { question: "22. Quale intermedio si forma durante la riduzione di un estere con LiAlH4?", options: ["Un’aldeide intermedia", "Un carbocatione benzilico", "Un nitrile", "Un radicale alcossilico"], answer: 0 },
+        { question: "23. Quale reagente riduce gli esteri ad alcoli primari?", options: ["KMnO4", "NaCl", "H2SO4", "LiAlH4"], answer: 3 },
+        { question: "24. Nella aminolisi di un estere con NH3 si ottiene:", options: ["Un nitrile", "Un’ammide", "Un chetone", "Un acido carbossilico"], answer: 1 },
+        { question: "25. L'idrolisi acido-catalizzata di un estere è essenzialmente:", options: ["La reazione inversa dell’esterificazione di Fischer", "Una riduzione del carbonile", "Una reazione radicalica", "Una reazione di eliminazione E2"], answer: 0 },
+        { question: "26. Qual è il prodotto principale dell'idrolisi basica di un estere?", options: ["Un carbossilato e un alcol", "Un'amide e un alcol", "Un chetone e un alcano", "Un'aldeide e acqua"], answer: 0 },
+        { question: "27. Perché gli esteri sono meno reattivi dei cloruri acilici nelle sostituzioni aciliche nucleofile?", options: ["Perché l'alcossido è un gruppo uscente peggiore del cloruro", "Perché il carbonile è completamente non polare", "Perché l'ossigeno non può donare elettroni", "Perché gli esteri non hanno carbonile"], answer: 0 },
+        { question: "28. Durante la saponificazione di un estere, quale legame viene rotto?", options: ["Il legame C–OR’ dell’estere", "Il legame C=O del carbonile", "Il legame C–C adiacente al carbonile", "Il legame O–H dell’acqua"], answer: 0 },
+        { question: "29. Nel meccanismo di idrolisi basica degli esteri, l'intermedio chiave è:", options: ["Un carbocatione planare", "Un enolato aromatico", "Un intermedio tetraedrico alcossido", "Un radicale carbonilico"], answer: 2 },
+        { question: "30. Il gruppo funzionale caratteristico di un tioestere è:", options: ["C(=O)–S–R", "C–Cl", "C(=O)–O–R", "C≡N"], answer: 0 },
+        { question: "31. Quale composto biologico contiene un legame tioestere?", options: ["Acetil-CoA", "Glucosio", "ATP", "Etanolo"], answer: 0 },
+        { question: "32. La formazione di acetil-CoA avviene tramite:", options: ["Addizione radicalica", "Trasposizione sigmatropica", "Sostituzione acilica nucleofila", "Eliminazione E2"], answer: 2 },
+        { question: "33. I tioesteri biologici più comuni sono:", options: ["Acil-CoA", "Cloruri-CoA", "Aldeidi-CoA", "Nitrili-CoA"], answer: 0 },
+        { question: "34. Qual è l’effetto complessivo della riduzione di un’ammide?", options: ["Ossidazione del carbonio", "Formazione di un estere", "Conversione del gruppo C=O in CH2", "Formazione di un nitrile"], answer: 2 },
+        { question: "35. La riduzione delle ammidi con LiAlH4 produce:", options: ["Aldeidi", "Acidi carbossilici", "Ammine", "Alcoli"], answer: 2 },
+        { question: "36. L’idrolisi basica di un’ammide produce:", options: ["Un carbossilato e ammoniaca", "Un estere", "Un aldeide", "Un alcol"], answer: 0 },
+        { question: "37. L’idrolisi acida di un’ammide produce:", options: ["Un estere e ammoniaca", "Un nitrile e acqua", "Un acido carbossilico e ammonio", "Un alcol e ammina"], answer: 2 },
+        { question: "38. L’idrolisi delle ammidi richiede condizioni più drastiche perché:", options: ["Le ammidi non sono polari", "Non esiste un intermedio tetraedrico", "L’amide è molto stabile e NH2− è un cattivo gruppo uscente", "Il carbonile è assente"], answer: 2 },
+        { question: "39. Le poliammidi si formano dalla reazione tra:", options: ["Alchene e alcol", "Acido e nitrile", "Diammina e diacido", "Chetone e ammina"], answer: 2 },
+        { question: "40. Quale molecola reagisce con l’acil adenilato per formare acetil-CoA?", options: ["Acetato", "Coenzima A", "Glucosio", "ATP"], answer: 1 }
+    ],
+    26: [
+        { question: "1. Quale struttura deriva da protonazione dell'enolato sull'ossigeno?", options: ["Aldeide", "Enolo", "Alchene", "Alcano"], answer: 1 },
+        { question: "2. Quale fattore riduce la reattività SN2 di un alogenuro?", options: ["Ibridazione sp", "Solvatazione", "Polarità", "Ingombramento sterico"], answer: 3 },
+        { question: "3. Quale effetto elettronico stabilizza l'enolato?", options: ["Induzione positiva", "Aromaticità", "Delocalizzazione", "Tensione sterica"], answer: 2 },
+        { question: "4. Quale struttura è tipica dell'intermedio enolato?", options: ["C‑O‑C", "C=C‑O−", "C=O‑H", "C≡C‑O"], answer: 1 },
+        { question: "5. Quale reazione forma nuovi legami C‑C da enolati?", options: ["Idratazione", "Ossidazione", "Riduzione", "Alchilazione"], answer: 3 },
+        { question: "6. Quale proprietà aumenta l'acidità α?", options: ["Assenza di ossigeno", "Aromaticità", "Gruppi metilici", "Due carbonili vicini"], answer: 3 },
+        { question: "7. Quale composto ha pKa circa 19?", options: ["Benzene", "Metano", "Etano", "Acetone"], answer: 3 },
+        { question: "8. Quale posizione attacca l'enolato nella reazione più comune?", options: ["Ossigeno", "Carbonile", "Carbonio α", "Idrogeno"], answer: 2 },
+        { question: "9. Quale composto non forma facilmente enolati?", options: ["Esteri", "Aldeidi", "Alcani", "Chetoni"], answer: 2 },
+        { question: "10. Quale caratteristica rende LDA efficace?", options: ["Sale neutro", "Acido forte", "Ossidante", "Base forte non nucleofila"], answer: 3 },
+        { question: "11. Quale specie è più nucleofila tra enolo ed enolato?", options: ["Dipende dal solvente", "Enolo", "Sono equivalenti", "Enolato"], answer: 3 },
+        { question: "12. Quale reazione avviene quando un enolato reagisce con un alogenuro alchilico primario?", options: ["E1", "Addizione elettrofila", "SN1", "SN2"], answer: 3 },
+        { question: "13. Quale tipo di alogenuro alchilico reagisce meglio con enolati?", options: ["Aromatico", "Vinilico", "Primario", "Terziario"], answer: 2 },
+        { question: "14. Quale prodotto deriva dall’alchilazione dell'enolato sul carbonio?", options: ["Alchene", "Carbonile α‑sostituito", "Acido carbossilico", "Enol etere"], answer: 1 },
+        { question: "15. Quale composto ha idrogeni α più acidi?", options: ["Eteri", "β‑dichetoni", "Alcheni", "Alcani"], answer: 1 },
+        { question: "16. Quale struttura stabilizza maggiormente un enolato?", options: ["Risonanza tra O e C α", "Presenza di catena lunga", "Legame idrogeno intramolecolare", "Interazione ionica con Na+"], answer: 0 },
+        { question: "17. Quale solvente è tipicamente usato nelle reazioni con LDA?", options: ["Etanolo", "THF", "Acido acetico", "Acqua"], answer: 1 },
+        { question: "18. Quale prodotto si forma dalla bromurazione α di un chetone?", options: ["α‑bromochetone", "Amide", "Acido carbossilico", "Alcol secondario"], answer: 0 },
+        { question: "19. Quale intermedio si forma nella tautomerizzazione catalizzata da base?", options: ["Radicale", "Carbene", "Enolato", "Carbocatione"], answer: 2 },
+        { question: "20. Quale specie elettrofila reagisce con enoli nelle α‑sostituzioni?", options: ["HO−", "NH2−", "E+", "CH3−"], answer: 2 },
+        { question: "21. Quale reazione permette la bromurazione α di acidi carbossilici?", options: ["Cannizzaro", "Wurtz", "Hell–Volhard–Zelinskii", "Friedel–Crafts"], answer: 2 },
+        { question: "22. Quale orbitale permette la delocalizzazione della carica nell'enolato?", options: ["Orbitali s del carbonio", "Orbitali p del carbonile", "Orbitali d dell'ossigeno", "Orbitali σ del C‑H"], answer: 1 },
+        { question: "23. Nel tautomerismo cheto‑enolico, quale forma è generalmente predominante per chetoni semplici?", options: ["Forma chetonica", "Forma enolica", "Forma radicalica", "Forma carbocationica"], answer: 0 },
+        { question: "24. Quale base è più comunemente usata per formare quantitativamente enolati in laboratorio?", options: ["EtOH", "LDA", "H2O", "NaCl"], answer: 1 },
+        { question: "25. Quale fattore rende acidi gli idrogeni in posizione α rispetto a un carbonile?", options: ["Interazione ionica con solvente", "Stabilizzazione per risonanza dell'enolato", "Assenza di doppi legami", "Ibridazione sp3 del carbonio"], answer: 1 },
+        { question: "26. Quale specie è responsabile della nucleofilicità nelle reazioni di sostituzione in α dei carbonili?", options: ["Acilio", "Carbocatione", "Enolato", "Radicale alchilico"], answer: 2 },
+        { question: "27. Quale reazione sostituisce un idrogeno α con un alogeno?", options: ["Ossidazione", "Alogenazione α", "Esterificazione", "Riduzione"], answer: 1 },
+        { question: "28. Quale fenomeno spiega la stabilità degli enolati?", options: ["Legame idrogeno", "Effetto induttivo inverso", "Aromaticità", "Risonanza"], answer: 3 },
+        { question: "29. Quale passaggio è determinante nella formazione dell'enolato?", options: ["Rimozione dell'idrogeno α", "Rottura del C=O", "Riduzione del carbonile", "Protonazione dell'ossigeno"], answer: 0 },
+        { question: "30. Quale specie agisce da nucleofilo nell'alchilazione?", options: ["Radicale", "Acilio", "Enolato", "Carbocatione"], answer: 2 },
+        { question: "31. Quale posizione non ha idrogeni acidi rispetto al carbonile?", options: ["α di aldeidi", "α", "α di dichetoni", "β"], answer: 3 },
+        { question: "32. Quale struttura contribuisce alla stabilità degli enolati di β‑dichetoni?", options: ["Aromaticità", "Ibridazione sp", "Nessuna risonanza", "Tre forme di risonanza"], answer: 3 },
+        { question: "33. Quale struttura è tipica dell'enolo?", options: ["C≡C‑OH", "C=O‑O", "C‑O‑C", "C=C‑OH"], answer: 3 },
+        { question: "34. Quale prodotto deriva dall'alchilazione dell'enolato sull'ossigeno?", options: ["Aldeide", "Chetoestere", "Acido", "Derivato enolico"], answer: 3 },
+        { question: "35. Quale reazione biologica utilizza un meccanismo di alchilazione enolatica?", options: ["Glicolisi", "Fermentazione", "Fotosintesi", "Biosintesi indolmycin"], answer: 3 },
+        { question: "36. Quale composto mostra tautomeria cheto‑enolica significativa?", options: ["Alcani", "β‑dichetoni", "Alchini", "Eteri"], answer: 1 },
+        { question: "37. Quale gruppo aumenta l'acidità degli idrogeni α?", options: ["Alchile", "Alchene", "Etere", "Carbonile"], answer: 3 },
+        { question: "38. Quale base forma enolati ma evita addizione nucleofila?", options: ["Alogenuro", "Base ingombrata", "Sale neutro", "Acido forte"], answer: 1 },
+        { question: "39. Quale proprietà distingue enoli da alcheni?", options: ["Assenza di ossigeno", "Maggiore densità elettronica", "Minor reattività", "Maggiore stabilità termica"], answer: 0 },
+        { question: "40. Quale reazione introduce un doppio legame da α‑bromochetone?", options: ["Addizione nucleofila", "Eliminazione E2", "Idrogenazione", "SN1"], answer: 1 }
+    ],
+    27: [
+        { question: "1. Quale condizione favorisce l’aldol?", options: ["Assenza di carbonili", "Solvente apolare", "Radicali", "Presenza di idrogeni α"], answer: 3 },
+        { question: "2. Qual è il prodotto iniziale di una reazione aldolica?", options: ["β‑idrossicarbonile", "Acido carbossilico", "Alcano", "Etere"], answer: 0 },
+        { question: "3. Quale specie agisce da elettrofilo nell’aldol?", options: ["Carbonile", "Radicale", "Carbene", "Enolato"], answer: 0 },
+        { question: "4. Quale composto è spesso substrato per aldol?", options: ["Aldeide", "Arene", "Alcano", "Alchino"], answer: 0 },
+        { question: "5. Quale proprietà rende possibili le condensazioni carboniliche?", options: ["Acidità degli idrogeni α", "Aromaticità", "Tripli legami", "Radicali"], answer: 0 },
+        { question: "6. Quale specie è più nucleofila nell’aldol?", options: ["Enolo", "Carbocatione", "Radicale", "Enolato"], answer: 3 },
+        { question: "7. Quale prodotto deriva da aldol intramolecolare?", options: ["Alcano lineare", "Etere", "Amide", "Chetone ciclico"], answer: 3 },
+        { question: "8. Quale passo elimina acqua nell’aldol?", options: ["Clorurazione", "Riduzione", "Disidratazione", "Addizione"], answer: 2 },
+        { question: "9. Quale reazione usa esteri come reagenti?", options: ["Diels‑Alder", "Grignard", "Claisen", "Cannizzaro"], answer: 2 },
+        { question: "10. Quale prodotto deriva dalla Claisen dopo protonazione?", options: ["Alcol", "β‑chetoestere neutro", "Aldeide", "Acido"], answer: 1 },
+        { question: "11. Quale tipo di reazione è l’aldol?", options: ["Addizione radicalica", "Condensazione carbonilica", "Riduzione", "Ossidazione"], answer: 1 },
+        { question: "12. Quale meccanismo elimina alcol nella Claisen?", options: ["Radicalico", "Sostituzione acilica", "SN1", "E2"], answer: 1 },
+        { question: "13. Quale prodotto deriva da due molecole identiche nell’aldol?", options: ["Alchino", "Amide", "Acido", "Aldolo simmetrico"], answer: 3 },
+        { question: "14. Quale prodotto intermedio si forma prima della disidratazione aldolica?", options: ["Acido", "Alcano", "β‑idrossicarbonile", "Alchene"], answer: 2 },
+        { question: "15. Quale struttura aumenta stabilità del prodotto aldol disidratato?", options: ["Coniugazione", "Tensione", "Ibridazione sp3", "Legami singoli"], answer: 0 },
+        { question: "16. Quale gruppo funzionale reagisce nell’aldol?", options: ["Tiolo", "Alogenuro", "Carbonile", "Ammide"], answer: 2 },
+        { question: "17. Quale reazione produce α,β‑insaturi?", options: ["Aldol con disidratazione", "Riduzione", "Cannizzaro", "Idrogenazione"], answer: 0 },
+        { question: "18. Quale reazione è intramolecolare tra esteri?", options: ["Wurtz", "Friedel‑Crafts", "Aldol", "Dieckmann"], answer: 3 },
+        { question: "19. Quale proprietà stabilizza l’enolato nelle condensazioni?", options: ["Risonanza", "Induzione negativa", "Aromaticità", "Tripli legami"], answer: 0 },
+        { question: "20. Quale specie è il nucleofilo nella Claisen?", options: ["Enolato", "Radicale", "Carbocatione", "Carbene"], answer: 0 },
+        { question: "21. Quale prodotto genera la Dieckmann?", options: ["β‑chetoestere ciclico", "Amide", "Aldeide", "Alchino"], answer: 0 },
+        { question: "22. Quale specie attacca il carbonile nella condensazione aldolica?", options: ["Carbene", "Enolato", "Carbocatione", "Radicale"], answer: 1 },
+        { question: "23. Quale tipo di reazione forma nuovi legami C‑C nei carbonili?", options: ["Riduzione", "Ossidazione", "Idrolisi", "Condensazione"], answer: 3 },
+        { question: "24. Quale passo genera l’enolato nell’aldol?", options: ["Riduzione", "Deprotonazione α", "Protonazione", "Ossidazione"], answer: 1 },
+        { question: "25. Quale caratteristica è richiesta per la Claisen?", options: ["Anello aromatico", "Triplo legame", "Doppio legame", "Idrogeni α nell'estere"], answer: 3 },
+        { question: "26. Quale prodotto si forma dopo disidratazione dell'aldolo?", options: ["Composto α,β‑insaturo", "Alcol", "Etere", "Alcano"], answer: 0 },
+        { question: "27. Quale passaggio avviene dopo l'addizione nell’aldol?", options: ["Protonazione dell'alcolato", "Ossidazione", "Riduzione", "Clorurazione"], answer: 0 },
+        { question: "28. Quale passaggio segue spesso la formazione dell'aldolo?", options: ["Riduzione", "Disidratazione", "Ossidazione", "Idrogenazione"], answer: 1 },
+        { question: "29. Quale reazione forma β‑chetoesteri?", options: ["Cannizzaro", "Diels‑Alder", "Claisen", "Wittig"], answer: 2 },
+        { question: "30. Quale specie nucleofila è coinvolta nella Claisen?", options: ["Carbene", "Carbocatione", "Radicale alchilico", "Enolato di estere"], answer: 3 },
+        { question: "31. Quale specie attacca l'estere nella Claisen?", options: ["Enolato", "Acilio", "Carbocatione", "Radicale"], answer: 0 },
+        { question: "32. Quale reazione è la versione intramolecolare della Claisen?", options: ["Aldol", "Friedel‑Crafts", "Dieckmann", "Wurtz"], answer: 2 },
+        { question: "33. Quale base è tipicamente usata nella Claisen?", options: ["Alcolato corrispondente", "Acqua", "Acido forte", "NaCl"], answer: 0 },
+        { question: "34. Quale passaggio stabilizza il prodotto Claisen?", options: ["Riduzione", "Protonazione carbonile", "Ossidazione", "Deprotonazione finale"], answer: 3 },
+        { question: "35. Quale meccanismo forma il legame C‑C nell’aldol?", options: ["Radicalico", "SN1", "Addizione nucleofila", "Elettrofila"], answer: 2 },
+        { question: "36. Quale fattore favorisce la Dieckmann?", options: ["Ossidazione", "Catena adatta a ciclizzazione", "Assenza di esteri", "Radicali liberi"], answer: 1 },
+        { question: "37. Quale struttura è tipica di un β‑chetoestere?", options: ["Nessun carbonile", "Un solo carbonile", "Due carbonili separati da CH", "Tre carbonili"], answer: 2 },
+        { question: "38. Quale sottoprodotto si forma nella Claisen?", options: ["NH3", "H2", "CO2", "Alcol"], answer: 3 },
+        { question: "39. Quale specie elettrofila reagisce nell’aldol?", options: ["Etere", "Alcano", "Alchene", "Carbonile"], answer: 3 }
+    ],
+    28: [
+        { question: "1. Quale classe di ammine è generalmente più basica?", options: ["Alchilammine", "Ammidi", "Arilammine", "Nitrili"], answer: 0 },
+        { question: "2. Quale effetto hanno i gruppi elettron-attrattori su un’anilina?", options: ["Non influenzano", "Aumentano la basicità", "Aumentano la nucleofilicità", "Diminuiscono la basicità"], answer: 3 },
+        { question: "3. Perché le arilammine sono meno basiche?", options: ["Sono planari", "Sono più pesanti", "Sono più stericamente ingombrate", "Il doppietto elettronico è delocalizzato nell’anello aromatico"], answer: 3 },
+        { question: "4. Quale ammina è meno basica tra anilina e metilammina?", options: ["Metilammina", "Sono uguali", "Anilina", "Dipende dal solvente"], answer: 2 },
+        { question: "5. Quale effetto hanno i gruppi elettron-donatori su un’anilina?", options: ["Diminuiscono la basicità", "Aumentano la basicità", "Non cambiano la basicità", "Rendono la molecola neutra"], answer: 1 },
+        { question: "6. Quale gruppo funzionale è la base strutturale delle proteine?", options: ["Esteri", "Amminoacidi", "Aldeidi", "Alcheni"], answer: 1 },
+        { question: "7. Quale sostituente rende l’anilina più basica?", options: ["-CN", "-NO2", "-Cl", "-OCH3"], answer: 3 },
+        { question: "8. Quale sostituente rende l’anilina meno basica?", options: ["-NO2", "-CH3", "-OCH3", "-NH2"], answer: 0 },
+        { question: "9. Quale equazione descrive la relazione tra pH, pKa e concentrazioni?", options: ["Henderson–Hasselbalch", "Clausius", "Nernst", "Arrhenius"], answer: 0 },
+        { question: "10. A pH fisiologico (~7.3) le ammine esistono principalmente come:", options: ["Ioni ammonio protonati", "Ioni ammonio deprotonati", "Radicali", "Ammine neutre"], answer: 0 },
+        { question: "11. Qual è la forma predominante della metilammina a pH 7.3?", options: ["CH3N", "CH3NH3+", "CH3NH2", "CH3NH-"], answer: 1 },
+        { question: "12. Quale reazione produce un’ammina da un nitrile?", options: ["Ossidazione", "Alogenazione", "Riduzione", "Esterificazione"], answer: 2 },
+        { question: "13. Quale valore di pKa indica una base più forte?", options: ["Un valore più grande", "Un valore più piccolo", "Un valore negativo", "Zero"], answer: 0 },
+        { question: "14. Qual è il nome comune di C6H5NH2?", options: ["Piperidina", "Imidazolo", "Anilina", "Piridina"], answer: 2 },
+        { question: "15. Quale relazione esiste tra pKa e pKb?", options: ["pKa + pKb = 14", "pKa = pKb", "pKa × pKb = 1", "pKa − pKb = 7"], answer: 0 },
+        { question: "16. Quale orbitale ibrido ha l’azoto nelle ammine alchiliche?", options: ["sp2", "dsp2", "sp3", "sp"], answer: 2 },
+        { question: "17. Quale tipo di reazione trasforma un alogenuro alchilico in nitrile?", options: ["E1", "Addizione", "SN1", "SN2"], answer: 3 },
+        { question: "18. Come vengono classificate le ammine?", options: ["In primarie, secondarie e terziarie in base al carbonio", "In aromatiche e alifatiche", "In acide e basiche", "In primarie, secondarie e terziarie in base ai gruppi legati all’azoto"], answer: 3 },
+        { question: "19. Quale formula generale ha un’ammina primaria?", options: ["R2NH", "R3N", "R4N", "RNH2"], answer: 3 },
+        { question: "20. Quale formula generale ha un’ammina secondaria?", options: ["R4N", "RNH2", "R2NH", "R3N"], answer: 2 },
+        { question: "21. Quale formula generale ha un’ammina terziaria?", options: ["R2NH", "RNH2", "R3N", "R4N"], answer: 2 },
+        { question: "22. Come si chiamano i composti con azoto legato a quattro gruppi?", options: ["Nitrili", "Sali di ammonio quaternari", "Ammine terziarie", "Ammidi"], answer: 1 },
+        { question: "23. Qual è approssimativamente l’angolo C–N–C nelle ammine?", options: ["Circa 120°", "Circa 109°", "Circa 90°", "Circa 180°"], answer: 1 },
+        { question: "24. Quale costante misura la basicità di un’ammina?", options: ["Kd", "Ka", "Kb", "Kw"], answer: 2 },
+        { question: "25. Perché molte ammine chirali non possono essere risolte?", options: ["Non hanno stereocentri", "Sono aromatiche", "Subiscono inversione piramidale rapida", "Sono planari"], answer: 2 },
+        { question: "26. Quale processo interconverte gli enantiomeri delle ammine?", options: ["Risonanza", "Rotazione libera", "Addizione nucleofila", "Inversione piramidale"], answer: 3 },
+        { question: "27. Quale proprietà delle ammine causa il tipico odore di pesce?", options: ["L’alta polarità", "La presenza di ammine a basso peso molecolare", "L’aromaticità", "La presenza di ossigeno"], answer: 1 },
+        { question: "28. Quale proprietà chimica è determinata dal doppietto solitario dell’azoto?", options: ["Inerzia chimica", "Acidità forte", "Aromaticità", "Basicità"], answer: 3 },
+        { question: "29. Come si comportano le ammine nei confronti degli acidi?", options: ["Formano chetoni", "Formano alcheni", "Formano esteri", "Formano sali ammonio"], answer: 3 },
+        { question: "30. Quale specie si forma quando un’ammina reagisce con un acido?", options: ["Un radicale", "Uno ione ammonio", "Un alchene", "Un nitrile"], answer: 1 },
+        { question: "31. Quale reagente riduce nitrili ad ammine?", options: ["H2SO4", "KMnO4", "NaCl", "LiAlH4"], answer: 3 },
+        { question: "32. Quale tipo di interazione stabilizza le ammine in soluzione acquosa?", options: ["Interazioni metalliche", "Legami a idrogeno", "Legami ionici", "Legami π"], answer: 1 },
+        { question: "33. Quale composto eterociclico contiene un azoto aromatico?", options: ["Benzene", "Pentano", "Cicloesano", "Piridina"], answer: 3 },
+        { question: "34. Quale composto eterociclico è completamente saturo?", options: ["Imidazolo", "Indolo", "Piridina", "Piperidina"], answer: 3 },
+        { question: "35. Quale ammina forma legami a idrogeno?", options: ["Ammine primarie e secondarie", "Solo quaternarie", "Solo aromatiche", "Solo terziarie"], answer: 0 },
+        { question: "36. Perché le ammine hanno punti di ebollizione più alti degli alcani?", options: ["Sono aromatiche", "Sono apolari", "Formano legami a idrogeno", "Sono planari"], answer: 2 },
+        { question: "37. Quale ammina ha maggiore associazione intermolecolare?", options: ["Aromatica", "Primaria", "Quaternaria", "Terziaria"], answer: 1 },
+        { question: "38. Quale prodotto si forma dalla reazione di un’epossido con un’ammina primaria?", options: ["Un estere", "Un nitrile", "Un alchene", "Un amminoalcol"], answer: 3 },
+        { question: "39. Quale fattore principale determina la nucleofilicità delle ammine?", options: ["Il doppietto elettronico dell’azoto", "La lunghezza della catena", "Il numero di carboni", "La massa molecolare"], answer: 0 },
+        { question: "40. Quale eterociclo contiene due azoti?", options: ["Imidazolo", "Indolo", "Piperidina", "Piridina"], answer: 0 }
+    ],
+    29: [
+        { question: "1. Qual è la posizione favorita nella sostituzione elettrofila della piridina?", options: ["C3", "C1", "C2", "C4"], answer: 0 },
+        { question: "2. Quale tipo di sostituzione si ottiene bromurando un N-arilammide?", options: ["Ossidazione", "Nessuna reazione", "Tribromurazione", "Monobromurazione"], answer: 3 },
+        { question: "3. Quale reazione consente Friedel–Crafts su un derivato di anilina?", options: ["Riduzione", "Protonazione", "Ossidazione", "Protezione come ammide"], answer: 3 },
+        { question: "4. Quale gruppo funzionale è presente nei farmaci sulfa?", options: ["Sulfonammide", "Aldeide", "Alchene", "Etere"], answer: 0 },
+        { question: "5. Da quale composto deriva la sintesi dei sulfa drugs?", options: ["Fenolo", "Benzene", "Acetanilide", "Toluene"], answer: 2 },
+        { question: "6. Quale tipo di composto è la piridina?", options: ["Nitrile", "Alcol", "Ammina eterociclica aromatica", "Ammide"], answer: 2 },
+        { question: "7. Quale eterociclo è presente nelle basi del DNA?", options: ["Pirrolo", "Tiazolo", "Imidazolo", "Purina"], answer: 3 },
+        { question: "8. Perché la piridina è meno reattiva del benzene nelle SEAr?", options: ["Effetto elettron-attrattore dell’azoto", "Maggiore basicità", "Maggiore aromaticità", "Minor polarità"], answer: 0 },
+        { question: "9. Quale tipo di azoto è presente nella piridina?", options: ["sp3 non basico", "sp2 con doppietto fuori dal sistema aromatico", "sp lineare", "sp3 aromatico"], answer: 1 },
+        { question: "10. Quale eterociclo contiene un azoto non basico perché il doppietto è aromatico?", options: ["Piridina", "Piperidina", "Imidazolo", "Pirrolo"], answer: 3 },
+        { question: "11. Quale posizione reagisce preferenzialmente nel pirrolo?", options: ["N", "C2", "C3", "C4"], answer: 1 },
+        { question: "12. Quale tipo di reazione subisce facilmente il pirrolo?", options: ["Riduzione", "Sostituzione elettrofila", "Addizione nucleofila", "Eliminazione E1"], answer: 1 },
+        { question: "13. Quale molecola biologica contiene un anello imidazolico?", options: ["Valina", "Istidina", "Glicina", "Alanina"], answer: 1 },
+        { question: "14. Quale vitamina contiene un anello tiazolico?", options: ["Vitamina D", "Vitamina K", "Vitamina B1", "Vitamina C"], answer: 2 },
+        { question: "15. Quale derivato si forma trattando un’ammina con anidride acetica?", options: ["Alcol", "Aldeide", "Acetamide", "Alchene"], answer: 2 },
+        { question: "16. Come si può controllare la reattività dell’anilina nelle sostituzioni aromatiche?", options: ["Riducendola", "Formando un estere", "Ossidandola", "Convertendola in ammide"], answer: 3 },
+        { question: "17. Perché è difficile ottenere monobromurazione dell’anilina?", options: ["È troppo attivante", "È troppo pesante", "È troppo stabile", "È troppo disattivante"], answer: 0 },
+        { question: "18. Quale tipo di reazione subiscono le ammine con cloruri acilici?", options: ["Acilazione", "Idrogenazione", "Riduzione", "Eliminazione"], answer: 0 },
+        { question: "19. Quale metodo converte un alogenuro alchilico in un’ammina primaria con un carbonio in più?", options: ["SN2 con CN− seguita da riduzione", "Addizione elettrofila", "Idrogenazione catalitica", "Ossidazione con KMnO4"], answer: 0 },
+        { question: "20. Quale reagente riduce nitrili in ammine?", options: ["H2SO4", "NaCl", "LiAlH4", "KBr"], answer: 2 },
+        { question: "21. Quale tipo di reazione consente di ottenere ammine da aldeidi o chetoni?", options: ["Idratazione", "Ossidazione", "Aminazione riduttiva", "Alogenazione"], answer: 2 },
+        { question: "22. Qual è l’intermedio chiave nell’amminazione riduttiva?", options: ["Radicale", "Enolo", "Immina", "Carbocatione"], answer: 2 },
+        { question: "23. Quale riducente è comunemente usato nell’amminazione riduttiva in laboratorio?", options: ["NaCl", "HNO3", "NaBH4", "KMnO4"], answer: 2 },
+        { question: "24. Quale catalizzatore è spesso utilizzato nell’amminazione riduttiva industriale?", options: ["Fe con HCl", "Ni con H2", "Pt con O2", "Cu con CO2"], answer: 1 },
+        { question: "25. Quale prodotto si ottiene se l’ammoniaca reagisce con un chetone in amminazione riduttiva?", options: ["Ammide", "Ammina secondaria", "Ammina terziaria", "Ammina primaria"], answer: 3 },
+        { question: "26. Quale prodotto si ottiene bromurando l’anilina con Br2 in acqua?", options: ["Bromobenzene", "Monobromoanilina", "Dibromoanilina", "2,4,6-tribromoanilina"], answer: 3 },
+        { question: "27. Quale reazione trasforma un’ammina in un sale di ammonio quaternario?", options: ["Ossidazione", "Riduzione", "Idrolisi", "Alchilazione"], answer: 3 },
+        { question: "28. Quale prodotto si ottiene se una ammina primaria reagisce con un chetone in amminazione riduttiva?", options: ["Ammina terziaria", "Ammina primaria", "Ammina secondaria", "Nitrile"], answer: 2 },
+        { question: "29. Quale prodotto si ottiene dall’acilazione di una ammina primaria?", options: ["Etere", "Ammide", "Alcol", "Alchene"], answer: 1 },
+        { question: "30. Quale sale si forma prima dell’eliminazione di Hofmann?", options: ["Sale di ammide", "Sale di nitrile", "Sale di estere", "Sale di ammonio quaternario"], answer: 3 },
+        { question: "31. Quale effetto ha il gruppo amminico sull’anello benzenico?", options: ["Neutro", "Meta direttore", "Attivante e orto/para direttore", "Disattivante"], answer: 2 },
+        { question: "32. Quale tipo di sostituzione avviene facilmente sulle arilammine?", options: ["Eliminazione E1", "Reazione radicalica", "Sostituzione elettrofila aromatica", "Addizione nucleofila"], answer: 2 },
+        { question: "33. Perché l’eliminazione di Hofmann dà il prodotto meno sostituito?", options: ["Maggiore aromaticità", "Maggiore polarità", "Maggiore stabilità elettronica", "Ingombro sterico del gruppo uscente"], answer: 3 },
+        { question: "34. Quale alchene è favorito nell’eliminazione di Hofmann?", options: ["Il più stabile aromatico", "Il meno sostituito", "Il più sostituito", "Il più pesante"], answer: 1 },
+        { question: "35. Quale meccanismo segue l’eliminazione di Hofmann?", options: ["E1", "E2", "Addizione radicalica", "SN1"], answer: 1 },
+        { question: "36. Quale base è usata per promuovere l’eliminazione di Hofmann?", options: ["KMnO4", "HNO3", "Ag2O", "NaCl"], answer: 2 },
+        { question: "37. Quale prodotto si ottiene se una ammina secondaria reagisce con un chetone in amminazione riduttiva?", options: ["Ammina secondaria", "Alcol", "Ammina terziaria", "Ammina primaria"], answer: 2 },
+        { question: "38. Perché le ammidi non subiscono ulteriore acilazione?", options: ["Sono più basiche", "Sono più reattive", "Sono meno nucleofile", "Sono radicaliche"], answer: 2 },
+        { question: "39. Quale reagente viene usato per metilare completamente un’ammina nella eliminazione di Hofmann?", options: ["CH3I", "HCl", "Br2", "NaCl"], answer: 0 },
+        { question: "40. Quale reazione converte ammine in alcheni?", options: ["Reazione di Wittig", "Eliminazione di Hofmann", "Ossidazione di Jones", "Reazione di Cannizzaro"], answer: 1 }
+    ],
+    30: [
+        { question: "1. Quale proteina è coinvolta nella contrazione muscolare?", options: ["Insulina", "Cheratina", "Actina", "Emoglobina"], answer: 2 },
+        { question: "2. Quale fattore può causare denaturazione?", options: ["Bassa pressione", "Temperatura elevata", "Assenza di acqua", "Riduzione del pH neutro"], answer: 1 },
+        { question: "3. Quale struttura coinvolge più catene polipeptidiche?", options: ["Struttura secondaria", "Struttura terziaria", "Struttura primaria", "Struttura quaternaria"], answer: 3 },
+        { question: "4. Cosa succede agli amminoacidi a pH molto alto?", options: ["Acquistano protoni", "Si polimerizzano", "Perdono protoni", "Diventano aromatici"], answer: 2 },
+        { question: "5. Quale legame unisce due amminoacidi?", options: ["Legame peptidico", "Legame ionico", "Legame estere", "Legame etere"], answer: 0 },
+        { question: "6. Come si forma un legame peptidico?", options: ["Addizione radicalica", "Condensazione tra COOH e NH2", "Ossidazione tra due COOH", "Riduzione tra due NH2"], answer: 1 },
+        { question: "7. Quale molecola viene eliminata durante la formazione del legame peptidico?", options: ["Acqua", "H2", "NH3", "CO2"], answer: 0 },
+        { question: "8. Quale tipo di legame è il legame peptidico?", options: ["Estere", "Aldeide", "Chetone", "Ammide"], answer: 3 },
+        { question: "9. Quale struttura delle proteine descrive la sequenza degli amminoacidi?", options: ["Struttura secondaria", "Struttura terziaria", "Struttura quaternaria", "Struttura primaria"], answer: 3 },
+        { question: "10. Quale struttura comprende α-elica e foglietto β?", options: ["Struttura terziaria", "Struttura primaria", "Struttura secondaria", "Struttura quaternaria"], answer: 2 },
+        { question: "11. Quale interazione stabilizza l’α-elica?", options: ["Legami ionici", "Legami covalenti C–C", "Legami a idrogeno", "Legami metallici"], answer: 2 },
+        { question: "12. Quale struttura descrive la disposizione tridimensionale di una singola catena?", options: ["Struttura secondaria", "Struttura terziaria", "Struttura quaternaria", "Struttura primaria"], answer: 1 },
+        { question: "13. Quale interazione stabilizza la struttura terziaria?", options: ["Interazioni idrofobiche", "Solo legami estere", "Solo legami ionici", "Solo legami metallici"], answer: 0 },
+        { question: "14. Quale valore rappresenta il punto isoelettrico?", options: ["pH massimo", "pH neutro universale", "pH in cui la carica netta è zero", "pH minimo"], answer: 2 },
+        { question: "15. Quale legame covalente può stabilizzare la struttura proteica?", options: ["Legami C=C", "Ponti disolfuro", "Legami estere", "Legami etere"], answer: 1 },
+        { question: "16. Quale amminoacido forma ponti disolfuro?", options: ["Serina", "Alanina", "Cisteina", "Valina"], answer: 2 },
+        { question: "17. Quale amminoacido contiene un gruppo imidazolico?", options: ["Valina", "Leucina", "Istidina", "Alanina"], answer: 2 },
+        { question: "18. Quale amminoacido contiene un gruppo ammidico?", options: ["Glicina", "Alanina", "Valina", "Asparagina"], answer: 3 },
+        { question: "19. Quale tipo di proteina svolge funzione catalitica?", options: ["Carboidrato", "Enzima", "Ormone steroideo", "Lipide"], answer: 1 },
+        { question: "20. Quale proteina trasporta ossigeno nel sangue?", options: ["Emoglobina", "Actina", "Insulina", "Albumina"], answer: 0 },
+        { question: "21. Quale ormone proteico regola il glucosio nel sangue?", options: ["Testosterone", "Cortisolo", "Insulina", "Adrenalina"], answer: 2 },
+        { question: "22. Quale processo distrugge la struttura tridimensionale delle proteine?", options: ["Idrogenazione", "Esterificazione", "Denaturazione", "Riduzione"], answer: 2 },
+        { question: "23. Come si chiama il legame tra due cisteine ossidate?", options: ["Esterico", "Etere", "Disolfuro", "Peptidico"], answer: 2 },
+        { question: "24. Cosa succede agli amminoacidi a pH molto basso?", options: ["Sono completamente protonati", "Sono completamente deprotonati", "Si ossidano", "Diventano radicali"], answer: 0 },
+        { question: "25. Perché il legame peptidico è planare?", options: ["Presenza di carica negativa", "Presenza di radicali", "Rotazione libera", "Risonanza tra C=O e N"], answer: 3 },
+        { question: "26. Cos’è uno zwitterione?", options: ["Specie con due cariche positive", "Specie con carica positiva e negativa", "Specie neutra senza cariche", "Specie radicalica"], answer: 1 },
+        { question: "27. Quale amminoacido contiene un gruppo fenolico?", options: ["Prolina", "Leucina", "Valina", "Tirosina"], answer: 3 },
+        { question: "28. La denaturazione rompe quali strutture?", options: ["Secondaria e terziaria", "Solo primaria", "Primaria", "Solo legami peptidici"], answer: 0 },
+        { question: "29. Quale tipo di amminoacidi tende a trovarsi all’interno delle proteine?", options: ["Carchi", "Idrofobici", "Aromatici carichi", "Polari"], answer: 1 },
+        { question: "30. Quale tipo di amminoacidi tende a trovarsi sulla superficie?", options: ["Apolari", "Aromatici non polari", "Idrofobici", "Polari"], answer: 3 },
+        { question: "31. Quale forma predomina per gli amminoacidi a pH fisiologico?", options: ["Forma completamente deprotonata", "Forma completamente protonata", "Zwitterione", "Forma radicalica"], answer: 2 },
+        { question: "32. Quale tecnica separa proteine in base alla dimensione?", options: ["Distillazione frazionata", "Cromatografia su gel", "Ossidazione", "Sublimazione"], answer: 1 },
+        { question: "33. Quale amminoacido è aromatico?", options: ["Fenilalanina", "Glicina", "Alanina", "Serina"], answer: 0 },
+        { question: "34. Quale metodo separa proteine in base alla carica?", options: ["Filtrazione", "Elettroforesi", "Cristallizzazione", "Distillazione"], answer: 1 },
+        { question: "35. Quale amminoacido non è chirale?", options: ["Alanina", "Glicina", "Valina", "Leucina"], answer: 1 },
+        { question: "36. Qual è la struttura generale di un amminoacido?", options: ["NH2–CH2–COO–", "NH–CH(R)–OH", "R–CO–NH2", "NH2–CH(R)–COOH"], answer: 3 },
+        { question: "37. Quale proprietà rende quasi tutti gli amminoacidi chirali?", options: ["Presenza di azoto aromatico", "Carbonio α legato a quattro gruppi diversi", "Presenza di due doppi legami", "Presenza di due ossigeni"], answer: 1 },
+        { question: "38. Come si chiamano gli amminoacidi presenti nelle proteine?", options: ["β-amminoacidi", "γ-amminoacidi", "δ-amminoacidi", "α-amminoacidi"], answer: 3 },
+        { question: "39. Quale gruppo rende gli amminoacidi basici?", options: ["Gruppo carbossilico", "Gruppo amminico", "Gruppo aldeidico", "Gruppo etere"], answer: 1 },
+        { question: "40. Quale gruppo funzionale rende gli amminoacidi acidi?", options: ["Gruppo metilico", "Gruppo carbossilico", "Gruppo amminico", "Gruppo alchilico"], answer: 1 }
+    ],
+    31: [
+        { question: "1. Quale forma del glucosio è più stabile in soluzione?", options: ["Beta-D-glucopiranosio", "Forma lineare", "Alfa-D-glucopiranosio", "Forma furanosica"], answer: 0 },
+        { question: "2. Come si distinguono le forme D e L dei monosaccaridi?", options: ["Numero di doppi legami", "Presenza di azoto", "Configurazione del carbonio chirale più lontano dal carbonile", "Numero di carboni"], answer: 2 },
+        { question: "3. Come differiscono gli anomeri?", options: ["Configurazione del carbonio anomerico", "Posizione del carbonile", "Numero di atomi di carbonio", "Presenza di azoto"], answer: 0 },
+        { question: "4. Quali sono le due forme cicliche del glucosio?", options: ["Cis e trans", "Alfa e beta", "E e Z", "R e S"], answer: 1 },
+        { question: "5. Come si chiama il nuovo centro chirale formato nella ciclizzazione?", options: ["Carbonio anomerico", "Carbonio beta", "Carbonio gamma", "Carbonio terminale"], answer: 0 },
+        { question: "6. Quale gruppo reagisce con il carbonile per formare l’emiacetale?", options: ["Gruppo nitrile", "Gruppo alcolico", "Gruppo amminico", "Gruppo metilico"], answer: 1 },
+        { question: "7. Come vengono classificati i carboidrati più semplici?", options: ["Disaccaridi", "Oligopeptidi", "Polisaccaridi", "Monosaccaridi"], answer: 3 },
+        { question: "8. Quale tipo di isomeria differenzia D-glucosio e L-glucosio?", options: ["Diastereomeria", "Enantiomeria", "Isomeria geometrica", "Isomeria di posizione"], answer: 1 },
+        { question: "9. Quanti centri chirali possiede il glucosio nella forma aperta?", options: ["Uno", "Quattro", "Due", "Sei"], answer: 1 },
+        { question: "10. Quale monosaccaride è un chetoso?", options: ["Ribosio", "Fruttosio", "Glucosio", "Gliceraldeide"], answer: 1 },
+        { question: "11. Quale monosaccaride è un aldoso?", options: ["Glicerolo", "Acetone", "Glucosio", "Fruttosio"], answer: 2 },
+        { question: "12. Quale gruppo funzionale possiede un chetoso?", options: ["Estere", "Chetone", "Ammide", "Aldeide"], answer: 1 },
+        { question: "13. Quale gruppo funzionale possiede un aldoso?", options: ["Etere", "Aldeide", "Estere", "Chetone"], answer: 1 },
+        { question: "14. Qual è la formula generale approssimata dei carboidrati?", options: ["C3H8", "C6H6", "C2H6O", "(CH2O)n"], answer: 3 },
+        { question: "15. Quale reagente ossida un aldoso in acido carbossilico?", options: ["Br2 in acqua", "NaBH4", "LiAlH4", "H2"], answer: 0 },
+        { question: "16. Come si chiama l’interconversione tra anomeri?", options: ["Isomerizzazione radicalica", "Mutarotazione", "Risonanza", "Idrogenazione"], answer: 1 },
+        { question: "17. Quale reazione forma la struttura ciclica dei monosaccaridi?", options: ["Formazione di emiacetale", "Eliminazione", "Riduzione", "Ossidazione"], answer: 0 },
+        { question: "18. Quale prodotto si ottiene riducendo un monosaccaride?", options: ["Acido carbossilico", "Alcol zuccherino", "Aldeide", "Ammina"], answer: 1 },
+        { question: "19. Quale tipo di legame collega le unità di glucosio nella cellulosa?", options: ["α(1→6)", "β(1→6)", "β(1→4)", "α(1→4)"], answer: 2 },
+        { question: "20. Quale funzione principale svolgono i carboidrati negli organismi?", options: ["Catalisi enzimatica", "Formazione di lipidi", "Fonte di energia", "Trasporto di elettroni"], answer: 2 },
+        { question: "21. Quale classe di biomolecole include glucosio, fruttosio e ribosio?", options: ["Carboidrati", "Proteine", "Nucleotidi", "Lipidi"], answer: 0 },
+        { question: "22. Quale zucchero è presente nel DNA?", options: ["Glucosio", "Desossiribosio", "Galattosio", "Ribosio"], answer: 1 },
+        { question: "23. Quale zucchero è presente nell’RNA?", options: ["Ribosio", "Desossiribosio", "Glucosio", "Fruttosio"], answer: 0 },
+        { question: "24. Quale molecola costituisce l’unità della chitina?", options: ["Glucosio", "N-acetilglucosamina", "Fruttosio", "Ribosio"], answer: 1 },
+        { question: "25. Quale derivato dei carboidrati contiene azoto?", options: ["Amido", "Glicogeno", "Cellulosa", "Chitina"], answer: 3 },
+        { question: "26. Quale composto deriva dalla riduzione del glucosio?", options: ["Sorbitolo", "Acetone", "Glicerolo", "Etanolo"], answer: 0 },
+        { question: "27. Quale polisaccaride è altamente ramificato?", options: ["Cellulosa", "Glicogeno", "Chitina", "Amilosio"], answer: 1 },
+        { question: "28. Quale tipo di legame domina nell’amido?", options: ["α(1→2)", "β(1→2)", "α(1→4)", "β(1→4)"], answer: 2 },
+        { question: "29. Quale differenza principale distingue cellulosa e amido?", options: ["Configurazione del legame glicosidico", "Presenza di azoto", "Massa molecolare", "Numero di atomi"], answer: 0 },
+        { question: "30. Quale polisaccaride forma la struttura delle pareti cellulari vegetali?", options: ["Destrano", "Glicogeno", "Amido", "Cellulosa"], answer: 3 },
+        { question: "31. Quale disaccaride contiene glucosio e fruttosio?", options: ["Saccarosio", "Cellulosio", "Maltosio", "Lattosio"], answer: 0 },
+        { question: "32. Quale polisaccaride è la principale riserva energetica negli animali?", options: ["Chitina", "Glicogeno", "Amido", "Cellulosa"], answer: 1 },
+        { question: "33. Quale molecola si libera durante la formazione di un legame glicosidico?", options: ["CO2", "Acqua", "H2", "NH3"], answer: 1 },
+        { question: "34. Quale disaccaride è formato da due molecole di glucosio?", options: ["Cellobiosio", "Maltosio", "Lattosio", "Saccarosio"], answer: 1 },
+        { question: "35. Quale tipo di legame unisce due monosaccaridi?", options: ["Legame ammidico", "Legame estere", "Legame glicosidico", "Legame peptidico"], answer: 2 },
+        { question: "36. Quale disaccaride contiene glucosio e galattosio?", options: ["Saccarosio", "Amido", "Maltosio", "Lattosio"], answer: 3 },
+        { question: "37. Quale disaccaride è uno zucchero riducente?", options: ["Saccarosio", "Maltosio", "Nessuno", "Trehalosio"], answer: 1 },
+        { question: "38. Perché il saccarosio non è uno zucchero riducente?", options: ["È aromatico", "Entrambi i carboni anomerici sono coinvolti nel legame", "Non contiene gruppi aldeidici", "Il legame glicosidico è beta 1-3"], answer: 1 },
+        { question: "39. Quale polisaccaride è la principale riserva energetica nelle piante?", options: ["Cellulosa", "Glicogeno", "Amido", "Chitina"], answer: 2 },
+        { question: "40. Perché gli esseri umani non digeriscono la cellulosa?", options: ["È troppo piccola", "È troppo solubile", "Non possiedono enzimi per legami β(1→4)", "È troppo acida"], answer: 2 }
+    ],
+    32: [
+        { question: "1. Come si chiama il processo di sintesi delle proteine dall’RNA?", options: ["Replicazione", "Idrolisi", "Trascrizione", "Traduzione"], answer: 3 },
+        { question: "2. Come si chiama il processo di sintesi dell’RNA dal DNA?", options: ["Traduzione", "Trascrizione", "Riduzione", "Replicazione"], answer: 1 },
+        { question: "3. Quale legame unisce i nucleotidi nel DNA?", options: ["Legame fosfodiestere", "Legame glicosidico semplice", "Legame ionico", "Legame peptidico"], answer: 0 },
+        { question: "4. Qual è la struttura generale di un triacilglicerolo?", options: ["Diacido carbossilico con due alcoli", "Triolo con tre gruppi amminici", "Triestere del glicerolo con tre acidi grassi", "Amide di glicerolo"], answer: 2 },
+        { question: "5. Qual è lo zucchero presente nel DNA?", options: ["Galattosio", "Mannosio", "2‑desossiribosio", "Ribosio"], answer: 2 },
+        { question: "6. Quali basi azotate sono purine?", options: ["Citosina e uracile", "Uracile e timina", "Timina e citosina", "Adenina e guanina"], answer: 3 },
+        { question: "7. Quali basi azotate sono pirimidine nel DNA?", options: ["Citosina e timina", "Adenina e guanina", "Guanina e uracile", "Adenina e citosina"], answer: 0 },
+        { question: "8. Quale base sostituisce la timina nell’RNA?", options: ["Guanina", "Citosina", "Adenina", "Uracile"], answer: 3 },
+        { question: "9. Cos’è un nucleotide?", options: ["Acido grasso + base", "Base + proteina", "Zucchero + ammina", "Nucleoside + gruppo fosfato"], answer: 3 },
+        { question: "10. Cos’è un nucleoside?", options: ["Base azotata + zucchero", "Base + fosfato", "Zucchero + lipide", "Base + glicerolo"], answer: 0 },
+        { question: "11. In quale direzione si scrive una sequenza di DNA?", options: ["Dal centro verso l’esterno", "Da 5′ a 3′", "Non ha direzione", "Da 3′ a 5′"], answer: 1 },
+        { question: "12. Quale ormone è un estrogeno?", options: ["Cortisolo", "Estradiolo", "Aldosterone", "Testosterone"], answer: 1 },
+        { question: "13. Quale coppia di basi è complementare?", options: ["C‑A", "A‑T", "G‑T", "A‑C"], answer: 1 },
+        { question: "14. Quanti legami a idrogeno formano G e C?", options: ["Quattro", "Due", "Tre", "Uno"], answer: 2 },
+        { question: "15. Quanti legami a idrogeno formano A e T?", options: ["Uno", "Quattro", "Tre", "Due"], answer: 3 },
+        { question: "16. Qual è la forma strutturale del DNA secondo Watson e Crick?", options: ["Tripla elica", "Foglio β", "Doppia elica", "Catena lineare"], answer: 2 },
+        { question: "17. Qual è il ruolo principale del DNA?", options: ["Degradare lipidi", "Produrre energia", "Conservare informazione genetica", "Trasportare ossigeno"], answer: 2 },
+        { question: "18. Qual è il ruolo dell’RNA?", options: ["Trasmettere l’informazione genetica per la sintesi proteica", "Sintetizzare glucosio", "Trasportare elettroni", "Immagazzinare lipidi"], answer: 0 },
+        { question: "19. Come si chiama il processo di copia del DNA?", options: ["Traduzione", "Isomerizzazione", "Replicazione", "Trascrizione inversa"], answer: 2 },
+        { question: "20. Quale ormone prepara l’utero alla gravidanza?", options: ["Progesterone", "Cortisolo", "Estrone", "Testosterone"], answer: 0 },
+        { question: "21. Qual è lo zucchero presente nell’RNA?", options: ["Fruttosio", "Desossiribosio", "Ribosio", "Glucosio"], answer: 2 },
+        { question: "22. Quale ormone è un androgeno?", options: ["Progesterone", "Testosterone", "Estradiolo", "Cortisolo"], answer: 1 },
+        { question: "23. Qual è la struttura base dei fosfolipidi?", options: ["Acido grasso + zucchero", "Tre acidi grassi + ammoniaca", "Glicerolo + due acidi grassi + fosfato", "Glicerolo + tre fosfati"], answer: 2 },
+        { question: "24. Perché gli oli vegetali sono generalmente liquidi a temperatura ambiente?", options: ["Non contengono glicerolo", "Contengono solo acidi grassi saturi", "Contengono più acidi grassi insaturi", "Sono composti da esteri aromatici"], answer: 2 },
+        { question: "25. Quale acido grasso è monoinsaturo?", options: ["Acido oleico", "Acido arachidico", "Acido palmitico", "Acido stearico"], answer: 0 },
+        { question: "26. Cosa indica la denominazione omega‑3?", options: ["Tre doppi legami consecutivi", "Tre gruppi carbossilici", "Il primo doppio legame è al terzo carbonio dal carbossile", "Il primo doppio legame è al terzo carbonio dall’estremità metilica"], answer: 3 },
+        { question: "27. Qual è il prodotto della saponificazione dei trigliceridi?", options: ["Acidi grassi liberi e acqua", "Glicerolo e sali di acidi grassi", "Esteri e ammoniaca", "Glicerolo e alcoli"], answer: 1 },
+        { question: "28. Perché i saponi funzionano come detergenti?", options: ["Sono completamente idrofili", "Sono acidi forti", "Sono completamente idrofobici", "Sono molecole anfipatiche"], answer: 3 },
+        { question: "29. Qual è la funzione principale del colesterolo nelle cellule?", options: ["Componente delle membrane", "Pigmento", "Riserva di glucosio", "Fonte di azoto"], answer: 0 },
+        { question: "30. Qual è lo svantaggio dei saponi in acqua dura?", options: ["Formano sali insolubili con Ca2+ e Mg2+.", "Diventano acidi", "Si ossidano", "Si decompongono rapidamente"], answer: 0 },
+        { question: "31. Cos’è una micella?", options: ["Polimero di glicerolo", "Cluster di proteine", "Aggregato di molecole anfipatiche con code idrofobiche interne", "Cristallo ionico di acidi grassi"], answer: 2 },
+        { question: "32. Quale molecola forma il doppio strato delle membrane cellulari?", options: ["Esteri semplici", "Fosfolipidi", "Terpeni", "Trigliceridi"], answer: 1 },
+        { question: "33. Qual è la funzione principale dei triacilgliceroli negli animali?", options: ["Trasporto di ossigeno", "Riserva energetica", "Catalisi enzimatica", "Sintesi di DNA"], answer: 1 },
+        { question: "34. Quale acido grasso è essenziale nella dieta umana?", options: ["Acido miristico", "Acido stearico", "Acido linoleico", "Acido palmitico"], answer: 2 },
+        { question: "35. Cosa produce l’idrogenazione degli oli vegetali?", options: ["Alcoli", "Grassi più saturi e solidi", "Aldeidi", "Polimeri"], answer: 1 },
+        { question: "36. Qual è la conseguenza indesiderata dell’idrogenazione parziale?", options: ["Eliminazione dei doppi legami", "Formazione di ammine", "Formazione di acidi grassi trans", "Riduzione del numero di carboni"], answer: 2 },
+        { question: "37. Quale classe di lipidi include prostaglandine, trombossani e leucotrieni?", options: ["Eicosanoidi", "Terpeni", "Steroli", "Gliceridi"], answer: 0 },
+        { question: "38. Da quale acido derivano gli eicosanoidi?", options: ["Acido arachidonico", "Acido palmitico", "Acido citrico", "Acido lattico"], answer: 0 },
+        { question: "39. Qual è la caratteristica strutturale degli steroidi?", options: ["Sistema tetraciclico di quattro anelli", "Tre anelli aromatici", "Catena lineare", "Due anelli con ossigeno"], answer: 0 },
+        { question: "40. Quale molecola è un esempio di steroide?", options: ["Colesterolo", "Acido acetico", "Glucosio", "Glicerolo"], answer: 0 }
+    ]
+};
+
+function startQuiz(chapterNum) {
+    currentChapter = chapterNum;
+    userAnswers = {};
+    
+    document.getElementById('menu-view').classList.add('hidden');
+    document.getElementById('quiz-view').classList.remove('hidden');
+    
+    document.getElementById('quiz-title').innerText = `Lezione 0${chapterNum < 10 ? '0' + chapterNum : chapterNum}`.replace('00', '0');
+    document.getElementById('quiz-subtitle').innerText = `Set Domande - Chimica Organica (eCampus) - ${allQuestions[chapterNum].length} Domande`;
+    
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+    
+    document.getElementById('score-screen').innerHTML = '';
+    document.getElementById('submit-btn').style.display = 'block';
+
+    allQuestions[chapterNum].forEach((q, index) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+        
+        let optionsHtml = '<ul class="options-list">';
+        q.options.forEach((opt, optIndex) => {
+            optionsHtml += `<li class="option-item" onclick="selectOption(${index}, ${optIndex}, this)">${opt}</li>`;
+        });
+        optionsHtml += '</ul>';
+
+        card.innerHTML = `
+            <div class="question-title">${q.question}</div>
+            ${optionsHtml}
+        `;
+        container.appendChild(card);
+    });
+    
+    window.scrollTo(0, 0);
+}
+
+function selectOption(qIndex, optIndex, element) {
+    const parent = element.parentElement;
+    const items = parent.getElementsByClassName('option-item');
+    for(let item of items) {
+        item.classList.remove('selected');
+    }
+    element.classList.add('selected');
+    userAnswers[qIndex] = optIndex;
+}
+
+function checkAnswers() {
+    const questions = allQuestions[currentChapter];
+    let score = 0;
+    
+    questions.forEach((q, index) => {
+        const card = document.getElementsByClassName('question-card')[index];
+        const options = card.getElementsByClassName('option-item');
+        
+        const userSelection = userAnswers[index];
+        
+        if(userSelection !== undefined) {
+            if(userSelection === q.answer) {
+                options[userSelection].classList.add('correct');
+                score++;
+            } else {
+                options[userSelection].classList.add('incorrect');
+                options[q.answer].classList.add('correct');
+            }
+        } else {
+            options[q.answer].classList.add('correct');
+        }
+        
+        for(let opt of options) {
+            opt.style.pointerEvents = 'none';
+        }
+    });
+    
+    document.getElementById('submit-btn').style.display = 'none';
+    const percentage = Math.round((score / questions.length) * 100);
+    document.getElementById('score-screen').innerHTML = `Punteggio finale: ${score} / ${questions.length} (${percentage}%)`;
+    window.scrollTo(0, document.body.scrollHeight);
+}
+
+function returnToMenu() {
+    document.getElementById('quiz-view').classList.add('hidden');
+    document.getElementById('menu-view').classList.remove('hidden');
+    window.scrollTo(0, 0);
+}
+</script>
+
+</body>
+</html>
